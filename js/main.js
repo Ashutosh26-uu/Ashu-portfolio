@@ -230,6 +230,23 @@
     el.style.setProperty("--my", e.clientY - r.top + "px");
   });
 
+  /* ---------- Talking portrait ---------- */
+  const frame = $("#portraitFrame"), bubble = $("#bubble");
+  let qi = 0, bubbleTimer;
+  const say = () => {
+    bubble.textContent = D.quips[qi++ % D.quips.length];
+    bubble.classList.add("show");
+    frame.classList.remove("pop"); void frame.offsetWidth; frame.classList.add("pop");
+    $(".portrait__note").style.opacity = "0";
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 2600);
+  };
+  frame.addEventListener("click", say);
+  frame.setAttribute("tabindex", "0");
+  frame.setAttribute("role", "button");
+  frame.setAttribute("aria-label", "Say hi to Ashutosh");
+  frame.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); say(); } });
+
   /* ---------- Hero particle network ---------- */
   const canvas = $("#hero-canvas");
   const ctx = canvas.getContext("2d");

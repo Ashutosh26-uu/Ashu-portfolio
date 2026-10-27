@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="assets/ashutosh.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -37,9 +37,9 @@
     <a href="#top" class="nav__logo" data-magnetic>AM<span>.</span></a>
     <nav class="nav__links" id="navLinks">
       <a href="#about">About</a>
-      <a href="#experience">Experience</a>
+      <a href="#experience">Story</a>
       <a href="#work">Work</a>
-      <a href="#recognition">Recognition</a>
+      <a href="#recognition">Trophies</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav__right">
@@ -56,16 +56,16 @@
       <div class="hero__glow"></div>
       <div class="container hero__inner">
         <div class="hero__text">
-          <p class="hero__tag mono reveal"><span class="pulse"></span> Founder, CEO &amp; CTO · ReasonateAI</p>
+          <p class="hero__hello hand reveal">Namaste <span class="wave">🙏</span> main Ashutosh hoon.</p>
           <h1 class="hero__title">
-            <span class="line"><span class="word">Architecting</span></span>
-            <span class="line"><span class="word">the <em class="serif">autonomous</em></span></span>
-            <span class="line"><span class="word stroke">AI CTO.</span></span>
+            <span class="line"><span class="word">I teach</span></span>
+            <span class="line"><span class="word">software to</span></span>
+            <span class="line"><span class="word"><em class="serif">fix <span class="scribble">itself.<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20 C 60 6, 120 28, 180 14 S 270 8, 296 18" /></svg></span></em></span></span>
           </h1>
           <p class="hero__sub reveal">
-            I'm <strong>Ashutosh Mishra</strong> — a <span class="typed" id="typed">deep-tech system architect</span><span class="caret">|</span><br />
-            building self-healing, zero-downtime cloud infrastructure you can deploy in plain language.
-            Incubated at <strong>TBIF – IIT Ropar</strong>, piloting with <strong>Samsung R&amp;D</strong> &amp; <strong>Tata Elxsi</strong>.
+            I'm a <span class="typed" id="typed">founder</span><span class="caret">|</span> who got a little too obsessed with one question —
+            <strong>why do apps still break at 2 a.m.?</strong> So I started <strong>ReasonateAI</strong> to fix it.
+            Today <span class="marker">13 incubators, Samsung R&amp;D and Tata Elxsi</span> are betting on the answer.
           </p>
           <div class="hero__cta reveal">
             <a href="#work" class="btn btn--primary" data-magnetic>See my work <span class="arrow">↗</span></a>
@@ -75,7 +75,12 @@
         </div>
 
         <figure class="portrait reveal" data-tilt>
-          <div class="portrait__frame">
+          <div class="portrait__note hand" aria-hidden="true">
+            psst… click me
+            <svg viewBox="0 0 80 60"><path d="M6 8 C 30 4, 58 14, 66 46" /><path d="M54 40 L 66 48 L 72 34" /></svg>
+          </div>
+          <div class="portrait__bubble" id="bubble" role="status" aria-live="polite"></div>
+          <div class="portrait__frame" id="portraitFrame">
             <img src="assets/ashutosh.jpg" alt="Ashutosh Mishra, Founder, CEO & CTO of ReasonateAI" width="900" height="1116" />
             <div class="portrait__scan" aria-hidden="true"></div>
           </div>
@@ -84,7 +89,7 @@
               <strong>Ashutosh Mishra</strong>
               <span class="mono muted">Founder · CEO · CTO</span>
             </div>
-            <span class="portrait__live mono"><span class="dot"></span>Open to pilots</span>
+            <span class="portrait__live mono"><span class="dot"></span>Open to chat</span>
           </figcaption>
           <div class="portrait__badge portrait__badge--a mono">🏆 Code for Bharat 2.0 · Winner</div>
           <div class="portrait__badge portrait__badge--b mono">⚡ TBIF · IIT Ropar</div>
@@ -108,46 +113,47 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">01</span>
-          <h2 class="section__title reveal">The <em class="serif">architect</em> behind the engine</h2>
+          <h2 class="section__title reveal">A little <em class="serif">about me</em></h2>
         </div>
         <div class="bento">
-          <article class="card card--intro reveal" data-spotlight>
+          <article class="card card--intro letter reveal" data-spotlight>
+            <p class="letter__to hand">Hey you,</p>
             <p class="big">
-              I believe in <span class="hl">zero-downtime autonomous reasoning</span>. At
-              <strong>ReasonateAI</strong> I'm building an AI CTO that turns natural-language intent into
-              secure, self-healing cloud infrastructure — every change rehearsed in a private twin before it ever touches production.
+              I'm a 3rd-year CSE student from <span class="hl">Prayagraj</span> who ended up running a deep-tech company.
+              At <strong>ReasonateAI</strong> we're building an AI that does a CTO's job — you describe what you need in plain words,
+              it builds it, tests it in a private copy, and keeps it running.
             </p>
             <p class="muted">
-              Before ReasonateAI I was Founding Member &amp; CTO at Curelex Healthtech, engineered full-stack systems at Cashcry
-              and backend logic at Prodesk IT. Today I lead the core engine, the architecture and our enterprise pilots —
-              while finishing my B.Tech in CSE at United University.
+              I still write the core engine myself. Before this I was the founding CTO at Curelex Healthtech, and learned the ropes
+              at Cashcry and Prodesk IT. Hackathons taught me the rest — mostly how to ship something real before sunrise.
             </p>
+            <p class="letter__sign hand">— Ashutosh <span>✦</span></p>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="8800">0</span><sup>+</sup></div>
-            <p class="mono muted">Organic developer waitlist</p>
+            <p class="mono muted">Developers waiting in line (no ads, promise)</p>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="100">0</span><sup>K+</sup></div>
-            <p class="mono muted">Lines of autonomous engine code</p>
+            <p class="mono muted">Lines of engine code, mostly written after midnight</p>
           </article>
           <article class="card card--focus reveal" data-spotlight>
-            <p class="mono muted">// currently shipping</p>
+            <p class="mono muted">// what I'm doing right now</p>
             <h3>ReasonateAI v0.0.2</h3>
-            <p>Dual-Twin is live: every build is tested and auto-fixed in a sandbox, with Node.js &amp; Python backends and GitHub sync. Next up — the virtual CTO.</p>
+            <p>Shipping v0.0.2 — every build now gets tested and auto-fixed in its own sandbox before it goes live. Next stop: the virtual CTO.</p>
             <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="4">0</span><sup>+</sup></div>
-            <p class="mono muted">National hackathon victories</p>
+            <p class="mono muted">National hackathon wins</p>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="13">0</span></div>
-            <p class="mono muted">Incubators backing us</p>
+            <p class="mono muted">Incubators who believed early</p>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="3">0</span><sup>+</sup></div>
-            <p class="mono muted">Years of deep-tech engineering</p>
+            <p class="mono muted">Years of building deep-tech</p>
           </article>
           <article class="card card--stat reveal" data-spotlight>
             <div class="stat"><span class="count" data-count="2">0</span></div>
@@ -170,7 +176,7 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">02</span>
-          <h2 class="section__title reveal">Experience <em class="serif">&amp;</em> roles</h2>
+          <h2 class="section__title reveal">The story <em class="serif">so far</em></h2>
         </div>
         <div class="ventures" id="experienceList"></div>
       </div>
@@ -181,7 +187,7 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">03</span>
-          <h2 class="section__title reveal">Selected <em class="serif">work</em></h2>
+          <h2 class="section__title reveal">Things I've <em class="serif">built</em></h2>
         </div>
         <div class="filters mono reveal" id="filters"></div>
         <div class="projects" id="projects"></div>
@@ -193,7 +199,7 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">04</span>
-          <h2 class="section__title reveal"><em class="serif">Recognition</em></h2>
+          <h2 class="section__title reveal">The trophy <em class="serif">shelf</em></h2>
         </div>
         <div class="awards" id="awards"></div>
       </div>
@@ -204,7 +210,7 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">05</span>
-          <h2 class="section__title reveal">Areas of <em class="serif">focus</em></h2>
+          <h2 class="section__title reveal">What keeps me <em class="serif">up at night</em></h2>
         </div>
         <div class="process" id="process"></div>
       </div>
@@ -215,7 +221,7 @@
       <div class="container">
         <div class="section__head">
           <span class="section__num mono">06</span>
-          <h2 class="section__title reveal">The <em class="serif">toolkit</em></h2>
+          <h2 class="section__title reveal">My <em class="serif">toolbox</em></h2>
         </div>
         <div class="stack" id="stackList"></div>
       </div>
@@ -224,17 +230,18 @@
     <!-- Contact -->
     <section class="section contact" id="contact">
       <div class="container">
-        <p class="mono muted reveal">// enterprise pilot, collaboration or a deep-tech conversation?</p>
+        <p class="contact__kicker hand reveal">Chai pe charcha? ☕ Pilot? Ya bas hello?</p>
         <h2 class="contact__title reveal">
           Let's build<br />something <em class="serif">tagda.</em>
         </h2>
         <div class="contact__links reveal" id="contactLinks"></div>
+        <p class="contact__ps hand reveal">P.S. I reply to every message. Usually faster than my code compiles.</p>
       </div>
     </section>
   </main>
 
   <footer class="footer container mono">
-    <span>© <span id="year"></span> Ashutosh Mishra · ReasonateAI</span>
+    <span>© <span id="year"></span> Ashutosh Mishra · made with ❤️ &amp; too many console.logs in Prayagraj</span>
     <span class="muted">Press <kbd>/</kbd> for terminal</span>
     <a href="#top">Back to top ↑</a>
   </footer>

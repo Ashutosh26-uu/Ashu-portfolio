@@ -4,36 +4,37 @@ window.PORTFOLIO = {
   email: "ashutosh@reasonateai.com",
   linkedin: "https://www.linkedin.com/in/ashutosh-mishra-841408324/",
 
-  roles: ["deep-tech system architect", "founder, CEO & CTO", "autonomous AI engineer", "national hackathon champion", "startup builder"],
+  roles: ["founder", "CTO who still writes the code", "3rd-year CSE student", "hackathon kid from Prayagraj", "builder"],
 
   // Logos strip (rendered as a text marquee)
   backers: ["IIT Ropar TBIF", "IISc Bangalore", "IIT Delhi", "IIT Kanpur", "NVIDIA Inception", "Google for Startups",
     "Samsung R&D", "Tata Elxsi", "IIT Mandi", "IIT Jodhpur", "IIT Patna", "IIIT Bangalore", "BITS Pilani", "DTU",
     "VIT Vellore", "TIEC Egypt", "PW School of Startups", "United Incubation Hub"],
 
-  stats: {
-    waitlist: 8800,
-    linesOfCode: 100,
-    hackathons: 4,
-    incubators: 13,
-    years: 3,
-    pilots: 2
-  },
+  // Things the portrait says when you click it
+  quips: [
+    "Haan, main hi hoon 👋",
+    "Bug mila? Bhejo, fix kar deta hoon.",
+    "Currently: shipping v0.0.2 🚀",
+    "Press / for my secret terminal 🤫",
+    "Ek pilot karein? 😄"
+  ],
 
+  // Shown as a story — newest chapter first
   experience: [
     {
       company: "ReasonateAI Private Limited",
       role: "Founder, CEO & CTO",
       period: "Mar 2026 — Present",
-      desc: "Architecting an Autonomous AI CTO and the proprietary Dual-Twin Architecture. Secured incubation at TBIF – IIT Ropar and lead enterprise pilots with Samsung R&D and Tata Elxsi.",
+      desc: "Started it to answer one question: why do apps still break in production? We're building an AI that tests every change in a private copy first. Incubated at TBIF – IIT Ropar, piloting with Samsung R&D and Tata Elxsi.",
       link: "https://www.reasonateai.com",
-      tag: "Deep-tech"
+      tag: "Now"
     },
     {
       company: "Curelex Healthtech Pvt. Ltd.",
       role: "Founding Member & CTO",
       period: "",
-      desc: "Owned the end-to-end backend architecture — patient platform plus an admin suite for doctors, patients, revenue and analytics.",
+      desc: "My first time owning a whole backend — the patient platform and the admin side for doctors, patients and revenue. Learned that health-tech has no room for “chalta hai”.",
       link: "https://curelex-start-up.vercel.app",
       tag: "Health-tech"
     },
@@ -41,45 +42,46 @@ window.PORTFOLIO = {
       company: "Cashcry",
       role: "Full-Stack Engineer",
       period: "",
-      desc: "Engineered scalable full-stack applications under veteran mentorship.",
+      desc: "Built full-stack apps alongside veteran engineers — and picked up how real teams ship.",
       tag: "Fintech"
     },
     {
       company: "Prodesk IT",
       role: "Backend Developer",
       period: "",
-      desc: "Built robust backend and database logic for production systems.",
+      desc: "Backend and database logic for production systems. Where I fell for clean schemas.",
       tag: "Backend"
     },
     {
       company: "United University, Prayagraj",
       role: "B.Tech, Computer Science & Engineering",
       period: "3rd Year",
-      desc: "Early-stage incubation and campus startup support for ReasonateAI.",
-      tag: "Education"
+      desc: "Where it all started. Still a student — the campus startup cell backed ReasonateAI in its earliest days.",
+      tag: "Roots"
     }
   ],
 
+  // "What keeps me up at night" — plain-language version of the focus areas
   focus: [
-    { title: "Dual-Twin Cloud Architecture", desc: "Ephemeral simulation environments and governed promotion pipelines for zero-downtime operations." },
-    { title: "Autonomous AI CTO Engine", desc: "Turning natural-language intent into validated, production-grade cloud manifests and Kubernetes orchestrations." },
-    { title: "Self-Healing Cloud Runtimes", desc: "Closed-loop telemetry agents that detect configuration drift and remediate on their own." },
-    { title: "Enterprise Pilot Leadership", desc: "Mission-critical deployment partnerships and pilot executions with Samsung R&D and Tata Elxsi." },
-    { title: "Distributed Systems & DevOps", desc: "High-throughput microservices, Docker runtimes and resilient multi-cloud failover topologies." }
+    { title: "Apps that never go down", desc: "Every change runs in a private twin of your app first. Only what passes goes live. That's Dual-Twin." },
+    { title: "An AI CTO for everyone", desc: "You say what you need in plain words. The AI turns it into real, tested cloud setup — Kubernetes and all." },
+    { title: "Software that heals itself", desc: "Agents keep watching the live app. Something drifts? They figure out why and fix it — no 2 a.m. calls." },
+    { title: "Proving it with the big ones", desc: "Running pilots with Samsung R&D and Tata Elxsi, because big claims need big rooms to prove them in." },
+    { title: "Systems that don't flinch", desc: "Microservices, Docker and multi-cloud failover — the boring plumbing that keeps everything standing." }
   ],
 
   awards: [
-    { kicker: "1st Prize · National", title: "Microsoft Code for Bharat 2.0", desc: "Champion for engineering an AI autonomous drone defence system." },
-    { kicker: "Deep-tech recognition", title: "Fastest Emerging Startup", desc: "Fastest Emerging Deep Tech Startup in North West India." },
-    { kicker: "National Finalist", title: "ISRO & Tata Hackathons", desc: "Premier autonomous robotics and systems competitions." },
-    { kicker: "National Finalist", title: "EY Techathon · Emergent IIT BHU", desc: "AI automobile fault detection and predictive diagnostics." }
+    { kicker: "1st Prize · National", title: "Microsoft Code for Bharat 2.0", desc: "Won it with an AI drone defence system. Still my favourite all-nighter." },
+    { kicker: "Deep-tech recognition", title: "Fastest Emerging Startup", desc: "Named Fastest Emerging Deep Tech Startup in North West India." },
+    { kicker: "National Finalist", title: "ISRO & Tata Hackathons", desc: "Autonomous robotics and systems — up against India's best teams." },
+    { kicker: "National Finalist", title: "EY Techathon · Emergent IIT BHU", desc: "AI that spots car faults before they become breakdowns." }
   ],
 
   projects: [
     {
       title: "Dual-Twin Runtime",
       subtitle: "ReasonateAI · Core engine",
-      desc: "An ephemeral simulation mirror: every infrastructure change is simulated and verified in a private twin before it is promoted to live — zero downtime, auto-fix on drift.",
+      desc: "The heart of ReasonateAI. Every change gets rehearsed in a private twin of your app before it touches the real one. If it breaks there, your users never find out.",
       tags: ["LLM Agents", "Kubernetes", "Docker", "Multi-cloud"],
       cat: ["ai", "cloud"],
       live: "https://www.reasonateai.com",
@@ -89,7 +91,7 @@ window.PORTFOLIO = {
     {
       title: "AI Drone Defense System",
       subtitle: "Microsoft Code for Bharat 2.0 · 1st Prize",
-      desc: "Real-time autonomous threat interception with edge inference — YOLOv8 detection, multi-object tracking, behavioural threat prediction and swarm coordination.",
+      desc: "The one that won us Code for Bharat. Drones that spot, track and predict threats in real time — YOLOv8 on the edge, swarm coordination, even voice control.",
       tags: ["Python", "YOLOv8", "TensorFlow.js", "Docker"],
       cat: ["ai", "defence"],
       repo: "project-D",
@@ -98,14 +100,14 @@ window.PORTFOLIO = {
     {
       title: "Enterprise Pilots",
       subtitle: "Samsung R&D · Tata Elxsi",
-      desc: "Automated cloud-infrastructure deployment for heavy industry, and autonomous DevOps pipeline validation across complex multi-cluster environments.",
+      desc: "Taking the engine into rooms where downtime costs crores — automated cloud deployment for heavy industry and self-checking DevOps pipelines.",
       tags: ["DevOps", "Multi-cluster", "Automation"],
       cat: ["cloud"]
     },
     {
       title: "Sehatra",
       subtitle: "National health network",
-      desc: "8 portals + dispatch app on one backend: real auth, role-based access, live cross-portal updates, the Saathi AI assistant, PWA and a Capacitor Android app.",
+      desc: "Healthcare for a whole district on one backend — 8 portals, an ambulance dispatch app and Saathi, an AI that talks to patients. Piloting in Barabanki, UP.",
       tags: ["Node.js", "React", "PostgreSQL", "Android"],
       cat: ["health", "ai"],
       repo: "-nexus-healthcare"
@@ -139,7 +141,7 @@ window.PORTFOLIO = {
     {
       title: "UU-10 Bus Attendance",
       subtitle: "Smart campus",
-      desc: "React + Express portal with an Excel workbook as the database. Daily bus PIN, phone-based attendance.",
+      desc: "Built for my own college bus. A daily PIN, attendance from your phone — and yes, the database is an Excel sheet, because that's what the admin office loves.",
       tags: ["React", "Express", "Excel DB"],
       cat: ["web"],
       repo: "UU-bus-erp",
