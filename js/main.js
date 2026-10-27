@@ -8,19 +8,31 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Render content ---------- */
-  $("#marquee").innerHTML = [...D.marquee, ...D.marquee].map((t) => `<span>${esc(t)}</span>`).join("");
+  $("#marquee").innerHTML = [...D.backers, ...D.backers].map((t) => `<span>${esc(t)}</span>`).join("");
 
-  $("#venturesList").innerHTML = D.ventures.map((v, i) => `
-    <a class="venture reveal" href="${v.link}" target="_blank" rel="noopener">
+  $("#experienceList").innerHTML = D.experience.map((v, i) => {
+    const tag = v.link ? "a" : "div";
+    const attrs = v.link ? ` href="${v.link}" target="_blank" rel="noopener"` : "";
+    return `
+    <${tag} class="venture reveal${i === 0 ? " venture--now" : ""}"${attrs}>
       <span class="venture__idx mono">0${i + 1}</span>
       <div>
-        <span class="venture__tag mono">${esc(v.tag)}</span>
-        <h3>${esc(v.name)}</h3>
-        <span class="venture__role mono muted">${esc(v.role)}</span>
+        <span class="venture__tag mono">${esc(v.tag)}</span>${v.period ? `<span class="venture__period mono">${esc(v.period)}</span>` : ""}
+        <h3>${esc(v.role)}</h3>
+        <span class="venture__role mono muted">${esc(v.company)}</span>
       </div>
       <p class="muted">${esc(v.desc)}</p>
-      <span class="venture__arrow">↗</span>
-    </a>`).join("");
+      <span class="venture__arrow">${v.link ? "↗" : "•"}</span>
+    </${tag}>`;
+  }).join("");
+
+  $("#awards").innerHTML = D.awards.map((a, i) => `
+    <article class="card award reveal${i === 0 ? " award--top" : ""}" data-spotlight>
+      <span class="award__icon" aria-hidden="true">${i === 0 ? "🏆" : "✦"}</span>
+      <span class="mono award__kicker">${esc(a.kicker)}</span>
+      <h3>${esc(a.title)}</h3>
+      <p class="muted">${esc(a.desc)}</p>
+    </article>`).join("");
 
   const counts = Object.fromEntries(D.filters.map((f) => [f.id, f.id === "all" ? D.projects.length : D.projects.filter((p) => p.cat.includes(f.id)).length]));
   $("#filters").innerHTML = D.filters.map((f, i) =>
@@ -39,8 +51,9 @@
       <p class="project__desc">${esc(p.desc)}</p>
       <div class="project__tags mono">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
       <div class="project__links">
-        ${p.live ? `<a class="live" href="${p.live}" target="_blank" rel="noopener">Live demo ↗</a>` : ""}
-        <a href="${ghUrl(p.repo)}" target="_blank" rel="noopener">Source code ↗</a>
+        ${p.live ? `<a class="live" href="${p.live}" target="_blank" rel="noopener">${esc(p.liveLabel || "Live demo")} ↗</a>` : ""}
+        ${p.repo ? `<a href="${ghUrl(p.repo)}" target="_blank" rel="noopener">Source code ↗</a>` : ""}
+        ${!p.live && !p.repo ? `<span class="muted mono">Under NDA · enterprise pilot</span>` : ""}
       </div>
     </article>`).join("");
 
@@ -50,14 +63,18 @@
       <div class="stack__items">${g.items.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
     </div>`).join("");
 
-  $("#process").innerHTML = D.process.map((s, i) => `
+  $("#process").innerHTML = D.focus.map((s, i) => `
     <article class="card step reveal" data-spotlight>
       <span class="step__n">0${i + 1}</span>
       <div><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></div>
-    </article>`).join("");
+    </article>`).join("") + `
+    <a class="card step step--cta reveal" href="#contact" data-spotlight>
+      <span class="step__n">→</span>
+      <div><h3>Run a pilot with ReasonateAI</h3><p>Available for collaboration &amp; enterprise pilots.</p></div>
+    </a>`;
 
   $("#contactLinks").innerHTML = D.contact.map((c) => `
-    <a class="contact__link" href="${c.href}" target="_blank" rel="noopener" data-magnetic>
+    <a class="contact__link" href="${c.href}"${c.href.startsWith("http") ? ' target="_blank" rel="noopener"' : ""} data-magnetic>
       <span class="mono muted">${esc(c.label)}</span>
       <strong>${esc(c.value)} <span>↗</span></strong>
     </a>`).join("");
@@ -123,7 +140,7 @@
     const dur = 1600;
     const step = (now) => {
       const t = Math.min(1, (now - start) / dur);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 4)));
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 4))).toLocaleString("en-IN");
       if (t < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -132,12 +149,6 @@
     entries.forEach((e) => { if (e.isIntersecting) { animateCount(e.target); cio.unobserve(e.target); } });
   }, { threshold: 0.5 });
   $$(".count").forEach((el) => cio.observe(el));
-
-  // Live repo count from GitHub (falls back to the static number)
-  fetch(`https://api.github.com/users/${D.github}`)
-    .then((r) => (r.ok ? r.json() : null))
-    .then((u) => { if (u && u.public_repos) { const el = $("#repoCount"); el.dataset.count = u.public_repos; if (el.textContent !== "0") el.textContent = u.public_repos; } })
-    .catch(() => {});
 
   /* ---------- Nav ---------- */
   const nav = $("#nav");
@@ -267,28 +278,33 @@
   const banner = () => print(`<span class="c">
    ___   __  ___
   / _ | /  |/  /   Ashutosh Mishra
- / __ |/ /|_/ /    Founder & CEO, Reasonate AI
+ / __ |/ /|_/ /    Founder, CEO & CTO · ReasonateAI
 /_/ |_/_/  /_/     </span><span class="d">type 'help' to begin</span>`);
   const cmds = {
-    help: () => `<span class="v">about</span>      who am I
-<span class="v">ventures</span>   companies I'm building
-<span class="v">projects</span>   things I've shipped
-<span class="v">stack</span>      my toolkit
-<span class="v">contact</span>    reach out
-<span class="v">github</span>     open my GitHub
-<span class="v">clear</span>      clear screen
-<span class="v">exit</span>       close terminal`,
-    about: () => `Ashutosh Mishra — Founder & CEO of Reasonate AI Pvt. Ltd.
-Prayagraj, India. Full-stack engineer, AI builder, startup builder.
-Building across health-tech, defence-AI, mobility and ed-tech.`,
-    ventures: () => D.ventures.map((v) => `<span class="c">▸</span> ${esc(v.name)} <span class="d">— ${esc(v.role)}</span>`).join("\n"),
+    help: () => `<span class="v">about</span>        who am I
+<span class="v">experience</span>   roles & companies
+<span class="v">projects</span>     things I've shipped
+<span class="v">awards</span>       recognition
+<span class="v">stack</span>        my toolkit
+<span class="v">contact</span>      reach out
+<span class="v">linkedin</span>     open my LinkedIn
+<span class="v">github</span>       open my GitHub
+<span class="v">clear</span>        clear screen
+<span class="v">exit</span>         close terminal`,
+    about: () => `Ashutosh Mishra — Founder, CEO & CTO of ReasonateAI Private Limited.
+Deep-tech system architect building the Autonomous AI CTO and Dual-Twin Architecture.
+Incubated at TBIF – IIT Ropar · Enterprise pilots with Samsung R&D and Tata Elxsi.
+B.Tech CSE, United University, Prayagraj.`,
+    experience: () => D.experience.map((v) => `<span class="c">▸</span> ${esc(v.role)} <span class="d">@ ${esc(v.company)} · ${esc(v.period)}</span>`).join("\n"),
+    awards: () => D.awards.map((a) => `<span class="c">🏆</span> ${esc(a.title)} <span class="d">— ${esc(a.kicker)}</span>`).join("\n"),
+    linkedin: () => { open(D.linkedin, "_blank", "noopener"); return "opening linkedin…"; },
     projects: () => D.projects.map((p) => `<span class="c">▸</span> ${esc(p.title).padEnd(28)}<span class="d">${esc(p.subtitle)}</span>`).join("\n"),
     stack: () => D.stack.map((g) => `<span class="v">${esc(g.group).padEnd(13)}</span>${g.items.map(esc).join(", ")}`).join("\n"),
     contact: () => D.contact.map((c) => `<span class="v">${esc(c.label).padEnd(13)}</span><a href="${c.href}" target="_blank" rel="noopener">${esc(c.value)}</a>`).join("\n"),
     github: () => { open(`https://github.com/${D.github}`, "_blank", "noopener"); return "opening github…"; },
     whoami: () => "a visitor with great taste in portfolios 😉",
     "sudo hire-me": () => `<span class="c">[sudo] access granted.</span> Let's build something tagda → scroll to contact.`,
-    ls: () => "about  ventures  projects  stack  contact",
+    ls: () => "about  experience  projects  awards  stack  contact",
     clear: () => { body.innerHTML = ""; return null; },
     exit: () => { toggleTerm(false); return null; }
   };
