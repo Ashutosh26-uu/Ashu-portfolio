@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ashutosh Mishra — Founder & CEO, Reasonate AI</title>
+  <meta name="description" content="Ashutosh Mishra — Founder & CEO of Reasonate AI. Building AI products across health-tech, defence-tech, mobility and ed-tech from Prayagraj, India." />
+  <meta name="theme-color" content="#07070a" />
+  <meta property="og:title" content="Ashutosh Mishra — Founder & CEO, Reasonate AI" />
+  <meta property="og:description" content="Building AI that actually ships. Health-tech, defence-AI, mobility and ed-tech." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Preloader -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__name">
+      <span>A</span><span>S</span><span>H</span><span>U</span><span>T</span><span>O</span><span>S</span><span>H</span>
+    </div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__count mono"><span id="loaderCount">0</span>%</div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- Nav -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo" data-magnetic>AM<span>.</span></a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#ventures">Ventures</a>
+      <a href="#work">Work</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__right">
+      <button class="nav__term mono" id="termOpen" title="Open terminal (press /)">&gt;_</button>
+      <a href="#contact" class="btn btn--sm" data-magnetic><span class="dot"></span>Let's talk</a>
+      <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero__glow"></div>
+      <div class="container hero__inner">
+        <p class="hero__tag mono reveal"><span class="pulse"></span> Founder &amp; CEO · Reasonate AI Pvt. Ltd.</p>
+        <h1 class="hero__title">
+          <span class="line"><span class="word">Building AI</span></span>
+          <span class="line"><span class="word">that <em class="serif">actually</em></span></span>
+          <span class="line"><span class="word stroke">ships.</span></span>
+        </h1>
+        <div class="hero__bottom">
+          <p class="hero__sub reveal">
+            I'm <strong>Ashutosh Mishra</strong> — a <span class="typed" id="typed">founder</span><span class="caret">|</span><br />
+            from Prayagraj, turning bold ideas into real products across
+            health-tech, defence-AI, mobility &amp; ed-tech.
+          </p>
+          <div class="hero__cta reveal">
+            <a href="#work" class="btn btn--primary" data-magnetic>See my work <span class="arrow">↗</span></a>
+            <a href="https://github.com/Ashutosh26-uu" target="_blank" rel="noopener" class="btn btn--ghost" data-magnetic>GitHub</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll mono"><span></span>Scroll</div>
+      <div class="hero__meta mono">
+        <div><small>Based in</small>Prayagraj, IN</div>
+        <div><small>Local time</small><span id="clock">--:--</span> IST</div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track" id="marquee"></div>
+    </div>
+
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">01</span>
+          <h2 class="section__title reveal">The <em class="serif">builder</em> behind the code</h2>
+        </div>
+        <div class="bento">
+          <article class="card card--intro reveal" data-spotlight>
+            <p class="big">
+              I don't just write code — I build <span class="hl">companies</span>. As the founder of
+              <strong>Reasonate AI</strong>, I lead products from the first sketch to production:
+              national-scale health networks, AI-powered drone surveillance, satellite-integrated mobility
+              and smart campus systems.
+            </p>
+            <p class="muted">
+              Full-stack by trade, product-obsessed by nature. React, Node, Python, TypeScript, computer vision,
+              LLM assistants, PWAs and Android — whatever the problem needs, I ship it.
+            </p>
+          </article>
+          <article class="card card--stat reveal" data-spotlight>
+            <div class="stat"><span class="count" data-count="32" id="repoCount">0</span><sup>+</sup></div>
+            <p class="mono muted">Public repositories</p>
+          </article>
+          <article class="card card--stat reveal" data-spotlight>
+            <div class="stat"><span class="count" data-count="4">0</span></div>
+            <p class="mono muted">Ventures in motion</p>
+          </article>
+          <article class="card card--focus reveal" data-spotlight>
+            <p class="mono muted">// currently building</p>
+            <h3>Sehatra</h3>
+            <p>A national health network — 8 portals, a dispatch app and the <em>Saathi</em> AI patient assistant, piloting in Barabanki, UP.</p>
+            <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          </article>
+          <article class="card card--stat reveal" data-spotlight>
+            <div class="stat"><span class="count" data-count="8">0</span></div>
+            <p class="mono muted">Live deployments</p>
+          </article>
+          <article class="card card--loc reveal" data-spotlight>
+            <div class="globe" aria-hidden="true"><span></span></div>
+            <div>
+              <p class="mono muted">Base</p>
+              <h3>Prayagraj, Uttar Pradesh</h3>
+              <p class="muted">Building for Bharat — and beyond.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ventures -->
+    <section class="section" id="ventures">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">02</span>
+          <h2 class="section__title reveal">Ventures <em class="serif">&amp;</em> missions</h2>
+        </div>
+        <div class="ventures" id="venturesList"></div>
+      </div>
+    </section>
+
+    <!-- Work -->
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">03</span>
+          <h2 class="section__title reveal">Selected <em class="serif">work</em></h2>
+        </div>
+        <div class="filters mono reveal" id="filters"></div>
+        <div class="projects" id="projects"></div>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <section class="section" id="stack">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">04</span>
+          <h2 class="section__title reveal">The <em class="serif">toolkit</em></h2>
+        </div>
+        <div class="stack" id="stackList"></div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section section--process">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">05</span>
+          <h2 class="section__title reveal">How I <em class="serif">build</em></h2>
+        </div>
+        <div class="process" id="process"></div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section contact" id="contact">
+      <div class="container">
+        <p class="mono muted reveal">// got an idea worth building?</p>
+        <h2 class="contact__title reveal">
+          Let's build<br />something <em class="serif">tagda.</em>
+        </h2>
+        <div class="contact__links reveal" id="contactLinks"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container mono">
+    <span>© <span id="year"></span> Ashutosh Mishra</span>
+    <span class="muted">Press <kbd>/</kbd> for terminal</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <!-- Terminal -->
+  <div class="term" id="term" aria-hidden="true">
+    <div class="term__win">
+      <div class="term__bar">
+        <i></i><i></i><i></i>
+        <span class="mono">ashutosh@reasonate:~</span>
+        <button id="termClose" aria-label="Close terminal">✕</button>
+      </div>
+      <div class="term__body mono" id="termBody"></div>
+      <form class="term__input mono" id="termForm">
+        <span>❯</span><input id="termInput" autocomplete="off" spellcheck="false" placeholder="type 'help'" />
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
