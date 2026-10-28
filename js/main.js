@@ -52,7 +52,7 @@
           <ul class="vpanel__list">${v.highlights.map((h, j) => `<li style="--i:${j}">${esc(h)}</li>`).join("")}</ul>
           <div class="vpanel__metrics">${v.metrics.map(([n, l], j) => `<div style="--i:${j}"><b>${esc(n)}</b><small>${esc(l)}</small></div>`).join("")}</div>
         </div>
-        <a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>
+        ${v.link ? `<a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>` : ""}
       </article>`;
   };
   showVenture(0);
@@ -93,9 +93,9 @@
       <div class="project__foot">
         <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
         <div class="project__links">
-          ${p.live ? `<a href="${p.live}"${ext(p.live)}>Live ↗</a>` : ""}
+          ${p.live ? `<a href="${p.live}"${ext(p.live)}>${esc(p.liveLabel || "Live")} ↗</a>` : ""}
           ${p.repo ? `<a href="${ghUrl(p.repo)}"${ext(ghUrl(p.repo))}>Source ↗</a>` : ""}
-          ${!p.live && !p.repo ? `<span class="nda">Confidential</span>` : ""}
+          ${!p.live && !p.repo ? `<span class="nda">Proprietary</span>` : ""}
         </div>
       </div>
     </article>`).join("");
