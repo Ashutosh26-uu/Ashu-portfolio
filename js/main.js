@@ -142,11 +142,62 @@
     </a></li>`).join("");
   $("#year").textContent = new Date().getFullYear();
 
+  /* ---------- Intro ---------- */
+  const root = document.documentElement;
+  const heroReveal = () => $$(".hero .reveal").forEach((el, i) => {
+    el.style.transitionDelay = 120 + i * 110 + "ms";
+    el.classList.add("in");
+  });
+  const intro = () => {
+    if (!root.classList.contains("is-loading")) return heroReveal();
+    $("#introYear").textContent = new Date().getFullYear();
+    const quick = root.classList.contains("intro-quick");
+    const minTime = quick ? 500 : 2300;
+    const bar = $("#introBar"), pct = $("#introPct"), status = $("#introStatus");
+    const steps = [[0, "Initialising"], [30, "Loading ventures"], [60, "Preparing systems"], [90, "Ready"]];
+    const t0 = performance.now();
+    let real = 0, shown = 0, done = false;
+
+    // Real progress: fonts, portrait and full page load each count for a third
+    const track = (p) => p.catch(() => {}).then(() => { real += 1 / 3; });
+    const img = $(".profile__photo img");
+    track(document.fonts ? document.fonts.ready : Promise.resolve());
+    track(img.decode ? img.decode() : Promise.resolve());
+    track(document.readyState === "complete" ? Promise.resolve() : new Promise((r) => addEventListener("load", r, { once: true })));
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      try { sessionStorage.setItem("introSeen", "1"); } catch (e) {}
+      root.classList.add("is-leaving");
+      root.classList.remove("is-loading");
+      scrollTo(0, 0);
+      heroReveal();
+      setTimeout(() => root.classList.remove("is-leaving", "intro-quick"), 1100);
+    };
+    const tick = (now) => {
+      if (done) return;
+      const timeP = Math.min(1, (now - t0) / minTime);
+      const target = Math.min(timeP, real >= 0.99 ? 1 : real * 0.92 + 0.05);
+      shown += (target - shown) * 0.12;
+      if (target === 1 && shown > 0.995) shown = 1;
+      const p = Math.round(shown * 100);
+      bar.style.transform = `scaleX(${shown})`;
+      pct.textContent = p + "%";
+      status.textContent = steps.filter(([at]) => p >= at).pop()[1];
+      if (shown >= 1) return setTimeout(finish, quick ? 80 : 280);
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    setTimeout(finish, 6000); // never block the page on a slow network
+  };
+
   /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
       const el = e.target;
+      if (el.closest(".hero")) return io.unobserve(el); // the intro plays the hero entrance
       const sibs = $$(":scope > .reveal", el.parentElement);
       el.style.transitionDelay = Math.min(Math.max(sibs.indexOf(el), 0), 5) * 70 + "ms";
       el.classList.add("in");
@@ -154,6 +205,7 @@
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
   $$(".reveal").forEach((el) => io.observe(el));
+  intro();
 
   /* ---------- Counters ---------- */
   const countUp = (el) => {
@@ -206,7 +258,6 @@
   $$(".nav__links a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
 
   /* ---------- Theme ---------- */
-  const root = document.documentElement;
   const currentTheme = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   $("#themeToggle").addEventListener("click", () => {
     const next = currentTheme() === "light" ? "dark" : "light";
