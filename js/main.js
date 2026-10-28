@@ -193,7 +193,10 @@
     track(img.decode ? img.decode() : Promise.resolve());
     track(document.readyState === "complete" ? Promise.resolve() : new Promise((r) => addEventListener("load", r, { once: true })));
 
+    let cleaned = false;
     const cleanup = () => {
+      if (cleaned) return;
+      cleaned = true;
       root.classList.remove("is-morphing");
       requestAnimationFrame(() => root.classList.remove("is-leaving", "intro-quick"));
     };
@@ -208,6 +211,7 @@
       root.classList.add("is-leaving");
       root.classList.remove("is-loading");
       heroReveal();
+      setTimeout(cleanup, 2200); // in case animation events never fire (e.g. a backgrounded tab)
 
       // Fly the portrait into the hero photo when that photo is on screen
       const photo = $("#introPhoto"), target = $(".hero .profile__photo");
@@ -234,7 +238,8 @@
     };
     const tick = (now) => {
       if (done) return;
-      const timeP = Math.min(1, (now - t0) / minTime);
+      // rAF timestamps can predate t0 by a frame, so clamp at zero
+      const timeP = Math.min(1, Math.max(0, (now - t0) / minTime));
       const target = Math.min(timeP, real >= 0.99 ? 1 : real * 0.92 + 0.05);
       shown += (target - shown) * 0.1;
       if (target === 1 && shown > 0.995) shown = 1;
@@ -242,7 +247,7 @@
       paintDial(shown);
       if (shown > 0.01) comet.classList.add("live");
       pct.textContent = String(p).padStart(2, "0");
-      status.textContent = steps.filter(([at]) => p >= at).pop()[1];
+      status.textContent = (steps.filter(([at]) => p >= at).pop() || steps[0])[1];
       if (shown >= 1) return setTimeout(finish, quick ? 120 : 450);
       requestAnimationFrame(tick);
     };
@@ -334,6 +339,77 @@
   };
   addEventListener("resize", movePill);
 
+  // Statement: split into words that light up with scroll progress
+  const statement = $("#statement");
+  const stWords = [];
+  (function wrap(node) {
+    [...node.childNodes].forEach((c) => {
+      if (c.nodeType === 1) return wrap(c);
+      if (c.nodeType !== 3) return;
+      const frag = document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) return frag.append(" ");
+        const s = document.createElement("span");
+        s.className = "sw"; s.textContent = part;
+        stWords.push(s); frag.append(s);
+      });
+      c.replaceWith(frag);
+    });
+  })(statement);
+  const paintStatement = () => {
+    if (reduced) { stWords.forEach((w) => w.classList.add("lit")); return; }
+    const r = statement.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (innerHeight * 0.82 - r.top) / (innerHeight * 0.55)));
+    const lit = Math.round(p * stWords.length);
+    stWords.forEach((w, i) => w.classList.toggle("lit", i < lit));
+  };
+
+  // Ghost numerals behind section headings
+  const heads = $$(".section__head").map((h) => {
+    const num = ($(".kicker", h)?.textContent.match(/^\d+/) || [""])[0];
+    if (!num) return null;
+    const g = document.createElement("span");
+    g.className = "ghost-num"; g.setAttribute("aria-hidden", "true"); g.textContent = num;
+    h.prepend(g);
+    return g;
+  }).filter(Boolean);
+  const paintGhosts = () => {
+    if (reduced) return;
+    heads.forEach((g) => {
+      const r = g.parentElement.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      g.style.setProperty("--gy", ((r.top - innerHeight * 0.5) * 0.14).toFixed(1) + "px");
+    });
+  };
+
+  // Kicker labels decode from random glyphs when they appear
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#/%&*";
+  const decode = (el) => {
+    if (reduced || el.dataset.decoded) return;
+    el.dataset.decoded = "1";
+    const final = el.textContent, t0 = performance.now(), dur = 700;
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const upto = Math.floor(p * final.length);
+      el.textContent = [...final].map((ch, i) => (i < upto || /[\s—·&]/.test(ch) ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join("");
+      if (p < 1) requestAnimationFrame(step); else el.textContent = final;
+    };
+    requestAnimationFrame(step);
+  };
+
+  // Footer wordmark: fit to the container width, rise in when visible
+  const wordmark = $("#wordmark");
+  const fitWordmark = () => {
+    wordmark.style.fontSize = "";
+    const avail = wordmark.clientWidth, need = wordmark.scrollWidth;
+    if (need > avail) wordmark.style.fontSize = parseFloat(getComputedStyle(wordmark).fontSize) * (avail / need) * 0.98 + "px";
+  };
+  fitWordmark();
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fitWordmark);
+  addEventListener("resize", fitWordmark);
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) wordmark.classList.add("in"); }, { threshold: 0.3 }).observe(wordmark);
+
   /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -343,6 +419,8 @@
       const sibs = $$(":scope > .reveal", el.parentElement);
       el.style.transitionDelay = Math.min(Math.max(sibs.indexOf(el), 0), 5) * 70 + "ms";
       el.classList.add("in");
+      const k = $(".kicker", el) || (el.classList.contains("kicker") ? el : null);
+      if (k) decode(k);
       io.unobserve(el);
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
@@ -390,6 +468,8 @@
     const max = document.documentElement.scrollHeight - innerHeight;
     $("#progress").style.transform = `scaleX(${max > 0 ? y / max : 0})`;
     if (y < innerHeight * 1.2) $(".hero").style.setProperty("--py", y * 0.25 + "px");
+    paintStatement();
+    paintGhosts();
     let current = "";
     sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) current = s.id; });
     $$(".nav__links a").forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));

@@ -447,6 +447,39 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
   .nav__pill { display: none; }
 }
 
+/* Statement band — words light up as it scrolls through the viewport */
+.statement { padding: clamp(96px, 14vw, 180px) 0; border-bottom: 1px solid var(--line); }
+.statement__text { font-family: var(--serif); font-size: clamp(1.9rem, 4.2vw, 3.6rem); line-height: 1.22; letter-spacing: -0.02em; max-width: 1040px; text-wrap: pretty; }
+.statement__text em { color: inherit; }
+.sw { color: var(--text); opacity: 0.16; transition: opacity 0.35s ease, color 0.35s ease; }
+.sw.lit { opacity: 1; }
+.statement__text em .sw.lit { color: var(--gold); }
+.statement__by { display: flex; align-items: center; gap: 14px; margin-top: 36px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.statement__by span { width: 36px; height: 1px; background: var(--gold); }
+
+/* Ghost section numerals behind headings */
+.section__head { position: relative; }
+.ghost-num { position: absolute; right: 0; top: -0.32em; z-index: -1; pointer-events: none; user-select: none;
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(7rem, 16vw, 15rem); line-height: 1;
+  color: transparent; -webkit-text-stroke: 1px var(--line-2); opacity: 0; transform: translate3d(0, var(--gy, 40px), 0);
+  transition: opacity 1.2s var(--ease) 0.2s; }
+.section__head.in .ghost-num { opacity: 1; }
+.section__head--row .ghost-num { right: auto; left: 46%; }
+.section, .contact { position: relative; isolation: isolate; }
+
+/* Footer wordmark */
+.wordmark { display: flex; justify-content: space-between; gap: 0.2em; padding: clamp(48px, 8vw, 96px) 0 clamp(20px, 3vw, 32px); overflow: hidden;
+  font-weight: 800; letter-spacing: -0.055em; line-height: 0.8; font-size: 12vw; white-space: nowrap; color: var(--text); }
+.wordmark span { display: inline-block; transform: translateY(105%); transition: transform 1.3s var(--ease); }
+.wordmark span:last-child { transition-delay: 0.08s; font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.03em; color: var(--gold); }
+.wordmark.in span { transform: none; }
+@media (min-width: 1248px) { .wordmark { font-size: 9.6rem; } }
+
+@media (max-width: 860px) {
+  .ghost-num { font-size: 6.5rem; top: -0.2em; }
+  .section__head--row .ghost-num { left: auto; right: 0; }
+}
+
 /* ==========================================================================
    Intro — a watch-dial progress ring around the portrait, split-curtain exit
    ========================================================================== */
