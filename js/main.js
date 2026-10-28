@@ -63,15 +63,46 @@
       <div class="stack__items">${g.items.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
     </div>`).join("");
 
-  $("#process").innerHTML = D.focus.map((s, i) => `
-    <article class="card step reveal" data-spotlight>
-      <span class="step__n">0${i + 1}</span>
-      <div><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></div>
-    </article>`).join("") + `
-    <a class="card step step--cta reveal" href="#contact" data-spotlight>
-      <span class="step__n">→</span>
-      <div><h3>Run a pilot with ReasonateAI</h3><p>Available for collaboration &amp; enterprise pilots.</p></div>
-    </a>`;
+  $("#venturesGrid").innerHTML = D.ventures.map((v, i) => `
+    <article class="card venture-card reveal" data-spotlight style="--c:${v.color}">
+      <div class="venture-card__top">
+        <span class="venture-card__mono">${esc(v.mono)}</span>
+        <span class="venture-card__stage mono"><span class="dot"></span>${esc(v.stage)}</span>
+      </div>
+      <span class="mono venture-card__no">0${i + 1} / 0${D.ventures.length}</span>
+      <h3>${esc(v.name)}</h3>
+      <p class="venture-card__line">${esc(v.line)}</p>
+      <p class="venture-card__role mono">${esc(v.role)}</p>
+      <p class="muted venture-card__desc">${esc(v.desc)}</p>
+      <div class="venture-card__metrics">${v.metrics.map(([n, l]) => `<div><b>${esc(n)}</b><small class="mono">${esc(l)}</small></div>`).join("")}</div>
+      <div class="project__tags mono">${v.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+      <a class="venture-card__link" href="${v.link}" target="_blank" rel="noopener">${esc(v.linkLabel)} <span>↗</span></a>
+    </article>`).join("");
+
+  $("#flow").innerHTML = D.flow.map((f, i) => `
+    <div class="flow__node" style="--i:${i}">
+      <span class="mono flow__k">${f.k}</span>
+      <b>${esc(f.t)}</b>
+      <small class="mono">${esc(f.d)}</small>
+    </div>${i < D.flow.length - 1 ? `<span class="flow__arrow" style="--i:${i}" aria-hidden="true"></span>` : ""}`).join("") +
+    `<div class="flow__loop mono" aria-hidden="true"><span>↺ watchers detect drift → back to the test twin → fixed → promoted</span></div>`;
+
+  // Engine log: types itself out whenever it scrolls into view
+  const logEl = $("#engineLog");
+  let logStarted = false;
+  const runLog = () => {
+    logEl.innerHTML = "";
+    let li = 0;
+    const next = () => {
+      if (li >= D.engineLog.length) return setTimeout(runLog, 4000);
+      const [cls, text] = D.engineLog[li++];
+      logEl.insertAdjacentHTML("beforeend", `<span class="${cls}">${esc(text)}</span>\n`);
+      logEl.scrollTop = logEl.scrollHeight;
+      setTimeout(next, reduced ? 0 : 420 + Math.random() * 380);
+    };
+    next();
+  };
+  new IntersectionObserver(([e]) => { if (e.isIntersecting && !logStarted) { logStarted = true; runLog(); } }, { threshold: 0.3 }).observe(logEl);
 
   $("#contactLinks").innerHTML = D.contact.map((c) => `
     <a class="contact__link" href="${c.href}"${c.href.startsWith("http") ? ' target="_blank" rel="noopener"' : ""} data-magnetic>
@@ -295,10 +326,11 @@
   const banner = () => print(`<span class="c">
    ___   __  ___
   / _ | /  |/  /   Ashutosh Mishra
- / __ |/ /|_/ /    Founder, CEO & CTO · ReasonateAI
+ / __ |/ /|_/ /    Founder & CEO · ReasonateAI · Sehatra · EduTech
 /_/ |_/_/  /_/     </span><span class="d">type 'help' to begin</span>`);
   const cmds = {
     help: () => `<span class="v">about</span>        who am I
+<span class="v">ventures</span>     companies I run
 <span class="v">experience</span>   roles & companies
 <span class="v">projects</span>     things I've shipped
 <span class="v">awards</span>       recognition
@@ -308,10 +340,11 @@
 <span class="v">github</span>       open my GitHub
 <span class="v">clear</span>        clear screen
 <span class="v">exit</span>         close terminal`,
-    about: () => `Ashutosh Mishra — Founder, CEO & CTO of ReasonateAI Private Limited.
+    about: () => `Ashutosh Mishra — Founder & CEO of ReasonateAI (also CTO), Sehatra and EduTech.
 Deep-tech system architect building the Autonomous AI CTO and Dual-Twin Architecture.
 Incubated at TBIF – IIT Ropar · Enterprise pilots with Samsung R&D and Tata Elxsi.
 B.Tech CSE, United University, Prayagraj.`,
+    ventures: () => D.ventures.map((v) => `<span class="c">▸</span> ${esc(v.name).padEnd(13)}<span class="d">${esc(v.role)} — ${esc(v.line)}</span>`).join("\n"),
     experience: () => D.experience.map((v) => `<span class="c">▸</span> ${esc(v.role)} <span class="d">@ ${esc(v.company)} · ${esc(v.period)}</span>`).join("\n"),
     awards: () => D.awards.map((a) => `<span class="c">🏆</span> ${esc(a.title)} <span class="d">— ${esc(a.kicker)}</span>`).join("\n"),
     linkedin: () => { open(D.linkedin, "_blank", "noopener"); return "opening linkedin…"; },
@@ -321,7 +354,7 @@ B.Tech CSE, United University, Prayagraj.`,
     github: () => { open(`https://github.com/${D.github}`, "_blank", "noopener"); return "opening github…"; },
     whoami: () => "a visitor with great taste in portfolios 😉",
     "sudo hire-me": () => `<span class="c">[sudo] access granted.</span> Let's build something tagda → scroll to contact.`,
-    ls: () => "about  experience  projects  awards  stack  contact",
+    ls: () => "about  ventures  experience  projects  awards  stack  contact",
     clear: () => { body.innerHTML = ""; return null; },
     exit: () => { toggleTerm(false); return null; }
   };

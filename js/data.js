@@ -4,7 +4,7 @@ window.PORTFOLIO = {
   email: "ashutosh@reasonateai.com",
   linkedin: "https://www.linkedin.com/in/ashutosh-mishra-841408324/",
 
-  roles: ["founder", "CTO who still writes the code", "3rd-year CSE student", "hackathon kid from Prayagraj", "builder"],
+  roles: ["founder of three companies", "CTO who still writes the code", "3rd-year CSE student", "hackathon kid from Prayagraj", "builder"],
 
   // Logos strip (rendered as a text marquee)
   backers: ["IIT Ropar TBIF", "IISc Bangalore", "IIT Delhi", "IIT Kanpur", "NVIDIA Inception", "Google for Startups",
@@ -20,6 +20,75 @@ window.PORTFOLIO = {
     "Ek pilot karein? 😄"
   ],
 
+  // The companies — shown as big cards in "Companies I run"
+  ventures: [
+    {
+      name: "ReasonateAI",
+      mono: "R",
+      color: "#c6ff3d",
+      role: "Founder, CEO & CTO",
+      line: "The AI CTO",
+      desc: "Describe your app in plain words. ReasonateAI plans it, builds it, tests it in a private twin and keeps it running — no 2 a.m. outages.",
+      stage: "v0.0.2 live",
+      metrics: [["8,800+", "waitlist"], ["13", "incubators"], ["2", "enterprise pilots"]],
+      tags: ["TBIF · IIT Ropar", "NVIDIA Inception", "Google for Startups"],
+      link: "https://www.reasonateai.com",
+      linkLabel: "reasonateai.com"
+    },
+    {
+      name: "Sehatra",
+      mono: "S",
+      color: "#5ee6c4",
+      role: "Founder & CEO",
+      line: "Healthcare for Bharat",
+      desc: "A national health network on one backend — 8 connected portals, ambulance dispatch and Saathi, an AI that talks to patients.",
+      stage: "District pilot",
+      metrics: [["8", "portals"], ["1", "pilot district"], ["PWA + Android", "apps"]],
+      tags: ["Pilot: Barabanki, UP", "Saathi AI", "Postgres"],
+      link: "https://github.com/Ashutosh26-uu/-nexus-healthcare",
+      linkLabel: "View the build"
+    },
+    {
+      name: "EduTech",
+      mono: "E",
+      color: "#a996ff",
+      role: "Founder & CEO",
+      line: "Tech for how India learns",
+      desc: "Started where I study — digital systems for campuses, beginning with the UU-10 bus attendance portal at United University.",
+      stage: "Early stage",
+      metrics: [["Campus", "first pilot"], ["Daily PIN", "attendance"], ["0 → 1", "building"]],
+      tags: ["United University", "Smart campus"],
+      link: "https://client-ghwf.vercel.app",
+      linkLabel: "See the first product"
+    }
+  ],
+
+  // Dual-Twin pipeline (Under the hood)
+  flow: [
+    { k: "01", t: "Intent", d: "“Build me a clinic booking app”" },
+    { k: "02", t: "3 AI agents", d: "plan · code · test" },
+    { k: "03", t: "Test twin", d: "private sandbox" },
+    { k: "04", t: "Checks", d: "tests · security · config" },
+    { k: "05", t: "Live twin", d: "zero-downtime promote" }
+  ],
+
+  engineLog: [
+    ["d", "$ reasonate build \"clinic booking app\""],
+    ["v", "[plan]    3 agents assigned · 6 pages · 4 tables"],
+    ["v", "[code]    react + fastapi scaffold generated"],
+    ["c", "[twin]    spinning private sandbox twin-7f3a…"],
+    ["v", "[test]    142 checks running"],
+    ["e", "[test]    ✗ 2 failing · auth redirect, missing index"],
+    ["v", "[fix]     agent patched 2 files · re-running"],
+    ["c", "[test]    ✓ 142/142 passed"],
+    ["v", "[secure]  no leaked keys · access rules ok"],
+    ["c", "[promote] live twin updated · downtime 0s"],
+    ["v", "[watch]   telemetry on · drift guard armed"],
+    ["e", "[watch]   ⚠ config drift detected on node-2"],
+    ["c", "[heal]    rolled back in twin · patched · promoted"],
+    ["d", "# and then everybody slept peacefully. 😴"]
+  ],
+
   // Shown as a story — newest chapter first
   experience: [
     {
@@ -29,6 +98,22 @@ window.PORTFOLIO = {
       desc: "Started it to answer one question: why do apps still break in production? We're building an AI that tests every change in a private copy first. Incubated at TBIF – IIT Ropar, piloting with Samsung R&D and Tata Elxsi.",
       link: "https://www.reasonateai.com",
       tag: "Now"
+    },
+    {
+      company: "Sehatra · Nexus Healthcare",
+      role: "Founder & CEO",
+      period: "Now",
+      desc: "Building a health network for Bharat — portals for patients, doctors, hospitals and dispatch, all on one backend. Piloting in Barabanki, UP.",
+      link: "https://github.com/Ashutosh26-uu/-nexus-healthcare",
+      tag: "Health-tech"
+    },
+    {
+      company: "EduTech",
+      role: "Founder & CEO",
+      period: "Now",
+      desc: "Campus tech that actually gets used — it started with my own university's bus attendance.",
+      link: "https://client-ghwf.vercel.app",
+      tag: "Ed-tech"
     },
     {
       company: "Curelex Healthtech Pvt. Ltd.",

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ashutosh Mishra — Founder, CEO & CTO, ReasonateAI</title>
+  <title>Ashutosh Mishra — Founder & CEO · ReasonateAI, Sehatra, EduTech</title>
   <meta name="description" content="Ashutosh Mishra — Founder, CEO & CTO of ReasonateAI. Deep-tech system architect building the Autonomous AI CTO and Dual-Twin Architecture. Incubated at TBIF IIT Ropar. Microsoft Code for Bharat 2.0 winner." />
   <meta name="theme-color" content="#07070a" />
   <meta property="og:title" content="Ashutosh Mishra — Founder, CEO & CTO, ReasonateAI" />
@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
 </head>
 <body>
   <!-- Preloader -->
@@ -36,10 +36,10 @@
   <header class="nav" id="nav">
     <a href="#top" class="nav__logo" data-magnetic>AM<span>.</span></a>
     <nav class="nav__links" id="navLinks">
+      <a href="#ventures">Ventures</a>
       <a href="#about">About</a>
-      <a href="#experience">Story</a>
       <a href="#work">Work</a>
-      <a href="#recognition">Trophies</a>
+      <a href="#tech">Tech</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav__right">
@@ -63,10 +63,15 @@
             <span class="line"><span class="word"><em class="serif">fix <span class="scribble">itself.<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20 C 60 6, 120 28, 180 14 S 270 8, 296 18" /></svg></span></em></span></span>
           </h1>
           <p class="hero__sub reveal">
-            I'm a <span class="typed" id="typed">founder</span><span class="caret">|</span> who got a little too obsessed with one question —
-            <strong>why do apps still break at 2 a.m.?</strong> So I started <strong>ReasonateAI</strong> to fix it.
-            Today <span class="marker">13 incubators, Samsung R&amp;D and Tata Elxsi</span> are betting on the answer.
+            I'm a <span class="typed" id="typed">founder</span><span class="caret">|</span> who got obsessed with one question —
+            <strong>why does software still break at 2 a.m.?</strong> That question turned into three companies, and
+            <span class="marker">13 incubators, Samsung R&amp;D and Tata Elxsi</span> are betting on the answer.
           </p>
+          <div class="hero__ventures reveal">
+            <a href="#ventures" class="vpill"><i style="--c:#c6ff3d">R</i><span><b>ReasonateAI</b><small class="mono">Founder, CEO &amp; CTO</small></span></a>
+            <a href="#ventures" class="vpill"><i style="--c:#5ee6c4">S</i><span><b>Sehatra</b><small class="mono">Founder &amp; CEO</small></span></a>
+            <a href="#ventures" class="vpill"><i style="--c:#a996ff">E</i><span><b>EduTech</b><small class="mono">Founder &amp; CEO</small></span></a>
+          </div>
           <div class="hero__cta reveal">
             <a href="#work" class="btn btn--primary" data-magnetic>See my work <span class="arrow">↗</span></a>
             <a href="https://www.linkedin.com/in/ashutosh-mishra-841408324/" target="_blank" rel="noopener" class="btn btn--ghost" data-magnetic>LinkedIn</a>
@@ -81,18 +86,21 @@
           </div>
           <div class="portrait__bubble" id="bubble" role="status" aria-live="polite"></div>
           <div class="portrait__frame" id="portraitFrame">
-            <img src="assets/ashutosh.jpg" alt="Ashutosh Mishra, Founder, CEO & CTO of ReasonateAI" width="900" height="1116" />
+            <img src="assets/ashutosh.jpg" alt="Ashutosh Mishra, founder of ReasonateAI, Sehatra and EduTech" width="900" height="1116" />
             <div class="portrait__scan" aria-hidden="true"></div>
+            <span class="portrait__corner mono" aria-hidden="true">ID · 001</span>
           </div>
           <figcaption class="portrait__plate">
             <div>
               <strong>Ashutosh Mishra</strong>
-              <span class="mono muted">Founder · CEO · CTO</span>
+              <span class="mono muted">Founder &amp; CEO ×3 · CTO</span>
             </div>
             <span class="portrait__live mono"><span class="dot"></span>Open to chat</span>
           </figcaption>
-          <div class="portrait__badge portrait__badge--a mono">🏆 Code for Bharat 2.0 · Winner</div>
-          <div class="portrait__badge portrait__badge--b mono">⚡ TBIF · IIT Ropar</div>
+          <ul class="portrait__chips mono">
+            <li>🏆 Code for Bharat 2.0 · Winner</li>
+            <li class="alt">⚡ TBIF · IIT Ropar</li>
+          </ul>
         </figure>
       </div>
       <div class="hero__scroll mono"><span></span>Scroll</div>
@@ -108,18 +116,30 @@
       <div class="marquee__track" id="marquee" aria-hidden="true"></div>
     </div>
 
+    <!-- Ventures -->
+    <section class="section" id="ventures">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">01</span>
+          <h2 class="section__title reveal">Companies I <em class="serif">run</em></h2>
+          <p class="section__aside hand reveal">three of them. yes, at once. 😅</p>
+        </div>
+        <div class="vgrid" id="venturesGrid"></div>
+      </div>
+    </section>
+
     <!-- About -->
     <section class="section" id="about">
       <div class="container">
         <div class="section__head">
-          <span class="section__num mono">01</span>
+          <span class="section__num mono">02</span>
           <h2 class="section__title reveal">A little <em class="serif">about me</em></h2>
         </div>
         <div class="bento">
           <article class="card card--intro letter reveal" data-spotlight>
             <p class="letter__to hand">Hey you,</p>
             <p class="big">
-              I'm a 3rd-year CSE student from <span class="hl">Prayagraj</span> who ended up running a deep-tech company.
+              I'm a 3rd-year CSE student from <span class="hl">Prayagraj</span> who ended up running three companies.
               At <strong>ReasonateAI</strong> we're building an AI that does a CTO's job — you describe what you need in plain words,
               it builds it, tests it in a private copy, and keeps it running.
             </p>
@@ -175,7 +195,7 @@
     <section class="section" id="experience">
       <div class="container">
         <div class="section__head">
-          <span class="section__num mono">02</span>
+          <span class="section__num mono">03</span>
           <h2 class="section__title reveal">The story <em class="serif">so far</em></h2>
         </div>
         <div class="ventures" id="experienceList"></div>
@@ -186,7 +206,7 @@
     <section class="section" id="work">
       <div class="container">
         <div class="section__head">
-          <span class="section__num mono">03</span>
+          <span class="section__num mono">04</span>
           <h2 class="section__title reveal">Things I've <em class="serif">built</em></h2>
         </div>
         <div class="filters mono reveal" id="filters"></div>
@@ -194,25 +214,39 @@
       </div>
     </section>
 
+    <!-- Under the hood -->
+    <section class="section" id="tech">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__num mono">05</span>
+          <h2 class="section__title reveal">Under the <em class="serif">hood</em></h2>
+          <p class="section__aside hand reveal">the part that keeps me up at night</p>
+        </div>
+        <div class="hood">
+          <div class="hood__intro reveal">
+            <span class="mono hl">// ReasonateAI · Dual-Twin Architecture</span>
+            <h3>Every change gets a rehearsal before it goes on stage.</h3>
+            <p class="muted">You describe what you want. Three AI agents plan it, write it and test it inside a private twin of your app.
+              Only what passes every check gets promoted to the live twin — with zero downtime. After launch, watchers keep an eye
+              on the live app and send any drift back into the loop to be fixed.</p>
+          </div>
+          <div class="flow reveal" id="flow" aria-label="Dual-Twin pipeline"></div>
+          <div class="engine reveal">
+            <div class="engine__bar mono"><i></i><i></i><i></i><span>reasonate-engine · live log</span><span class="engine__tag">illustrative</span></div>
+            <pre class="engine__log mono" id="engineLog" aria-hidden="true"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Recognition -->
     <section class="section" id="recognition">
       <div class="container">
         <div class="section__head">
-          <span class="section__num mono">04</span>
+          <span class="section__num mono">06</span>
           <h2 class="section__title reveal">The trophy <em class="serif">shelf</em></h2>
         </div>
         <div class="awards" id="awards"></div>
-      </div>
-    </section>
-
-    <!-- Focus -->
-    <section class="section section--process">
-      <div class="container">
-        <div class="section__head">
-          <span class="section__num mono">05</span>
-          <h2 class="section__title reveal">What keeps me <em class="serif">up at night</em></h2>
-        </div>
-        <div class="process" id="process"></div>
       </div>
     </section>
 
@@ -220,7 +254,7 @@
     <section class="section" id="stack">
       <div class="container">
         <div class="section__head">
-          <span class="section__num mono">06</span>
+          <span class="section__num mono">07</span>
           <h2 class="section__title reveal">My <em class="serif">toolbox</em></h2>
         </div>
         <div class="stack" id="stackList"></div>
@@ -261,7 +295,7 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/data.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>
