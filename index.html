@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=7" />
+  <link rel="stylesheet" href="css/style.css?v=9" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -28,16 +28,27 @@
 <body>
   <!-- Intro -->
   <div class="intro" id="intro" aria-hidden="true">
-    <div class="intro__grid"></div>
+    <div class="intro__bg"><div class="intro__grid"></div></div>
     <div class="intro__corner intro__corner--tl"><span class="status-dot"></span>Prayagraj, India</div>
     <div class="intro__corner intro__corner--tr"><span id="introYear">2026</span> · Portfolio</div>
     <div class="intro__inner">
-      <svg class="intro__mark" viewBox="0 0 80 80" aria-hidden="true">
-        <rect class="intro__mark-outline" x="2" y="2" width="76" height="76" rx="20" />
-        <rect class="intro__mark-fill" x="2" y="2" width="76" height="76" rx="20" />
-        <text class="intro__mark-text" x="40" y="49" text-anchor="middle">AM</text>
-      </svg>
-      <div class="intro__name"><span>Ashutosh Mishra</span></div>
+      <div class="intro__avatar">
+        <svg class="intro__ring" viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#4A86FF" />
+              <stop offset="55%" stop-color="#8B5CF6" />
+              <stop offset="100%" stop-color="#D2B37A" />
+            </linearGradient>
+          </defs>
+          <circle class="intro__ring-dash" cx="100" cy="100" r="97" />
+          <circle class="intro__ring-track" cx="100" cy="100" r="88" />
+          <circle class="intro__ring-fill" id="introRing" cx="100" cy="100" r="88" />
+        </svg>
+        <div class="intro__orbit" aria-hidden="true"><i style="--c:#4A86FF; --a:0deg"></i><i style="--c:#14A37F; --a:120deg"></i><i style="--c:#8B5CF6; --a:240deg"></i></div>
+        <div class="intro__photo" id="introPhoto"><img src="assets/ashutosh.jpg" alt="" width="900" height="1116" /></div>
+      </div>
+      <div class="intro__name" id="introName">Ashutosh Mishra</div>
       <div class="intro__role"><span>Founder &amp; CEO</span></div>
       <ul class="intro__ventures">
         <li style="--c:#4A86FF; --d:0">ReasonateAI</li>
@@ -45,10 +56,8 @@
         <li style="--c:#8B5CF6; --d:2">EduTech</li>
       </ul>
     </div>
-    <div class="intro__foot">
-      <div class="intro__bar"><i id="introBar"></i></div>
-      <div class="intro__status"><span id="introStatus">Initialising</span><span id="introPct">0%</span></div>
-    </div>
+    <div class="intro__corner intro__corner--bl" id="introStatus">Initialising</div>
+    <div class="intro__count" aria-hidden="true"><span id="introPct">00</span><small>%</small></div>
   </div>
 
   <a class="skip" href="#main">Skip to content</a>
@@ -271,7 +280,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=7"></script>
-  <script src="js/main.js?v=7"></script>
+  <script src="js/data.js?v=9"></script>
+  <script src="js/main.js?v=9"></script>
 </body>
 </html>

@@ -145,51 +145,87 @@
   /* ---------- Intro ---------- */
   const root = document.documentElement;
   const heroReveal = () => $$(".hero .reveal").forEach((el, i) => {
-    el.style.transitionDelay = 120 + i * 110 + "ms";
+    el.style.transitionDelay = (el.classList.contains("profile") ? 150 : 250 + i * 110) + "ms";
     el.classList.add("in");
   });
   const intro = () => {
     if (!root.classList.contains("is-loading")) return heroReveal();
     $("#introYear").textContent = new Date().getFullYear();
+
+    // Split the name so each letter can blur in
+    const nameEl = $("#introName");
+    nameEl.innerHTML = [...nameEl.textContent].map((ch, i) =>
+      ch === " " ? '<span class="sp"></span>' : `<span class="ch" style="--i:${i}">${esc(ch)}</span>`).join("");
+
     const quick = root.classList.contains("intro-quick");
-    const minTime = quick ? 500 : 2300;
-    const bar = $("#introBar"), pct = $("#introPct"), status = $("#introStatus");
-    const steps = [[0, "Initialising"], [30, "Loading ventures"], [60, "Preparing systems"], [90, "Ready"]];
+    const minTime = quick ? 500 : 2600;
+    const ring = $("#introRing"), pct = $("#introPct"), status = $("#introStatus");
+    const RING = 2 * Math.PI * 88;
+    const steps = [[0, "Initialising"], [25, "Loading ventures"], [55, "Preparing systems"], [85, "Almost there"], [100, "Welcome"]];
     const t0 = performance.now();
     let real = 0, shown = 0, done = false;
 
     // Real progress: fonts, portrait and full page load each count for a third
     const track = (p) => p.catch(() => {}).then(() => { real += 1 / 3; });
-    const img = $(".profile__photo img");
     track(document.fonts ? document.fonts.ready : Promise.resolve());
+    const img = $(".profile__photo img");
     track(img.decode ? img.decode() : Promise.resolve());
     track(document.readyState === "complete" ? Promise.resolve() : new Promise((r) => addEventListener("load", r, { once: true })));
 
+    const cleanup = () => {
+      root.classList.remove("is-morphing");
+      requestAnimationFrame(() => root.classList.remove("is-leaving", "intro-quick"));
+    };
     const finish = () => {
       if (done) return;
       done = true;
       try { sessionStorage.setItem("introSeen", "1"); } catch (e) {}
+      ring.style.strokeDashoffset = 0;
+      pct.textContent = "100";
+      scrollTo(0, 0);
       root.classList.add("is-leaving");
       root.classList.remove("is-loading");
-      scrollTo(0, 0);
       heroReveal();
-      setTimeout(() => root.classList.remove("is-leaving", "intro-quick"), 1100);
+
+      // Fly the portrait into the hero photo when that photo is on screen
+      const photo = $("#introPhoto"), target = $(".hero .profile__photo");
+      const src = photo.getBoundingClientRect(), dst = target.getBoundingClientRect();
+      const visible = dst.width > 0 && dst.top < innerHeight - 80 && dst.bottom > 0;
+      photo.style.animation = "none";
+      photo.style.clipPath = "none";
+      if (visible && photo.animate) {
+        root.classList.add("is-morphing");
+        const sx = dst.width / src.width, sy = dst.height / src.height;
+        const dx = dst.left - src.left, dy = dst.top - src.top;
+        const radius = parseFloat(getComputedStyle(target).borderTopLeftRadius) || 16;
+        photo.style.transformOrigin = "0 0";
+        photo.animate([
+          { transform: "translate(0, 0) scale(1)", borderRadius: "50%" },
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, borderRadius: `${radius / sx}px / ${radius / sy}px` }
+        ], { duration: quick ? 600 : 1150, easing: "cubic-bezier(0.76, 0, 0.24, 1)", fill: "forwards" }).onfinish = cleanup;
+      } else {
+        photo.animate
+          ? photo.animate([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(0.7)" }],
+              { duration: 600, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "forwards" }).onfinish = cleanup
+          : cleanup();
+      }
     };
     const tick = (now) => {
       if (done) return;
       const timeP = Math.min(1, (now - t0) / minTime);
       const target = Math.min(timeP, real >= 0.99 ? 1 : real * 0.92 + 0.05);
-      shown += (target - shown) * 0.12;
+      shown += (target - shown) * 0.1;
       if (target === 1 && shown > 0.995) shown = 1;
       const p = Math.round(shown * 100);
-      bar.style.transform = `scaleX(${shown})`;
-      pct.textContent = p + "%";
+      ring.style.strokeDashoffset = RING * (1 - shown);
+      pct.textContent = String(p).padStart(2, "0");
       status.textContent = steps.filter(([at]) => p >= at).pop()[1];
-      if (shown >= 1) return setTimeout(finish, quick ? 80 : 280);
+      if (shown >= 1) return setTimeout(finish, quick ? 120 : 450);
       requestAnimationFrame(tick);
     };
+    ring.style.strokeDasharray = RING;
     requestAnimationFrame(tick);
-    setTimeout(finish, 6000); // never block the page on a slow network
+    setTimeout(finish, 7000); // never block the page on a slow network
   };
 
   /* ---------- Reveal on scroll ---------- */

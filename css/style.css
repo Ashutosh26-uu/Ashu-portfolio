@@ -355,65 +355,95 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 .term__input input { flex: 1; background: none; border: 0; outline: 0; color: #E6E8EB; font: inherit; font-size: 0.82rem; }
 
 /* ==========================================================================
-   Intro
+   Intro — portrait inside a live progress ring, then morphs into the hero
    ========================================================================== */
-.intro { display: none; position: fixed; inset: 0; z-index: 1000; background: var(--bg); color: var(--text); overflow: hidden;
-  clip-path: inset(0 0 0 0); transition: clip-path 1s cubic-bezier(0.76, 0, 0.24, 1); }
+.intro { display: none; position: fixed; inset: 0; z-index: 1000; color: var(--text); overflow: hidden; pointer-events: none; }
 html.is-loading .intro, html.is-leaving .intro { display: block; }
+html.is-loading .intro { pointer-events: auto; }
 html.is-loading body { overflow: hidden; }
-html.is-leaving .intro { clip-path: inset(0 0 100% 0); }
-.intro::after { content: ""; position: absolute; width: 900px; height: 900px; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-soft), transparent 60%); pointer-events: none; animation: introGlow 3s ease-in-out infinite alternate; }
-@keyframes introGlow { to { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; } }
+.intro__bg { position: absolute; inset: 0; background: var(--bg); transition: opacity 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s; }
+.intro__bg::after { content: ""; position: absolute; width: 1000px; height: 1000px; left: 50%; top: 46%; transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 58%); animation: introGlow 3.2s ease-in-out infinite alternate; }
+@keyframes introGlow { to { transform: translate(-50%, -50%) scale(1.18); opacity: 0.65; } }
 .intro__grid { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0); background-size: 28px 28px;
-  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 20%, transparent 75%); }
-.intro__inner { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; text-align: center;
-  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.6s; }
-html.is-leaving .intro__inner { transform: translateY(-60px); opacity: 0; }
+  -webkit-mask-image: radial-gradient(ellipse 55% 50% at 50% 46%, #000 15%, transparent 75%); mask-image: radial-gradient(ellipse 55% 50% at 50% 46%, #000 15%, transparent 75%); }
+.intro__inner { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; text-align: center; }
 
-.intro__mark { width: 84px; height: 84px; margin-bottom: 10px; overflow: visible; }
-.intro__mark-outline { fill: none; stroke: var(--text); stroke-width: 2; stroke-dasharray: 300; stroke-dashoffset: 300; animation: draw 1s var(--ease) 0.1s forwards; }
-.intro__mark-fill { fill: var(--text); opacity: 0; transform-origin: 40px 40px; transform: scale(0.85); animation: markFill 0.5s var(--ease) 0.9s forwards; }
-.intro__mark-text { font-family: var(--sans); font-weight: 800; font-size: 26px; letter-spacing: 0.5px; fill: var(--bg); opacity: 0; animation: fadeIn 0.4s ease 1.1s forwards; }
-@keyframes draw { to { stroke-dashoffset: 0; } }
-@keyframes markFill { to { opacity: 1; transform: scale(1); } }
-@keyframes fadeIn { to { opacity: 1; } }
+/* Avatar + ring */
+.intro__avatar { position: relative; width: 200px; height: 200px; margin-bottom: 18px; display: grid; place-items: center; }
+.intro__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.intro__ring circle { fill: none; }
+.intro__ring-dash { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 2 6; transform-origin: 100px 100px; opacity: 0; animation: spin 24s linear infinite, fadeIn 0.8s ease 0.1s forwards; }
+.intro__ring-track { stroke: var(--line); stroke-width: 2; opacity: 0; animation: fadeIn 0.6s ease 0.2s forwards; }
+.intro__ring-fill { stroke: url(#ringGrad); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 553; stroke-dashoffset: 553;
+  filter: drop-shadow(0 0 6px rgba(74, 134, 255, 0.55)); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.intro__orbit { position: absolute; inset: 0; opacity: 0; animation: spin 7s linear infinite, fadeIn 0.8s ease 1s forwards; }
+.intro__orbit i { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px; border-radius: 50%; background: var(--c);
+  box-shadow: 0 0 12px var(--c); transform: rotate(var(--a)) translateY(-97px); }
+.intro__photo { position: relative; width: 152px; height: 152px; border-radius: 50%; overflow: hidden; background: var(--surface-2);
+  box-shadow: 0 0 0 6px var(--bg), 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  clip-path: circle(0% at 50% 50%); animation: photoIn 1.2s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards; will-change: transform; }
+.intro__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.35); filter: grayscale(1) contrast(1.05);
+  animation: photoImg 1.8s var(--ease) 0.25s forwards; }
+@keyframes photoIn { to { clip-path: circle(50% at 50% 50%); } }
+@keyframes photoImg { 60% { filter: grayscale(1) contrast(1.05); } to { transform: none; filter: none; } }
 
-.intro__name, .intro__role { overflow: hidden; }
-.intro__name span, .intro__role span { display: inline-block; transform: translateY(110%); animation: slideUp 0.9s var(--ease) forwards; }
-.intro__name span { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; animation-delay: 0.5s; }
-.intro__role span { font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--gold); animation-delay: 0.7s; }
+/* Name, role, ventures */
+.intro__name { font-size: clamp(2.1rem, 5.2vw, 3.6rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; }
+.intro__name .ch { display: inline-block; opacity: 0; filter: blur(10px); transform: translateY(35%);
+  animation: charIn 0.9s var(--ease) forwards; animation-delay: calc(0.75s + var(--i) * 0.035s); }
+.intro__name .sp { display: inline-block; width: 0.28em; }
+@keyframes charIn { to { opacity: 1; filter: none; transform: none; } }
+.intro__role { display: flex; align-items: center; gap: 14px; overflow: hidden; }
+.intro__role::before, .intro__role::after { content: ""; width: 0; height: 1px; background: var(--gold); opacity: 0.6; animation: rule 0.9s var(--ease) 1.25s forwards; }
+@keyframes rule { to { width: 44px; } }
+.intro__role span { display: inline-block; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--gold);
+  transform: translateY(110%); animation: slideUp 0.9s var(--ease) 1.2s forwards; }
 @keyframes slideUp { to { transform: none; } }
-.intro__ventures { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 6px; }
+@keyframes fadeIn { to { opacity: 1; } }
+.intro__ventures { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
 .intro__ventures li { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
-  border: 1px solid var(--line-2); background: var(--surface); opacity: 0; transform: translateY(10px);
-  animation: chipIn 0.6s var(--ease) forwards; animation-delay: calc(0.95s + var(--d) * 0.14s); }
+  border: 1px solid var(--line-2); background: color-mix(in srgb, var(--surface) 80%, transparent); backdrop-filter: blur(8px);
+  opacity: 0; transform: translateY(10px); animation: chipIn 0.7s var(--ease) forwards; animation-delay: calc(1.45s + var(--d) * 0.12s); }
 .intro__ventures li::before { content: ""; width: 8px; height: 8px; border-radius: 3px; background: var(--c); }
 @keyframes chipIn { to { opacity: 1; transform: none; } }
 
-.intro__corner { position: absolute; top: 28px; z-index: 1; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.72rem;
+/* Corners & counter */
+.intro__corner { position: absolute; z-index: 1; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.72rem;
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); opacity: 0; animation: fadeIn 0.6s ease 0.3s forwards; }
-.intro__corner--tl { left: 32px; }
-.intro__corner--tr { right: 32px; }
-.intro__foot { position: absolute; left: 50%; bottom: 48px; z-index: 1; width: min(320px, 100% - 64px); transform: translateX(-50%); opacity: 0; animation: fadeIn 0.6s ease 0.4s forwards; }
-.intro__bar { height: 2px; border-radius: 2px; background: var(--line-2); overflow: hidden; }
-.intro__bar i { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 12px var(--accent); }
-.intro__status { display: flex; justify-content: space-between; margin-top: 12px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--faint); font-variant-numeric: tabular-nums; }
+.intro__corner--tl { top: 28px; left: 32px; }
+.intro__corner--tr { top: 28px; right: 32px; }
+.intro__corner--bl { bottom: 36px; left: 32px; }
+.intro__count { position: absolute; z-index: 1; right: 32px; bottom: 22px; font-family: var(--serif); font-style: italic; font-weight: 400; line-height: 1;
+  font-size: clamp(3.2rem, 7vw, 5.5rem); color: var(--text); font-variant-numeric: tabular-nums; opacity: 0; animation: fadeIn 0.6s ease 0.3s forwards; }
+.intro__count small { font-size: 0.4em; color: var(--gold); margin-left: 4px; }
+
+/* Exit: background fades, text lifts away, the portrait flies into the hero (JS) */
+html.is-leaving .intro__bg { opacity: 0; }
+html.is-leaving .intro__corner, html.is-leaving .intro__count, html.is-leaving .intro__name, html.is-leaving .intro__role,
+html.is-leaving .intro__ventures, html.is-leaving .intro__orbit {
+  opacity: 0 !important; transform: translateY(-24px); transition: opacity 0.5s ease, transform 0.8s var(--ease); }
+html.is-leaving .intro__ring { opacity: 0; transform: rotate(-90deg) scale(1.15); transition: opacity 0.5s ease, transform 0.8s var(--ease); }
+html.is-leaving .intro__photo { box-shadow: 0 0 0 0 transparent; transition: box-shadow 0.6s; }
+html.is-morphing .hero .profile__photo img { opacity: 0; }
 
 /* Quick variant for repeat visits in the same session */
-html.intro-quick .intro *, html.intro-quick .intro *::before { animation-delay: 0s !important; animation-duration: 0.35s !important; }
+html.intro-quick .intro *, html.intro-quick .intro *::before, html.intro-quick .intro *::after { animation-delay: 0s !important; animation-duration: 0.35s !important; }
 
 /* Hero entrance — waits for the intro, then plays */
 html.is-loading .hero .reveal { opacity: 0; transform: translateY(24px); }
-.hero .profile__photo img { transform: scale(1.08); transition: transform 1.6s var(--ease); }
-.hero .profile.in .profile__photo img { transform: none; }
-.hero .profile.in:hover .profile__photo img { transform: scale(1.03); }
+html.is-loading .hero .profile.reveal, .hero .profile.reveal { transform: none; }
 
 @media (max-width: 560px) {
-  .intro__corner { top: 20px; font-size: 0.64rem; }
-  .intro__corner--tl { left: 16px; }
-  .intro__corner--tr { right: 16px; }
-  .intro__foot { bottom: 36px; }
+  .intro__avatar { width: 168px; height: 168px; }
+  .intro__photo { width: 128px; height: 128px; }
+  .intro__orbit i { transform: rotate(var(--a)) translateY(-81px); }
+  .intro__corner { font-size: 0.64rem; }
+  .intro__corner--tl { top: 20px; left: 16px; }
+  .intro__corner--tr { top: 20px; right: 16px; }
+  .intro__corner--bl { bottom: 28px; left: 16px; }
+  .intro__count { right: 16px; bottom: 16px; }
 }
 
 /* ==========================================================================
