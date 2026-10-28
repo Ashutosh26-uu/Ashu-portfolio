@@ -15,6 +15,8 @@
   --accent-soft: rgba(74, 134, 255, 0.12);
   --on-accent: #FFFFFF;
   --gold: #D2B37A;
+  --gold-hi: #F6E7C1;
+  --gold-lo: #8C6A2C;
   --ok: #34D399;
   --warn: #F59E0B;
   --err: #F87171;
@@ -36,7 +38,7 @@
     --bg: #F7F6F2; --bg-alt: #EFEDE7; --surface: #FFFFFF; --surface-2: #F4F3EF;
     --line: rgba(17, 19, 24, 0.08); --line-2: rgba(17, 19, 24, 0.16);
     --text: #111318; --muted: #565C67; --faint: #8A909A;
-    --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C;
+    --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C; --gold-hi: #C9A35A; --gold-lo: #5E4519;
     --ok: #0F9D6E; --warn: #B45309; --err: #DC2626;
     --shadow: 0 1px 2px rgba(17, 19, 24, 0.04), 0 24px 48px -28px rgba(17, 19, 24, 0.22);
     --grid-dot: rgba(17, 19, 24, 0.07);
@@ -47,7 +49,7 @@
   --bg: #F7F6F2; --bg-alt: #EFEDE7; --surface: #FFFFFF; --surface-2: #F4F3EF;
   --line: rgba(17, 19, 24, 0.08); --line-2: rgba(17, 19, 24, 0.16);
   --text: #111318; --muted: #565C67; --faint: #8A909A;
-  --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C;
+  --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C; --gold-hi: #C9A35A; --gold-lo: #5E4519;
   --ok: #0F9D6E; --warn: #B45309; --err: #DC2626;
   --shadow: 0 1px 2px rgba(17, 19, 24, 0.04), 0 24px 48px -28px rgba(17, 19, 24, 0.22);
   --grid-dot: rgba(17, 19, 24, 0.07);
@@ -355,95 +357,124 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 .term__input input { flex: 1; background: none; border: 0; outline: 0; color: #E6E8EB; font: inherit; font-size: 0.82rem; }
 
 /* ==========================================================================
-   Intro — portrait inside a live progress ring, then morphs into the hero
+   Intro — a watch-dial progress ring around the portrait, split-curtain exit
    ========================================================================== */
 .intro { display: none; position: fixed; inset: 0; z-index: 1000; color: var(--text); overflow: hidden; pointer-events: none; }
 html.is-loading .intro, html.is-leaving .intro { display: block; }
 html.is-loading .intro { pointer-events: auto; }
 html.is-loading body { overflow: hidden; }
-.intro__bg { position: absolute; inset: 0; background: var(--bg); transition: opacity 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s; }
-.intro__bg::after { content: ""; position: absolute; width: 1000px; height: 1000px; left: 50%; top: 46%; transform: translate(-50%, -50%); border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-soft), transparent 58%); animation: introGlow 3.2s ease-in-out infinite alternate; }
-@keyframes introGlow { to { transform: translate(-50%, -50%) scale(1.18); opacity: 0.65; } }
-.intro__grid { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0); background-size: 28px 28px;
-  -webkit-mask-image: radial-gradient(ellipse 55% 50% at 50% 46%, #000 15%, transparent 75%); mask-image: radial-gradient(ellipse 55% 50% at 50% 46%, #000 15%, transparent 75%); }
-.intro__inner { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; text-align: center; }
+:root { --ease-cine: cubic-bezier(0.76, 0, 0.24, 1); }
 
-/* Avatar + ring */
-.intro__avatar { position: relative; width: 200px; height: 200px; margin-bottom: 18px; display: grid; place-items: center; }
-.intro__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+/* Background: two halves that part like a curtain */
+.intro__half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); transition: transform 1.15s var(--ease-cine) 0.1s; }
+.intro__half--top { top: 0; }
+.intro__half--bot { bottom: 0; }
+.intro__light { position: absolute; inset: 0; transition: opacity 0.5s ease;
+  background: radial-gradient(ellipse 50% 45% at 50% 42%, color-mix(in srgb, var(--gold) 9%, transparent), transparent 70%),
+              radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, color-mix(in srgb, #000 35%, transparent) 100%); }
+.intro__grain { position: absolute; inset: -50%; opacity: 0.05; transition: opacity 0.5s ease; animation: grain 1.2s steps(6) infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+@keyframes grain { 0% { transform: translate(0, 0); } 33% { transform: translate(-4%, 3%); } 66% { transform: translate(3%, -4%); } 100% { transform: translate(0, 0); } }
+
+/* Hairline frame drawn around the viewport */
+.intro__frame { position: absolute; inset: 20px; pointer-events: none; }
+.intro__frame i { position: absolute; background: color-mix(in srgb, var(--gold) 45%, transparent); transition: opacity 0.4s ease; }
+.intro__frame i:nth-child(1) { top: 0; left: 0; right: 0; height: 1px; transform-origin: left; transform: scaleX(0); animation: lineX 1.2s var(--ease-cine) 0.05s forwards; }
+.intro__frame i:nth-child(2) { top: 0; right: 0; bottom: 0; width: 1px; transform-origin: top; transform: scaleY(0); animation: lineY 1.2s var(--ease-cine) 0.25s forwards; }
+.intro__frame i:nth-child(3) { bottom: 0; left: 0; right: 0; height: 1px; transform-origin: right; transform: scaleX(0); animation: lineX 1.2s var(--ease-cine) 0.45s forwards; }
+.intro__frame i:nth-child(4) { top: 0; left: 0; bottom: 0; width: 1px; transform-origin: bottom; transform: scaleY(0); animation: lineY 1.2s var(--ease-cine) 0.65s forwards; }
+@keyframes lineX { to { transform: scaleX(1); } }
+@keyframes lineY { to { transform: scaleY(1); } }
+
+.intro__inner { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+
+/* Watch-dial ring */
+.intro__avatar { position: relative; width: 220px; height: 220px; margin-bottom: 34px; display: grid; place-items: center; }
+.intro__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; opacity: 0; animation: ringIn 1.2s var(--ease) 0.2s forwards; }
+@keyframes ringIn { from { opacity: 0; transform: rotate(-150deg) scale(0.92); } to { opacity: 1; transform: rotate(-90deg) scale(1); } }
 .intro__ring circle { fill: none; }
-.intro__ring-dash { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 2 6; transform-origin: 100px 100px; opacity: 0; animation: spin 24s linear infinite, fadeIn 0.8s ease 0.1s forwards; }
-.intro__ring-track { stroke: var(--line); stroke-width: 2; opacity: 0; animation: fadeIn 0.6s ease 0.2s forwards; }
-.intro__ring-fill { stroke: url(#ringGrad); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 553; stroke-dashoffset: 553;
-  filter: drop-shadow(0 0 6px rgba(74, 134, 255, 0.55)); }
-@keyframes spin { to { transform: rotate(360deg); } }
-.intro__orbit { position: absolute; inset: 0; opacity: 0; animation: spin 7s linear infinite, fadeIn 0.8s ease 1s forwards; }
-.intro__orbit i { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px; border-radius: 50%; background: var(--c);
-  box-shadow: 0 0 12px var(--c); transform: rotate(var(--a)) translateY(-97px); }
-.intro__photo { position: relative; width: 152px; height: 152px; border-radius: 50%; overflow: hidden; background: var(--surface-2);
-  box-shadow: 0 0 0 6px var(--bg), 0 30px 60px -20px rgba(0, 0, 0, 0.6);
-  clip-path: circle(0% at 50% 50%); animation: photoIn 1.2s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards; will-change: transform; }
-.intro__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.35); filter: grayscale(1) contrast(1.05);
-  animation: photoImg 1.8s var(--ease) 0.25s forwards; }
-@keyframes photoIn { to { clip-path: circle(50% at 50% 50%); } }
-@keyframes photoImg { 60% { filter: grayscale(1) contrast(1.05); } to { transform: none; filter: none; } }
+.intro__ticks line { stroke: var(--line-2); stroke-width: 1; stroke-linecap: round; transition: stroke 0.35s ease; }
+.intro__ticks line.major { stroke-width: 1.4; }
+.intro__ticks line.on { stroke: var(--gold); }
+.intro__ticks line.major.on { stroke: var(--gold-hi); }
+.intro__ring-track { stroke: var(--line); stroke-width: 1; }
+.intro__ring-fill { stroke: url(#ringGrad); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 540; stroke-dashoffset: 540; }
+.intro__comet { fill: var(--gold-hi); filter: drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 14px color-mix(in srgb, var(--gold) 60%, transparent)); opacity: 0; transition: opacity 0.4s; }
+html.is-loading .intro__comet.live { opacity: 1; }
 
-/* Name, role, ventures */
-.intro__name { font-size: clamp(2.1rem, 5.2vw, 3.6rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; }
-.intro__name .ch { display: inline-block; opacity: 0; filter: blur(10px); transform: translateY(35%);
-  animation: charIn 0.9s var(--ease) forwards; animation-delay: calc(0.75s + var(--i) * 0.035s); }
-.intro__name .sp { display: inline-block; width: 0.28em; }
+.intro__photo { position: relative; width: 148px; height: 148px; border-radius: 50%; overflow: hidden; background: var(--surface-2);
+  clip-path: circle(0% at 50% 50%); animation: photoIn 1.3s var(--ease-cine) 0.35s forwards; will-change: transform; }
+.intro__photo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent); transition: opacity 0.4s; }
+.intro__photo::before { content: ""; position: absolute; inset: -20%; z-index: 1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 240, 210, 0.35) 50%, transparent 60%); transform: translateX(-120%); animation: sheen 1.6s var(--ease) 1.5s forwards; }
+@keyframes sheen { to { transform: translateX(120%); } }
+.intro__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.4); filter: grayscale(1) contrast(1.08) brightness(0.9);
+  animation: photoImg 2s var(--ease) 0.35s forwards; }
+@keyframes photoIn { to { clip-path: circle(50% at 50% 50%); } }
+@keyframes photoImg { 55% { filter: grayscale(1) contrast(1.08) brightness(0.9); } to { transform: none; filter: none; } }
+
+/* Typography */
+.intro__name { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: 1; letter-spacing: -0.02em; }
+.intro__name .ch { display: inline-block; opacity: 0; filter: blur(12px); transform: translateY(40%);
+  animation: charIn 1s var(--ease) forwards; animation-delay: calc(0.9s + var(--i) * 0.04s); }
+.intro__name .sp { display: inline-block; width: 0.26em; }
 @keyframes charIn { to { opacity: 1; filter: none; transform: none; } }
-.intro__role { display: flex; align-items: center; gap: 14px; overflow: hidden; }
-.intro__role::before, .intro__role::after { content: ""; width: 0; height: 1px; background: var(--gold); opacity: 0.6; animation: rule 0.9s var(--ease) 1.25s forwards; }
-@keyframes rule { to { width: 44px; } }
-.intro__role span { display: inline-block; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--gold);
-  transform: translateY(110%); animation: slideUp 0.9s var(--ease) 1.2s forwards; }
-@keyframes slideUp { to { transform: none; } }
-@keyframes fadeIn { to { opacity: 1; } }
-.intro__ventures { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
-.intro__ventures li { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
-  border: 1px solid var(--line-2); background: color-mix(in srgb, var(--surface) 80%, transparent); backdrop-filter: blur(8px);
-  opacity: 0; transform: translateY(10px); animation: chipIn 0.7s var(--ease) forwards; animation-delay: calc(1.45s + var(--d) * 0.12s); }
-.intro__ventures li::before { content: ""; width: 8px; height: 8px; border-radius: 3px; background: var(--c); }
-@keyframes chipIn { to { opacity: 1; transform: none; } }
+.intro__rule { position: relative; width: 120px; height: 1px; margin: 26px 0 20px; background: color-mix(in srgb, var(--gold) 30%, transparent); transform: scaleX(0);
+  animation: lineX 1s var(--ease-cine) 1.5s forwards; overflow: hidden; }
+.intro__rule i { position: absolute; top: 0; left: 0; width: 40%; height: 100%; background: linear-gradient(90deg, transparent, var(--gold-hi), transparent); transform: translateX(-100%);
+  animation: sweep 2.2s ease-in-out 2.2s infinite; }
+@keyframes sweep { to { transform: translateX(260%); } }
+.intro__role, .intro__ventures { font-family: var(--mono); text-transform: uppercase; clip-path: inset(0 100% 0 0); animation: wipe 1.1s var(--ease-cine) forwards; }
+.intro__role { font-size: 0.78rem; letter-spacing: 0.42em; color: var(--gold); margin-right: -0.42em; animation-delay: 1.65s; }
+.intro__ventures { margin-top: 12px; font-size: 0.7rem; letter-spacing: 0.32em; color: var(--faint); margin-right: -0.32em; animation-delay: 1.85s; }
+.intro__ventures span { color: var(--gold); opacity: 0.7; margin: 0 0.2em; }
+@keyframes wipe { to { clip-path: inset(0 0 0 0); } }
 
 /* Corners & counter */
-.intro__corner { position: absolute; z-index: 1; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.72rem;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); opacity: 0; animation: fadeIn 0.6s ease 0.3s forwards; }
-.intro__corner--tl { top: 28px; left: 32px; }
-.intro__corner--tr { top: 28px; right: 32px; }
-.intro__corner--bl { bottom: 36px; left: 32px; }
-.intro__count { position: absolute; z-index: 1; right: 32px; bottom: 22px; font-family: var(--serif); font-style: italic; font-weight: 400; line-height: 1;
-  font-size: clamp(3.2rem, 7vw, 5.5rem); color: var(--text); font-variant-numeric: tabular-nums; opacity: 0; animation: fadeIn 0.6s ease 0.3s forwards; }
-.intro__count small { font-size: 0.4em; color: var(--gold); margin-left: 4px; }
+.intro__corner { position: absolute; z-index: 2; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.68rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); opacity: 0; animation: fadeIn 0.8s ease 0.8s forwards; }
+.intro__corner span:not(.intro__pulse):not(#introStatus) { color: var(--gold); opacity: 0.8; }
+.intro__corner--tl { top: 44px; left: 48px; color: var(--text); }
+.intro__corner--tr { top: 44px; right: 48px; }
+.intro__corner--bl { bottom: 46px; left: 48px; }
+.intro__pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 var(--gold); animation: pulse 1.6s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+.intro__count { position: absolute; z-index: 2; right: 46px; bottom: 34px; display: flex; align-items: baseline; font-family: var(--serif); font-weight: 400; line-height: 1;
+  font-size: clamp(3.4rem, 7vw, 6rem); letter-spacing: -0.04em; color: var(--text); font-variant-numeric: tabular-nums lining-nums; opacity: 0; animation: fadeIn 0.8s ease 0.8s forwards; }
+.intro__count small { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--gold); margin-left: 8px; }
+@keyframes fadeIn { to { opacity: 1; } }
 
-/* Exit: background fades, text lifts away, the portrait flies into the hero (JS) */
-html.is-leaving .intro__bg { opacity: 0; }
-html.is-leaving .intro__corner, html.is-leaving .intro__count, html.is-leaving .intro__name, html.is-leaving .intro__role,
-html.is-leaving .intro__ventures, html.is-leaving .intro__orbit {
-  opacity: 0 !important; transform: translateY(-24px); transition: opacity 0.5s ease, transform 0.8s var(--ease); }
-html.is-leaving .intro__ring { opacity: 0; transform: rotate(-90deg) scale(1.15); transition: opacity 0.5s ease, transform 0.8s var(--ease); }
-html.is-leaving .intro__photo { box-shadow: 0 0 0 0 transparent; transition: box-shadow 0.6s; }
+/* Exit: curtain parts, details dissolve, the portrait flies into the hero (JS) */
+html.is-leaving .intro__half--top { transform: translateY(-100%); }
+html.is-leaving .intro__half--bot { transform: translateY(100%); }
+html.is-leaving .intro__light, html.is-leaving .intro__grain, html.is-leaving .intro__frame i { opacity: 0 !important; }
+html.is-leaving .intro__corner, html.is-leaving .intro__count, html.is-leaving .intro__name, html.is-leaving .intro__rule,
+html.is-leaving .intro__role, html.is-leaving .intro__ventures {
+  opacity: 0 !important; filter: blur(6px); transition: opacity 0.45s ease, filter 0.45s ease; }
+html.is-leaving .intro__ring { opacity: 0 !important; transform: rotate(-60deg) scale(1.12); transition: opacity 0.5s ease, transform 0.9s var(--ease); animation: none; }
+html.is-leaving .intro__photo::after, html.is-leaving .intro__photo::before { opacity: 0; }
 html.is-morphing .hero .profile__photo img { opacity: 0; }
 
 /* Quick variant for repeat visits in the same session */
 html.intro-quick .intro *, html.intro-quick .intro *::before, html.intro-quick .intro *::after { animation-delay: 0s !important; animation-duration: 0.35s !important; }
+html.intro-quick .intro__rule i, html.intro-quick .intro__photo::before { animation: none !important; }
 
 /* Hero entrance — waits for the intro, then plays */
 html.is-loading .hero .reveal { opacity: 0; transform: translateY(24px); }
 html.is-loading .hero .profile.reveal, .hero .profile.reveal { transform: none; }
 
 @media (max-width: 560px) {
-  .intro__avatar { width: 168px; height: 168px; }
-  .intro__photo { width: 128px; height: 128px; }
-  .intro__orbit i { transform: rotate(var(--a)) translateY(-81px); }
-  .intro__corner { font-size: 0.64rem; }
-  .intro__corner--tl { top: 20px; left: 16px; }
-  .intro__corner--tr { top: 20px; right: 16px; }
-  .intro__corner--bl { bottom: 28px; left: 16px; }
-  .intro__count { right: 16px; bottom: 16px; }
+  .intro__frame { inset: 12px; }
+  .intro__avatar { width: 184px; height: 184px; margin-bottom: 28px; }
+  .intro__photo { width: 124px; height: 124px; }
+  .intro__corner { font-size: 0.58rem; letter-spacing: 0.12em; }
+  .intro__corner--tl { top: 28px; left: 26px; }
+  .intro__corner--tl span { display: none; }
+  .intro__corner--tr { top: 28px; right: 26px; }
+  .intro__corner--bl { bottom: 30px; left: 26px; }
+  .intro__count { right: 24px; bottom: 22px; }
+  .intro__role { letter-spacing: 0.32em; margin-right: -0.32em; }
+  .intro__ventures { font-size: 0.62rem; letter-spacing: 0.22em; margin-right: -0.22em; }
 }
 
 /* ==========================================================================

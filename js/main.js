@@ -150,7 +150,6 @@
   });
   const intro = () => {
     if (!root.classList.contains("is-loading")) return heroReveal();
-    $("#introYear").textContent = new Date().getFullYear();
 
     // Split the name so each letter can blur in
     const nameEl = $("#introName");
@@ -158,9 +157,31 @@
       ch === " " ? '<span class="sp"></span>' : `<span class="ch" style="--i:${i}">${esc(ch)}</span>`).join("");
 
     const quick = root.classList.contains("intro-quick");
-    const minTime = quick ? 500 : 2600;
-    const ring = $("#introRing"), pct = $("#introPct"), status = $("#introStatus");
-    const RING = 2 * Math.PI * 88;
+    const minTime = quick ? 500 : 3000;
+    const ring = $("#introRing"), pct = $("#introPct"), status = $("#introStatus"), comet = $("#introComet");
+    const R = 86, RING = 2 * Math.PI * R, TICKS = 60;
+
+    // Watch-dial ticks just outside the ring; every fifth one is longer
+    const SVGNS = "http://www.w3.org/2000/svg";
+    const ticks = [...Array(TICKS)].map((_, i) => {
+      const a = (i / TICKS) * Math.PI * 2, major = i % 5 === 0;
+      const r1 = 93, r2 = major ? 103 : 98;
+      const l = document.createElementNS(SVGNS, "line");
+      l.setAttribute("x1", 100 + r1 * Math.cos(a)); l.setAttribute("y1", 100 + r1 * Math.sin(a));
+      l.setAttribute("x2", 100 + r2 * Math.cos(a)); l.setAttribute("y2", 100 + r2 * Math.sin(a));
+      if (major) l.classList.add("major");
+      $("#introTicks").appendChild(l);
+      return l;
+    });
+    let litTicks = 0;
+    const paintDial = (p) => {
+      ring.style.strokeDashoffset = RING * (1 - p);
+      const a = p * Math.PI * 2;
+      comet.setAttribute("cx", 100 + R * Math.cos(a));
+      comet.setAttribute("cy", 100 + R * Math.sin(a));
+      const lit = Math.floor(p * TICKS + 0.0001);
+      for (; litTicks < Math.min(lit + (p >= 1 ? 1 : 0), TICKS); litTicks++) ticks[litTicks].classList.add("on");
+    };
     const steps = [[0, "Initialising"], [25, "Loading ventures"], [55, "Preparing systems"], [85, "Almost there"], [100, "Welcome"]];
     const t0 = performance.now();
     let real = 0, shown = 0, done = false;
@@ -180,8 +201,9 @@
       if (done) return;
       done = true;
       try { sessionStorage.setItem("introSeen", "1"); } catch (e) {}
-      ring.style.strokeDashoffset = 0;
+      paintDial(1);
       pct.textContent = "100";
+      comet.classList.remove("live");
       scrollTo(0, 0);
       root.classList.add("is-leaving");
       root.classList.remove("is-loading");
@@ -217,7 +239,8 @@
       shown += (target - shown) * 0.1;
       if (target === 1 && shown > 0.995) shown = 1;
       const p = Math.round(shown * 100);
-      ring.style.strokeDashoffset = RING * (1 - shown);
+      paintDial(shown);
+      if (shown > 0.01) comet.classList.add("live");
       pct.textContent = String(p).padStart(2, "0");
       status.textContent = steps.filter(([at]) => p >= at).pop()[1];
       if (shown >= 1) return setTimeout(finish, quick ? 120 : 450);
