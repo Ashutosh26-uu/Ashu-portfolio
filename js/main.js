@@ -3,120 +3,106 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const ghUrl = (repo) => `https://github.com/${D.github}/${repo}`;
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const ext = (href) => (href.startsWith("http") ? ' target="_blank" rel="noopener"' : "");
+  const ghUrl = (repo) => `https://github.com/${D.github}/${repo}`;
 
-  /* ---------- Render content ---------- */
-  $("#marquee").innerHTML = [...D.backers, ...D.backers].map((t) => `<span>${esc(t)}</span>`).join("");
+  const ICONS = {
+    brain: '<svg viewBox="0 0 24 24"><path d="M9 3a3 3 0 0 0-3 3v.5A3 3 0 0 0 4 9.3a3 3 0 0 0 .6 5A3 3 0 0 0 9 18.6V21M15 3a3 3 0 0 1 3 3v.5a3 3 0 0 1 2 2.8 3 3 0 0 1-.6 5A3 3 0 0 1 15 18.6V21M9 3h6M12 3v18"/></svg>',
+    heal: '<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><path d="M12 8v8M8 12h8"/></svg>',
+    nodes: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="3" width="6" height="6" rx="1.5"/><rect x="9" y="15" width="6" height="6" rx="1.5"/><path d="M6 9v3h12V9M12 12v3"/></svg>'
+  };
 
-  $("#experienceList").innerHTML = D.experience.map((v, i) => {
-    const tag = v.link ? "a" : "div";
-    const attrs = v.link ? ` href="${v.link}" target="_blank" rel="noopener"` : "";
-    return `
-    <${tag} class="venture reveal${i === 0 ? " venture--now" : ""}"${attrs}>
-      <span class="venture__idx mono">0${i + 1}</span>
-      <div>
-        <span class="venture__tag mono">${esc(v.tag)}</span>${v.period ? `<span class="venture__period mono">${esc(v.period)}</span>` : ""}
-        <h3>${esc(v.role)}</h3>
-        <span class="venture__role mono muted">${esc(v.company)}</span>
-      </div>
-      <p class="muted">${esc(v.desc)}</p>
-      <span class="venture__arrow">${v.link ? "↗" : "•"}</span>
-    </${tag}>`;
-  }).join("");
+  /* ---------- Render ---------- */
+  $("#creds").innerHTML = D.credentials.map((c) => `<li>${esc(c)}</li>`).join("");
 
-  $("#awards").innerHTML = D.awards.map((a, i) => `
-    <article class="card award reveal${i === 0 ? " award--top" : ""}" data-spotlight>
-      <span class="award__icon" aria-hidden="true">${i === 0 ? "🏆" : "✦"}</span>
-      <span class="mono award__kicker">${esc(a.kicker)}</span>
-      <h3>${esc(a.title)}</h3>
-      <p class="muted">${esc(a.desc)}</p>
-    </article>`).join("");
-
-  const counts = Object.fromEntries(D.filters.map((f) => [f.id, f.id === "all" ? D.projects.length : D.projects.filter((p) => p.cat.includes(f.id)).length]));
-  $("#filters").innerHTML = D.filters.map((f, i) =>
-    `<button class="${i === 0 ? "active" : ""}" data-filter="${f.id}">${esc(f.label)}<sup>${counts[f.id]}</sup></button>`).join("");
-
-  $("#projects").innerHTML = D.projects.map((p, i) => `
-    <article class="card project reveal ${p.featured ? "featured" : ""}" data-spotlight data-tilt data-cat="${p.cat.join(" ")}">
-      <div class="project__top mono">
-        <span class="project__num">${String(i + 1).padStart(2, "0")}</span>
-        ${p.featured ? `<span class="project__badge">Featured</span>` : p.live ? `<span class="project__badge">Live</span>` : ""}
-      </div>
-      <div>
-        <span class="project__sub mono">${esc(p.subtitle)}</span>
-        <h3 class="project__title">${esc(p.title)}</h3>
-      </div>
-      <p class="project__desc">${esc(p.desc)}</p>
-      <div class="project__tags mono">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-      <div class="project__links">
-        ${p.live ? `<a class="live" href="${p.live}" target="_blank" rel="noopener">${esc(p.liveLabel || "Live demo")} ↗</a>` : ""}
-        ${p.repo ? `<a href="${ghUrl(p.repo)}" target="_blank" rel="noopener">Source code ↗</a>` : ""}
-        ${!p.live && !p.repo ? `<span class="muted mono">Under NDA · enterprise pilot</span>` : ""}
-      </div>
-    </article>`).join("");
-
-  $("#stackList").innerHTML = D.stack.map((g) => `
-    <div class="stack__row reveal">
-      <h3>${esc(g.group)}</h3>
-      <div class="stack__items">${g.items.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+  $("#figures").innerHTML = D.figures.map((f) => `
+    <div class="figure reveal">
+      <div class="figure__n"><span class="count" data-count="${f.n}">0</span>${f.suffix ? `<sup>${esc(f.suffix)}</sup>` : ""}</div>
+      <p class="figure__l">${esc(f.label)}</p>
     </div>`).join("");
 
-  $("#venturesGrid").innerHTML = D.ventures.map((v, i) => `
-    <article class="card venture-card reveal" data-spotlight style="--c:${v.color}">
-      <div class="venture-card__top">
-        <span class="venture-card__mono">${esc(v.mono)}</span>
-        <span class="venture-card__stage mono"><span class="dot"></span>${esc(v.stage)}</span>
-      </div>
-      <span class="mono venture-card__no">0${i + 1} / 0${D.ventures.length}</span>
-      <h3>${esc(v.name)}</h3>
-      <p class="venture-card__line">${esc(v.line)}</p>
-      <p class="venture-card__role mono">${esc(v.role)}</p>
-      <p class="muted venture-card__desc">${esc(v.desc)}</p>
-      <div class="venture-card__metrics">${v.metrics.map(([n, l]) => `<div><b>${esc(n)}</b><small class="mono">${esc(l)}</small></div>`).join("")}</div>
-      <div class="project__tags mono">${v.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-      <a class="venture-card__link" href="${v.link}" target="_blank" rel="noopener">${esc(v.linkLabel)} <span>↗</span></a>
+  // Ventures — tabs + detail panel
+  const tabs = $("#ventureTabs"), panel = $("#venturePanel");
+  tabs.innerHTML = D.ventures.map((v, i) => `
+    <button class="vtab" role="tab" id="tab-${v.id}" aria-controls="venturePanel" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}" style="--c:${v.color}">
+      <span class="vtab__mark">${esc(v.mark)}</span>
+      <span><b>${esc(v.name)}</b><small>${esc(v.role)}</small></span>
+      <span class="vtab__arrow" aria-hidden="true">→</span>
+    </button>`).join("");
+  const showVenture = (i) => {
+    const v = D.ventures[i];
+    $$(".vtab", tabs).forEach((t, j) => { t.setAttribute("aria-selected", j === i); t.tabIndex = j === i ? 0 : -1; });
+    panel.setAttribute("aria-labelledby", `tab-${v.id}`);
+    panel.innerHTML = `
+      <article class="card vpanel" style="--c:${v.color}">
+        <div class="vpanel__top">
+          <div>
+            <p class="vpanel__sector">${esc(v.sector)}</p>
+            <h3>${esc(v.name)}</h3>
+            <p class="vpanel__legal">${esc(v.legal)}${v.since ? ` · ${esc(v.since)}` : ""}</p>
+          </div>
+          <div class="vpanel__badges">
+            <span class="badge">${esc(v.role)}</span>
+            <span class="badge badge--live"><span class="status-dot"></span>${esc(v.stage)}</span>
+          </div>
+        </div>
+        <p class="vpanel__summary">${esc(v.summary)}</p>
+        <div class="vpanel__grid">
+          <ul class="vpanel__list">${v.highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
+          <div class="vpanel__metrics">${v.metrics.map(([n, l]) => `<div><b>${esc(n)}</b><small>${esc(l)}</small></div>`).join("")}</div>
+        </div>
+        <a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>
+      </article>`;
+  };
+  showVenture(0);
+  tabs.addEventListener("click", (e) => { const t = e.target.closest(".vtab"); if (t) showVenture(+t.dataset.i); });
+  tabs.addEventListener("keydown", (e) => {
+    if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
+    e.preventDefault();
+    const cur = $$(".vtab", tabs).findIndex((t) => t.getAttribute("aria-selected") === "true");
+    const dir = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
+    const next = (cur + dir + D.ventures.length) % D.ventures.length;
+    showVenture(next);
+    $$(".vtab", tabs)[next].focus();
+  });
+
+  // Technology
+  $("#flow").innerHTML = D.flow.map((f, i) => `
+    <div class="flow__step${i === 2 ? " is-twin" : ""}${i === D.flow.length - 1 ? " is-live" : ""}">
+      <span class="flow__n">${String(i + 1).padStart(2, "0")}</span>
+      <b>${esc(f.t)}</b>
+      <small>${esc(f.d)}</small>
+      <span class="flow__bar" aria-hidden="true"><i style="--i:${i}"></i></span>
+    </div>`).join("");
+
+  const capIcons = [ICONS.brain, ICONS.heal, ICONS.nodes];
+  $("#capabilities").innerHTML = D.capabilities.map((c, i) => `
+    <article class="card cap reveal">
+      <span class="cap__icon" aria-hidden="true">${capIcons[i % capIcons.length]}</span>
+      <div><h3>${esc(c.t)}</h3><p>${esc(c.d)}</p></div>
     </article>`).join("");
 
-  $("#flow").innerHTML = D.flow.map((f, i) => `
-    <div class="flow__node" style="--i:${i}">
-      <span class="mono flow__k">${f.k}</span>
-      <b>${esc(f.t)}</b>
-      <small class="mono">${esc(f.d)}</small>
-    </div>${i < D.flow.length - 1 ? `<span class="flow__arrow" style="--i:${i}" aria-hidden="true"></span>` : ""}`).join("") +
-    `<div class="flow__loop mono" aria-hidden="true"><span>↺ watchers detect drift → back to the test twin → fixed → promoted</span></div>`;
-
-  // Engine log: types itself out whenever it scrolls into view
-  const logEl = $("#engineLog");
-  let logStarted = false;
-  const runLog = () => {
-    logEl.innerHTML = "";
-    let li = 0;
-    const next = () => {
-      if (li >= D.engineLog.length) return setTimeout(runLog, 4000);
-      const [cls, text] = D.engineLog[li++];
-      logEl.insertAdjacentHTML("beforeend", `<span class="${cls}">${esc(text)}</span>\n`);
-      logEl.scrollTop = logEl.scrollHeight;
-      setTimeout(next, reduced ? 0 : 420 + Math.random() * 380);
-    };
-    next();
-  };
-  new IntersectionObserver(([e]) => { if (e.isIntersecting && !logStarted) { logStarted = true; runLog(); } }, { threshold: 0.3 }).observe(logEl);
-
-  $("#contactLinks").innerHTML = D.contact.map((c) => `
-    <a class="contact__link" href="${c.href}"${c.href.startsWith("http") ? ' target="_blank" rel="noopener"' : ""} data-magnetic>
-      <span class="mono muted">${esc(c.label)}</span>
-      <strong>${esc(c.value)} <span>↗</span></strong>
-    </a>`).join("");
-
-  $("#year").textContent = new Date().getFullYear();
-
-  /* ---------- Filters ---------- */
+  // Work
+  $("#filters").innerHTML = D.filters.map((f, i) => `<button class="${i === 0 ? "active" : ""}" data-filter="${f.id}" aria-pressed="${i === 0}">${esc(f.label)}</button>`).join("");
+  $("#projects").innerHTML = D.projects.map((p) => `
+    <article class="card project reveal" data-cat="${p.cat.join(" ")}">
+      <span class="project__org">${esc(p.org)}</span>
+      <h3>${esc(p.title)}</h3>
+      <p>${esc(p.desc)}</p>
+      <div class="project__foot">
+        <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+        <div class="project__links">
+          ${p.live ? `<a href="${p.live}"${ext(p.live)}>Live ↗</a>` : ""}
+          ${p.repo ? `<a href="${ghUrl(p.repo)}"${ext(ghUrl(p.repo))}>Source ↗</a>` : ""}
+          ${!p.live && !p.repo ? `<span class="nda">Confidential</span>` : ""}
+        </div>
+      </div>
+    </article>`).join("");
   $("#filters").addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn) return;
-    $$("#filters button").forEach((b) => b.classList.toggle("active", b === btn));
+    $$("#filters button").forEach((b) => { b.classList.toggle("active", b === btn); b.setAttribute("aria-pressed", b === btn); });
     const f = btn.dataset.filter;
     $$(".project").forEach((p) => {
       const show = f === "all" || p.dataset.cat.split(" ").includes(f);
@@ -125,243 +111,137 @@
     });
   });
 
-  /* ---------- Loader ---------- */
-  $$(".loader__name span").forEach((s, i) => s.style.setProperty("--i", i));
-  document.body.classList.add("loading");
-  let pct = 0;
-  const finish = () => {
-    $("#loader").classList.add("done");
-    document.body.classList.remove("loading");
-    document.body.classList.add("ready");
-    revealHero();
-  };
-  if (reduced) { pct = 100; finish(); }
-  else {
-    const tick = () => {
-      pct = Math.min(100, pct + Math.random() * 9 + 3);
-      $("#loaderCount").textContent = Math.floor(pct);
-      $("#loaderBar").style.width = pct + "%";
-      if (pct < 100) setTimeout(tick, 45);
-      else setTimeout(finish, 300);
-    };
-    tick();
-  }
+  // Track record
+  $("#awards").innerHTML = D.awards.map((a, i) => `
+    <li class="award reveal${i === 0 ? " award--top" : ""}">
+      <span class="award__no">${String(i + 1).padStart(2, "0")}</span>
+      <div><h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p></div>
+      <span class="award__result">${esc(a.result)}</span>
+    </li>`).join("");
+  $("#backers").innerHTML = D.backers.map((b) => `<li>${esc(b)}</li>`).join("");
 
-  function revealHero() {
-    $$(".hero .reveal").forEach((el, i) => setTimeout(() => el.classList.add("in"), 500 + i * 120));
-  }
+  // About
+  $("#principles").innerHTML = D.principles.map((p, i) => `
+    <div class="principle"><span>0${i + 1}</span><div><b>${esc(p.t)}</b><p>${esc(p.d)}</p></div></div>`).join("");
+  $("#timeline").innerHTML = D.experience.map((x) => `
+    <li class="${/present/i.test(x.period) ? "now" : ""}">
+      <b>${esc(x.role)}</b>
+      <span class="org">${esc(x.org)}</span>${x.period ? `<span class="period">${esc(x.period)}</span>` : ""}
+      <p>${esc(x.desc)}</p>
+    </li>`).join("");
+  $("#education").innerHTML = `<b>${esc(D.education.degree)}</b><span>${esc(D.education.school)} · ${esc(D.education.note)}</span>`;
+  $("#expBusiness").innerHTML = D.expertise.business.map((t) => `<li>${esc(t)}</li>`).join("");
+  $("#expTech").innerHTML = D.expertise.technology.map((t) => `<li>${esc(t)}</li>`).join("");
+  $("#stack").innerHTML = D.stack.map((t) => `<span>${esc(t)}</span>`).join("");
 
-  /* ---------- Scroll reveal & counters ---------- */
+  // Contact
+  $("#contactLinks").innerHTML = D.contact.map((c) => `
+    <li><a href="${c.href}"${ext(c.href)}>
+      <span><small>${esc(c.label)}</small><strong>${esc(c.value)}</strong></span>
+      <span class="arr" aria-hidden="true">↗</span>
+    </a></li>`).join("");
+  $("#year").textContent = new Date().getFullYear();
+
+  /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
       const el = e.target;
-      if (el.closest(".hero")) return;
-      const siblings = $$(".reveal", el.parentElement);
-      el.style.transitionDelay = Math.min(siblings.indexOf(el), 6) * 70 + "ms";
+      const sibs = $$(":scope > .reveal", el.parentElement);
+      el.style.transitionDelay = Math.min(Math.max(sibs.indexOf(el), 0), 5) * 70 + "ms";
       el.classList.add("in");
       io.unobserve(el);
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
   $$(".reveal").forEach((el) => io.observe(el));
 
-  const animateCount = (el) => {
+  /* ---------- Counters ---------- */
+  const countUp = (el) => {
     const target = +el.dataset.count;
-    const start = performance.now();
-    const dur = 1600;
+    if (reduced) { el.textContent = target.toLocaleString("en-IN"); return; }
+    const t0 = performance.now(), dur = 1400;
     const step = (now) => {
-      const t = Math.min(1, (now - start) / dur);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 4))).toLocaleString("en-IN");
+      const t = Math.min(1, (now - t0) / dur);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))).toLocaleString("en-IN");
       if (t < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   };
-  const cio = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { if (e.isIntersecting) { animateCount(e.target); cio.unobserve(e.target); } });
-  }, { threshold: 0.5 });
+  const cio = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } }), { threshold: 0.6 });
   $$(".count").forEach((el) => cio.observe(el));
 
-  /* ---------- Nav ---------- */
-  const nav = $("#nav");
-  let lastY = 0;
+  /* ---------- Engine log ---------- */
+  const logEl = $("#engineLog");
+  let logStarted = false;
+  const runLog = () => {
+    logEl.innerHTML = "";
+    let li = 0;
+    const next = () => {
+      if (li >= D.engineLog.length) return setTimeout(runLog, 4500);
+      const [cls, text] = D.engineLog[li++];
+      logEl.insertAdjacentHTML("beforeend", `<span class="${cls}">${esc(text)}</span>\n`);
+      setTimeout(next, reduced ? 0 : 380 + Math.random() * 320);
+    };
+    next();
+  };
+  if (reduced) { logEl.innerHTML = D.engineLog.map(([c, t]) => `<span class="${c}">${esc(t)}</span>`).join("\n"); }
+  else new IntersectionObserver(([e]) => { if (e.isIntersecting && !logStarted) { logStarted = true; runLog(); } }, { threshold: 0.3 }).observe(logEl);
+
+  /* ---------- Navigation ---------- */
+  const nav = $("#nav"), burger = $("#burger");
   const sections = $$("main section[id]");
   const onScroll = () => {
     const y = scrollY;
-    nav.classList.toggle("scrolled", y > 40);
-    nav.classList.toggle("hidden", y > lastY && y > 400 && !nav.classList.contains("open"));
-    lastY = y;
+    nav.classList.toggle("scrolled", y > 8);
     const max = document.documentElement.scrollHeight - innerHeight;
     $("#progress").style.transform = `scaleX(${max > 0 ? y / max : 0})`;
     let current = "";
-    sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.4) current = s.id; });
+    sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) current = s.id; });
     $$(".nav__links a").forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
   };
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
-  $("#burger").addEventListener("click", () => nav.classList.toggle("open"));
-  $$(".nav__links a").forEach((a) => a.addEventListener("click", () => nav.classList.remove("open")));
+  const setMenu = (open) => { nav.classList.toggle("open", open); burger.setAttribute("aria-expanded", open); burger.setAttribute("aria-label", open ? "Close menu" : "Open menu"); };
+  burger.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+  $$(".nav__links a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
 
-  /* ---------- Typed roles ---------- */
-  const typed = $("#typed");
-  let ri = 0, ci = D.roles[0].length, deleting = true;
-  const typeLoop = () => {
-    const word = D.roles[ri];
-    if (deleting) {
-      ci--;
-      if (ci <= 0) { deleting = false; ri = (ri + 1) % D.roles.length; }
-    } else {
-      ci++;
-      if (ci >= D.roles[ri].length) { deleting = true; typed.textContent = D.roles[ri]; return setTimeout(typeLoop, 1800); }
-    }
-    typed.textContent = (deleting ? word : D.roles[ri]).slice(0, ci);
-    setTimeout(typeLoop, deleting ? 45 : 85);
-  };
-  if (!reduced) setTimeout(typeLoop, 3200);
-
-  /* ---------- Clock ---------- */
-  const clock = () => {
-    $("#clock").textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata" });
-  };
-  clock(); setInterval(clock, 15000);
-
-  /* ---------- Cursor, magnetic, spotlight, tilt ---------- */
-  if (fine && !reduced) {
-    const cur = $("#cursor"), dot = $("#cursorDot");
-    let mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my;
-    addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px, ${my}px)`; });
-    (function loop() {
-      cx += (mx - cx) * 0.18; cy += (my - cy) * 0.18;
-      cur.style.transform = `translate(${cx}px, ${cy}px)`;
-      requestAnimationFrame(loop);
-    })();
-    document.addEventListener("mouseover", (e) => cur.classList.toggle("hover", !!e.target.closest("a, button, .chip")));
-
-    $$("[data-magnetic]").forEach((el) => {
-      el.addEventListener("mousemove", (e) => {
-        const r = el.getBoundingClientRect();
-        el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px, ${(e.clientY - r.top - r.height / 2) * 0.35}px)`;
-      });
-      el.addEventListener("mouseleave", () => { el.style.transition = "transform .5s cubic-bezier(.22,1,.36,1)"; el.style.transform = ""; setTimeout(() => (el.style.transition = ""), 500); });
-    });
-
-    $$("[data-tilt]").forEach((el) => {
-      el.addEventListener("mousemove", (e) => {
-        const r = el.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = `perspective(900px) rotateX(${-py * 6}deg) rotateY(${px * 6}deg) translateY(-4px)`;
-      });
-      el.addEventListener("mouseleave", () => (el.style.transform = ""));
-    });
-  }
-  document.addEventListener("pointermove", (e) => {
-    const el = e.target.closest("[data-spotlight]");
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", e.clientX - r.left + "px");
-    el.style.setProperty("--my", e.clientY - r.top + "px");
+  /* ---------- Theme ---------- */
+  const root = document.documentElement;
+  const currentTheme = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  $("#themeToggle").addEventListener("click", () => {
+    const next = currentTheme() === "light" ? "dark" : "light";
+    root.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) {}
   });
 
-  /* ---------- Talking portrait ---------- */
-  const frame = $("#portraitFrame"), bubble = $("#bubble");
-  let qi = 0, bubbleTimer;
-  const say = () => {
-    bubble.textContent = D.quips[qi++ % D.quips.length];
-    bubble.classList.add("show");
-    frame.classList.remove("pop"); void frame.offsetWidth; frame.classList.add("pop");
-    $(".portrait__note").style.opacity = "0";
-    clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 2600);
-  };
-  frame.addEventListener("click", say);
-  frame.setAttribute("tabindex", "0");
-  frame.setAttribute("role", "button");
-  frame.setAttribute("aria-label", "Say hi to Ashutosh");
-  frame.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); say(); } });
+  /* ---------- Clock ---------- */
+  const clock = () => { $("#clock").textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata" }); };
+  clock(); setInterval(clock, 15000);
 
-  /* ---------- Hero particle network ---------- */
-  const canvas = $("#hero-canvas");
-  const ctx = canvas.getContext("2d");
-  let W, H, pts = [], mouse = { x: -999, y: -999 }, running = true;
-  const resize = () => {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    W = canvas.clientWidth; H = canvas.clientHeight;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.min(110, Math.floor((W * H) / 14000));
-    pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() * 1.6 + 0.4 }));
-  };
-  resize();
-  addEventListener("resize", resize);
-  canvas.parentElement.addEventListener("pointermove", (e) => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
-  canvas.parentElement.addEventListener("pointerleave", () => { mouse.x = mouse.y = -999; });
-  new IntersectionObserver(([e]) => { running = e.isIntersecting; if (running) draw(); }).observe(canvas);
-  const LINK = 130;
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    for (const p of pts) {
-      if (!reduced) { p.x += p.vx; p.y += p.vy; }
-      if (p.x < 0 || p.x > W) p.vx *= -1;
-      if (p.y < 0 || p.y > H) p.vy *= -1;
-      const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
-      if (d < 160 && d > 0) { p.x += (dx / d) * 1.2; p.y += (dy / d) * 1.2; }
-    }
-    for (let i = 0; i < pts.length; i++) {
-      const a = pts[i];
-      for (let j = i + 1; j < pts.length; j++) {
-        const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d < LINK) { ctx.strokeStyle = `rgba(198,255,61,${(1 - d / LINK) * 0.18})`; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
-      }
-      const md = Math.hypot(a.x - mouse.x, a.y - mouse.y);
-      if (md < 200) { ctx.strokeStyle = `rgba(124,92,255,${(1 - md / 200) * 0.5})`; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
-      ctx.fillStyle = "rgba(242,240,234,0.7)";
-      ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();
-    }
-    if (running && !reduced) requestAnimationFrame(draw);
-  }
-  draw();
-
-  /* ---------- Terminal easter egg ---------- */
+  /* ---------- Console (press /) ---------- */
   const term = $("#term"), body = $("#termBody"), input = $("#termInput");
   const print = (html) => { body.insertAdjacentHTML("beforeend", html + "\n"); body.scrollTop = body.scrollHeight; };
-  const banner = () => print(`<span class="c">
-   ___   __  ___
-  / _ | /  |/  /   Ashutosh Mishra
- / __ |/ /|_/ /    Founder & CEO · ReasonateAI · Sehatra · EduTech
-/_/ |_/_/  /_/     </span><span class="d">type 'help' to begin</span>`);
   const cmds = {
-    help: () => `<span class="v">about</span>        who am I
-<span class="v">ventures</span>     companies I run
-<span class="v">experience</span>   roles & companies
-<span class="v">projects</span>     things I've shipped
-<span class="v">awards</span>       recognition
-<span class="v">stack</span>        my toolkit
-<span class="v">contact</span>      reach out
-<span class="v">linkedin</span>     open my LinkedIn
-<span class="v">github</span>       open my GitHub
-<span class="v">clear</span>        clear screen
-<span class="v">exit</span>         close terminal`,
-    about: () => `Ashutosh Mishra — Founder & CEO of ReasonateAI (also CTO), Sehatra and EduTech.
-Deep-tech system architect building the Autonomous AI CTO and Dual-Twin Architecture.
-Incubated at TBIF – IIT Ropar · Enterprise pilots with Samsung R&D and Tata Elxsi.
-B.Tech CSE, United University, Prayagraj.`,
-    ventures: () => D.ventures.map((v) => `<span class="c">▸</span> ${esc(v.name).padEnd(13)}<span class="d">${esc(v.role)} — ${esc(v.line)}</span>`).join("\n"),
-    experience: () => D.experience.map((v) => `<span class="c">▸</span> ${esc(v.role)} <span class="d">@ ${esc(v.company)} · ${esc(v.period)}</span>`).join("\n"),
-    awards: () => D.awards.map((a) => `<span class="c">🏆</span> ${esc(a.title)} <span class="d">— ${esc(a.kicker)}</span>`).join("\n"),
-    linkedin: () => { open(D.linkedin, "_blank", "noopener"); return "opening linkedin…"; },
-    projects: () => D.projects.map((p) => `<span class="c">▸</span> ${esc(p.title).padEnd(28)}<span class="d">${esc(p.subtitle)}</span>`).join("\n"),
-    stack: () => D.stack.map((g) => `<span class="v">${esc(g.group).padEnd(13)}</span>${g.items.map(esc).join(", ")}`).join("\n"),
-    contact: () => D.contact.map((c) => `<span class="v">${esc(c.label).padEnd(13)}</span><a href="${c.href}" target="_blank" rel="noopener">${esc(c.value)}</a>`).join("\n"),
-    github: () => { open(`https://github.com/${D.github}`, "_blank", "noopener"); return "opening github…"; },
-    whoami: () => "a visitor with great taste in portfolios 😉",
-    "sudo hire-me": () => `<span class="c">[sudo] access granted.</span> Let's build something tagda → scroll to contact.`,
-    ls: () => "about  ventures  experience  projects  awards  stack  contact",
+    help: () => ["about", "ventures", "experience", "awards", "stack", "contact", "clear", "exit"]
+      .map((c) => `<span class="v">${c}</span>`).join("  "),
+    about: () => `Ashutosh Mishra — entrepreneur and systems engineer.
+Founder & CEO of ReasonateAI (also CTO), Sehatra and EduTech.
+Incubated at TBIF – IIT Ropar · enterprise pilots with Samsung R&D and Tata Elxsi.`,
+    ventures: () => D.ventures.map((v) => `<span class="c">▸</span> ${esc(v.name).padEnd(13)}<span class="d">${esc(v.role)} — ${esc(v.sector)}</span>`).join("\n"),
+    experience: () => D.experience.map((x) => `<span class="c">▸</span> ${esc(x.role)} <span class="d">· ${esc(x.org)}</span>`).join("\n"),
+    awards: () => D.awards.map((a) => `<span class="c">▸</span> ${esc(a.title)} <span class="d">— ${esc(a.result)}</span>`).join("\n"),
+    stack: () => D.stack.map(esc).join(", "),
+    contact: () => D.contact.map((c) => `<span class="v">${esc(c.label).padEnd(10)}</span><a href="${c.href}"${ext(c.href)}>${esc(c.value)}</a>`).join("\n"),
     clear: () => { body.innerHTML = ""; return null; },
     exit: () => { toggleTerm(false); return null; }
   };
   const toggleTerm = (show) => {
     term.classList.toggle("open", show);
     term.setAttribute("aria-hidden", String(!show));
-    if (show) { if (!body.childNodes.length) banner(); setTimeout(() => input.focus(), 50); }
+    if (show) {
+      if (!body.childNodes.length) print(`<span class="c">ashutosh@reasonate</span> <span class="d">— type</span> <span class="v">help</span>`);
+      setTimeout(() => input.focus(), 50);
+    }
   };
   $("#termForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -372,12 +252,11 @@ B.Tech CSE, United University, Prayagraj.`,
     const out = fn ? fn() : `command not found: ${esc(v)} — try <span class="v">help</span>`;
     if (out !== null) print(out);
   });
-  $("#termOpen").addEventListener("click", () => toggleTerm(true));
   $("#termClose").addEventListener("click", () => toggleTerm(false));
   term.addEventListener("click", (e) => { if (e.target === term) toggleTerm(false); });
   addEventListener("keydown", (e) => {
     const typing = /input|textarea/i.test(document.activeElement.tagName);
     if (e.key === "/" && !typing) { e.preventDefault(); toggleTerm(true); }
-    if (e.key === "Escape") toggleTerm(false);
+    if (e.key === "Escape") { toggleTerm(false); setMenu(false); }
   });
 })();

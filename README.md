@@ -1,17 +1,20 @@
 # Ashutosh Mishra — Portfolio
 
-Personal portfolio of **Ashutosh Mishra**, Founder & CEO of Reasonate AI Pvt. Ltd.
+Personal website of **Ashutosh Mishra** — Founder & CEO of ReasonateAI, Sehatra and EduTech.
 
 Pure HTML / CSS / JavaScript — no build step, no dependencies.
 
-## Features
+## Sections
 
-- Animated preloader, interactive particle-network hero, typed roles
-- Custom cursor, magnetic buttons, 3D tilt + spotlight cards
-- Bento "About" grid with live IST clock and live GitHub repo count
-- Ventures list, filterable projects grid, toolkit and process sections
-- Hidden terminal — press `/` and type `help`
-- Fully responsive, respects `prefers-reduced-motion`
+- Hero with positioning, credentials and profile card
+- Key figures
+- Ventures — ReasonateAI, Sehatra and EduTech (tabbed detail view)
+- Technology — the Dual-Twin Architecture with a live engine log
+- Selected work (filterable), track record, about, experience and expertise
+- Contact
+
+Dark and light themes (follows the system, with a toggle), fully responsive, keyboard accessible,
+and respects `prefers-reduced-motion`. Press `/` for the hidden console.
 
 ## Edit content
 

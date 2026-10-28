@@ -1,269 +1,177 @@
 // All portfolio content lives here — edit this file to update the site.
 window.PORTFOLIO = {
+  name: "Ashutosh Mishra",
   github: "Ashutosh26-uu",
   email: "ashutosh@reasonateai.com",
   linkedin: "https://www.linkedin.com/in/ashutosh-mishra-841408324/",
 
-  roles: ["founder of three companies", "CTO who still writes the code", "3rd-year CSE student", "hackathon kid from Prayagraj", "builder"],
+  // Hero credential strip
+  credentials: ["TBIF · IIT Ropar", "NVIDIA Inception", "Google for Startups", "Samsung R&D · Pilot", "Tata Elxsi · Pilot"],
 
-  // Logos strip (rendered as a text marquee)
-  backers: ["IIT Ropar TBIF", "IISc Bangalore", "IIT Delhi", "IIT Kanpur", "NVIDIA Inception", "Google for Startups",
-    "Samsung R&D", "Tata Elxsi", "IIT Mandi", "IIT Jodhpur", "IIT Patna", "IIIT Bangalore", "BITS Pilani", "DTU",
-    "VIT Vellore", "TIEC Egypt", "PW School of Startups", "United Incubation Hub"],
-
-  // Things the portrait says when you click it
-  quips: [
-    "Haan, main hi hoon 👋",
-    "Bug mila? Bhejo, fix kar deta hoon.",
-    "Currently: shipping v0.0.2 🚀",
-    "Press / for my secret terminal 🤫",
-    "Ek pilot karein? 😄"
+  figures: [
+    { n: 3, suffix: "", label: "Companies founded" },
+    { n: 13, suffix: "", label: "Incubators backing ReasonateAI" },
+    { n: 2, suffix: "", label: "Enterprise pilots" },
+    { n: 8800, suffix: "+", label: "Developers on the waitlist" },
+    { n: 4, suffix: "+", label: "National hackathon wins" },
+    { n: 100, suffix: "K+", label: "Lines of core engine code" }
   ],
 
-  // The companies — shown as big cards in "Companies I run"
   ventures: [
     {
+      id: "reasonate",
       name: "ReasonateAI",
-      mono: "R",
-      color: "#c6ff3d",
+      legal: "ReasonateAI Private Limited",
+      mark: "R",
+      color: "#3E7BFA",
+      sector: "Autonomous AI · Cloud infrastructure",
       role: "Founder, CEO & CTO",
-      line: "The AI CTO",
-      desc: "Describe your app in plain words. ReasonateAI plans it, builds it, tests it in a private twin and keeps it running — no 2 a.m. outages.",
+      since: "Since Mar 2026",
       stage: "v0.0.2 live",
-      metrics: [["8,800+", "waitlist"], ["13", "incubators"], ["2", "enterprise pilots"]],
-      tags: ["TBIF · IIT Ropar", "NVIDIA Inception", "Google for Startups"],
+      summary: "An AI app builder and virtual CTO. Customers describe what they need in plain language; AI agents plan, build and test it in a private twin of the application, then promote it to production with zero downtime.",
+      highlights: [
+        "Proprietary Dual-Twin Architecture for zero-downtime releases",
+        "Incubated at TBIF – IIT Ropar; backed by 13 incubators including IISc, IIT Delhi and IIT Kanpur",
+        "Enterprise pilots with Samsung R&D and Tata Elxsi",
+        "Member of NVIDIA Inception and Google for Startups"
+      ],
+      metrics: [["8,800+", "Waitlist"], ["13", "Incubators"], ["2", "Enterprise pilots"]],
       link: "https://www.reasonateai.com",
-      linkLabel: "reasonateai.com"
+      linkLabel: "Visit reasonateai.com"
     },
     {
+      id: "sehatra",
       name: "Sehatra",
-      mono: "S",
-      color: "#5ee6c4",
+      legal: "Nexus Healthcare",
+      mark: "S",
+      color: "#14A37F",
+      sector: "Health-tech · Public health networks",
       role: "Founder & CEO",
-      line: "Healthcare for Bharat",
-      desc: "A national health network on one backend — 8 connected portals, ambulance dispatch and Saathi, an AI that talks to patients.",
+      since: "",
       stage: "District pilot",
-      metrics: [["8", "portals"], ["1", "pilot district"], ["PWA + Android", "apps"]],
-      tags: ["Pilot: Barabanki, UP", "Saathi AI", "Postgres"],
+      summary: "A connected health network for India. Patients, doctors, hospitals and emergency dispatch run on one shared platform, with Saathi — an AI assistant that guides patients through care.",
+      highlights: [
+        "8 role-based portals and a dispatch app on a single backend",
+        "Live updates across portals with real authentication and access control",
+        "Installable web app and Android app",
+        "Pilot district: Barabanki, Uttar Pradesh"
+      ],
+      metrics: [["8", "Portals"], ["1", "Pilot district"], ["Web + Android", "Platforms"]],
       link: "https://github.com/Ashutosh26-uu/-nexus-healthcare",
-      linkLabel: "View the build"
+      linkLabel: "View the platform"
     },
     {
+      id: "edutech",
       name: "EduTech",
-      mono: "E",
-      color: "#a996ff",
+      legal: "EduTech",
+      mark: "E",
+      color: "#8B5CF6",
+      sector: "Ed-tech · Campus systems",
       role: "Founder & CEO",
-      line: "Tech for how India learns",
-      desc: "Started where I study — digital systems for campuses, beginning with the UU-10 bus attendance portal at United University.",
+      since: "",
       stage: "Early stage",
-      metrics: [["Campus", "first pilot"], ["Daily PIN", "attendance"], ["0 → 1", "building"]],
-      tags: ["United University", "Smart campus"],
+      summary: "Digital infrastructure for educational institutions, starting with operations campuses still run on paper — beginning with transport attendance at United University.",
+      highlights: [
+        "First deployment: UU-10 bus attendance portal",
+        "Daily PIN-based attendance from students' phones",
+        "Built around the tools administrators already use"
+      ],
+      metrics: [["1", "Campus"], ["Daily", "PIN attendance"], ["0 → 1", "Stage"]],
       link: "https://client-ghwf.vercel.app",
       linkLabel: "See the first product"
     }
   ],
 
-  // Dual-Twin pipeline (Under the hood)
+  // Dual-Twin pipeline
   flow: [
-    { k: "01", t: "Intent", d: "“Build me a clinic booking app”" },
-    { k: "02", t: "3 AI agents", d: "plan · code · test" },
-    { k: "03", t: "Test twin", d: "private sandbox" },
-    { k: "04", t: "Checks", d: "tests · security · config" },
-    { k: "05", t: "Live twin", d: "zero-downtime promote" }
+    { t: "Intent", d: "Plain-language request" },
+    { t: "AI agents", d: "Plan · build · test" },
+    { t: "Test twin", d: "Isolated sandbox" },
+    { t: "Verification", d: "Tests · security · config" },
+    { t: "Live twin", d: "Zero-downtime release" }
+  ],
+
+  capabilities: [
+    { t: "Autonomous AI CTO", d: "Translates business intent into validated, production-grade cloud manifests and Kubernetes orchestration." },
+    { t: "Self-healing runtime", d: "Telemetry agents detect configuration drift and remediate it inside the test twin before re-promoting." },
+    { t: "Distributed systems", d: "Microservices, container runtimes and multi-cloud failover designed for high-throughput workloads." }
   ],
 
   engineLog: [
     ["d", "$ reasonate build \"clinic booking app\""],
     ["v", "[plan]    3 agents assigned · 6 pages · 4 tables"],
-    ["v", "[code]    react + fastapi scaffold generated"],
-    ["c", "[twin]    spinning private sandbox twin-7f3a…"],
-    ["v", "[test]    142 checks running"],
-    ["e", "[test]    ✗ 2 failing · auth redirect, missing index"],
-    ["v", "[fix]     agent patched 2 files · re-running"],
-    ["c", "[test]    ✓ 142/142 passed"],
-    ["v", "[secure]  no leaked keys · access rules ok"],
-    ["c", "[promote] live twin updated · downtime 0s"],
-    ["v", "[watch]   telemetry on · drift guard armed"],
-    ["e", "[watch]   ⚠ config drift detected on node-2"],
-    ["c", "[heal]    rolled back in twin · patched · promoted"],
-    ["d", "# and then everybody slept peacefully. 😴"]
+    ["v", "[build]   react + fastapi scaffold generated"],
+    ["c", "[twin]    provisioning isolated test twin"],
+    ["v", "[verify]  142 checks running"],
+    ["e", "[verify]  2 failing · auth redirect, missing index"],
+    ["v", "[repair]  agent patched 2 files · re-running"],
+    ["c", "[verify]  142/142 passed"],
+    ["v", "[secure]  no exposed secrets · access rules ok"],
+    ["c", "[release] promoted to live twin · downtime 0s"],
+    ["v", "[observe] telemetry active · drift guard armed"],
+    ["e", "[observe] config drift detected on node-2"],
+    ["c", "[heal]    fixed in twin · verified · re-promoted"]
   ],
 
-  // Shown as a story — newest chapter first
   experience: [
-    {
-      company: "ReasonateAI Private Limited",
-      role: "Founder, CEO & CTO",
-      period: "Mar 2026 — Present",
-      desc: "Started it to answer one question: why do apps still break in production? We're building an AI that tests every change in a private copy first. Incubated at TBIF – IIT Ropar, piloting with Samsung R&D and Tata Elxsi.",
-      link: "https://www.reasonateai.com",
-      tag: "Now"
-    },
-    {
-      company: "Sehatra · Nexus Healthcare",
-      role: "Founder & CEO",
-      period: "Now",
-      desc: "Building a health network for Bharat — portals for patients, doctors, hospitals and dispatch, all on one backend. Piloting in Barabanki, UP.",
-      link: "https://github.com/Ashutosh26-uu/-nexus-healthcare",
-      tag: "Health-tech"
-    },
-    {
-      company: "EduTech",
-      role: "Founder & CEO",
-      period: "Now",
-      desc: "Campus tech that actually gets used — it started with my own university's bus attendance.",
-      link: "https://client-ghwf.vercel.app",
-      tag: "Ed-tech"
-    },
-    {
-      company: "Curelex Healthtech Pvt. Ltd.",
-      role: "Founding Member & CTO",
-      period: "",
-      desc: "My first time owning a whole backend — the patient platform and the admin side for doctors, patients and revenue. Learned that health-tech has no room for “chalta hai”.",
-      link: "https://curelex-start-up.vercel.app",
-      tag: "Health-tech"
-    },
-    {
-      company: "Cashcry",
-      role: "Full-Stack Engineer",
-      period: "",
-      desc: "Built full-stack apps alongside veteran engineers — and picked up how real teams ship.",
-      tag: "Fintech"
-    },
-    {
-      company: "Prodesk IT",
-      role: "Backend Developer",
-      period: "",
-      desc: "Backend and database logic for production systems. Where I fell for clean schemas.",
-      tag: "Backend"
-    },
-    {
-      company: "United University, Prayagraj",
-      role: "B.Tech, Computer Science & Engineering",
-      period: "3rd Year",
-      desc: "Where it all started. Still a student — the campus startup cell backed ReasonateAI in its earliest days.",
-      tag: "Roots"
-    }
+    { role: "Founder, CEO & CTO", org: "ReasonateAI Private Limited", period: "Mar 2026 — Present", desc: "Lead company strategy, enterprise partnerships and the core engineering of the Autonomous AI CTO and Dual-Twin Architecture." },
+    { role: "Founder & CEO", org: "Sehatra · Nexus Healthcare", period: "Present", desc: "Building a connected public-health platform for India, from product design to a district-level pilot." },
+    { role: "Founder & CEO", org: "EduTech", period: "Present", desc: "Building digital operations for educational institutions, starting with campus transport." },
+    { role: "Founding Member & CTO", org: "Curelex Healthtech Pvt. Ltd.", period: "", desc: "Owned end-to-end backend architecture for the patient platform and the administrative suite." },
+    { role: "Full-Stack Engineer", org: "Cashcry", period: "", desc: "Engineered scalable full-stack applications under senior engineering mentorship." },
+    { role: "Backend Developer", org: "Prodesk IT", period: "", desc: "Built backend services and database logic for production systems." }
   ],
 
-  // "What keeps me up at night" — plain-language version of the focus areas
-  focus: [
-    { title: "Apps that never go down", desc: "Every change runs in a private twin of your app first. Only what passes goes live. That's Dual-Twin." },
-    { title: "An AI CTO for everyone", desc: "You say what you need in plain words. The AI turns it into real, tested cloud setup — Kubernetes and all." },
-    { title: "Software that heals itself", desc: "Agents keep watching the live app. Something drifts? They figure out why and fix it — no 2 a.m. calls." },
-    { title: "Proving it with the big ones", desc: "Running pilots with Samsung R&D and Tata Elxsi, because big claims need big rooms to prove them in." },
-    { title: "Systems that don't flinch", desc: "Microservices, Docker and multi-cloud failover — the boring plumbing that keeps everything standing." }
-  ],
+  education: { degree: "B.Tech, Computer Science & Engineering", school: "United University, Prayagraj", note: "3rd year" },
 
   awards: [
-    { kicker: "1st Prize · National", title: "Microsoft Code for Bharat 2.0", desc: "Won it with an AI drone defence system. Still my favourite all-nighter." },
-    { kicker: "Deep-tech recognition", title: "Fastest Emerging Startup", desc: "Named Fastest Emerging Deep Tech Startup in North West India." },
-    { kicker: "National Finalist", title: "ISRO & Tata Hackathons", desc: "Autonomous robotics and systems — up against India's best teams." },
-    { kicker: "National Finalist", title: "EY Techathon · Emergent IIT BHU", desc: "AI that spots car faults before they become breakdowns." }
+    { title: "Microsoft Code for Bharat 2.0", result: "National Winner · 1st Prize", desc: "AI-powered autonomous drone defence system." },
+    { title: "Fastest Emerging Deep Tech Startup", result: "North West India", desc: "Recognition for ReasonateAI." },
+    { title: "ISRO & Tata Hackathons", result: "National Finalist", desc: "Autonomous robotics and systems." },
+    { title: "EY Techathon · Emergent IIT BHU", result: "National Finalist", desc: "AI-based automobile fault detection and predictive diagnostics." }
   ],
 
+  backers: ["IIT Ropar · TBIF", "IISc Bangalore", "IIT Delhi", "IIT Kanpur", "IIT Mandi", "IIT Jodhpur", "IIT Patna",
+    "IIIT Bangalore", "BITS Pilani", "DTU", "VIT Vellore", "TIEC Egypt", "United Incubation Hub",
+    "NVIDIA Inception", "Google for Startups", "PW School of Startups"],
+
   projects: [
-    {
-      title: "Dual-Twin Runtime",
-      subtitle: "ReasonateAI · Core engine",
-      desc: "The heart of ReasonateAI. Every change gets rehearsed in a private twin of your app before it touches the real one. If it breaks there, your users never find out.",
-      tags: ["LLM Agents", "Kubernetes", "Docker", "Multi-cloud"],
-      cat: ["ai", "cloud"],
-      live: "https://www.reasonateai.com",
-      liveLabel: "reasonateai.com",
-      featured: true
-    },
-    {
-      title: "AI Drone Defense System",
-      subtitle: "Microsoft Code for Bharat 2.0 · 1st Prize",
-      desc: "The one that won us Code for Bharat. Drones that spot, track and predict threats in real time — YOLOv8 on the edge, swarm coordination, even voice control.",
-      tags: ["Python", "YOLOv8", "TensorFlow.js", "Docker"],
-      cat: ["ai", "defence"],
-      repo: "project-D",
-      featured: true
-    },
-    {
-      title: "Enterprise Pilots",
-      subtitle: "Samsung R&D · Tata Elxsi",
-      desc: "Taking the engine into rooms where downtime costs crores — automated cloud deployment for heavy industry and self-checking DevOps pipelines.",
-      tags: ["DevOps", "Multi-cluster", "Automation"],
-      cat: ["cloud"]
-    },
-    {
-      title: "Sehatra",
-      subtitle: "National health network",
-      desc: "Healthcare for a whole district on one backend — 8 portals, an ambulance dispatch app and Saathi, an AI that talks to patients. Piloting in Barabanki, UP.",
-      tags: ["Node.js", "React", "PostgreSQL", "Android"],
-      cat: ["health", "ai"],
-      repo: "-nexus-healthcare"
-    },
-    {
-      title: "AETHER",
-      subtitle: "Satellite-integrated mobility",
-      desc: "AI + IoT + drones + NavIC satellite comms for real-time vehicle monitoring, safety automation and destination-aware fleet intelligence.",
-      tags: ["Python", "React", "IoT", "NavIC"],
-      cat: ["ai", "defence"],
-      repo: "AETHER",
-      live: "https://aether-tau-flax.vercel.app"
-    },
-    {
-      title: "Curelex",
-      subtitle: "Health-tech · as CTO",
-      desc: "Patient-facing health platform and a Node.js + MySQL admin portal for doctors, patients, revenue and analytics.",
-      tags: ["TypeScript", "Node.js", "MySQL"],
-      cat: ["health", "web"],
-      repo: "Curelex-start-up",
-      live: "https://curelex-start-up.vercel.app"
-    },
-    {
-      title: "ChayBot",
-      subtitle: "Multi-modal AI assistant",
-      desc: "Multiple AI models, live web search, voice/image/document input, context memory and a plugin architecture.",
-      tags: ["Python", "FastAPI", "WebSockets"],
-      cat: ["ai"],
-      repo: "chatbot"
-    },
-    {
-      title: "UU-10 Bus Attendance",
-      subtitle: "Smart campus",
-      desc: "Built for my own college bus. A daily PIN, attendance from your phone — and yes, the database is an Excel sheet, because that's what the admin office loves.",
-      tags: ["React", "Express", "Excel DB"],
-      cat: ["web"],
-      repo: "UU-bus-erp",
-      live: "https://client-ghwf.vercel.app"
-    },
-    {
-      title: "Nexus AI",
-      subtitle: "Hackathon build",
-      desc: "An AI workspace built under hackathon pressure with Vite, React and TypeScript.",
-      tags: ["TypeScript", "React", "Vite"],
-      cat: ["ai", "web"],
-      repo: "hackthon_AU"
-    }
+    { title: "Dual-Twin Runtime", org: "ReasonateAI", desc: "Ephemeral simulation mirror that verifies every infrastructure change before it reaches production.", tags: ["LLM agents", "Kubernetes", "Docker"], cat: ["ai", "cloud"], live: "https://www.reasonateai.com" },
+    { title: "AI Drone Defense System", org: "Code for Bharat 2.0 · Winner", desc: "Real-time threat detection, tracking and interception with edge inference and swarm coordination.", tags: ["Python", "YOLOv8", "TensorFlow.js"], cat: ["ai", "defence"], repo: "project-D" },
+    { title: "Sehatra Platform", org: "Sehatra", desc: "Eight portals, dispatch and an AI patient assistant on one backend, with web and Android clients.", tags: ["Node.js", "React", "PostgreSQL"], cat: ["health"], repo: "-nexus-healthcare" },
+    { title: "Enterprise Pilots", org: "Samsung R&D · Tata Elxsi", desc: "Automated cloud deployment for industrial workloads and autonomous DevOps pipeline validation.", tags: ["DevOps", "Multi-cluster"], cat: ["cloud"] },
+    { title: "AETHER", org: "Intelligent mobility", desc: "AI, IoT, drones and NavIC satellite communication for real-time fleet monitoring and safety.", tags: ["Python", "React", "IoT"], cat: ["ai", "defence"], repo: "AETHER", live: "https://aether-tau-flax.vercel.app" },
+    { title: "Curelex", org: "Health-tech · CTO", desc: "Patient platform and administrative portal for doctors, patients, revenue and analytics.", tags: ["TypeScript", "Node.js", "MySQL"], cat: ["health"], repo: "Curelex-start-up", live: "https://curelex-start-up.vercel.app" },
+    { title: "ChayBot", org: "Applied AI", desc: "Multi-model assistant with web search, multimodal input, memory and a plugin architecture.", tags: ["Python", "FastAPI"], cat: ["ai"], repo: "chatbot" },
+    { title: "UU-10 Bus Attendance", org: "EduTech", desc: "Campus transport attendance with daily PINs and phone check-in.", tags: ["React", "Express"], cat: ["edu"], repo: "UU-bus-erp", live: "https://client-ghwf.vercel.app" }
   ],
 
   filters: [
     { id: "all", label: "All" },
-    { id: "ai", label: "AI / ML" },
-    { id: "cloud", label: "Cloud & DevOps" },
+    { id: "ai", label: "AI" },
+    { id: "cloud", label: "Cloud" },
+    { id: "health", label: "Health" },
     { id: "defence", label: "Defence & Mobility" },
-    { id: "health", label: "Health-tech" },
-    { id: "web", label: "Web" }
+    { id: "edu", label: "Education" }
   ],
 
-  stack: [
-    { group: "Deep-tech", items: ["Autonomous Cloud Infrastructure", "Dual-Twin Architecture", "LLM Reasoning & Verification", "Deep-Tech System Architecture"] },
-    { group: "Cloud & DevOps", items: ["Kubernetes", "Docker", "Cloud Orchestration", "Microservices", "Multi-cloud Failover", "CI/CD"] },
-    { group: "AI / ML", items: ["LLM Agents", "YOLOv8", "TensorFlow.js", "Computer Vision", "Edge Inference", "Predictive Analytics"] },
-    { group: "Backend", items: ["Node.js", "Express", "Python", "FastAPI", "Flask", "WebSockets", "Distributed Systems"] },
-    { group: "Frontend & Mobile", items: ["React", "TypeScript", "Vite", "PWA", "Capacitor", "Android"] },
-    { group: "Data", items: ["PostgreSQL", "MySQL", "SQLite"] }
+  expertise: {
+    business: ["Venture building", "Product strategy", "Enterprise partnerships", "Pilot execution", "Team leadership", "Incubator & ecosystem relations"],
+    technology: ["Autonomous cloud infrastructure", "Kubernetes & orchestration", "LLM reasoning & verification", "Distributed backend systems", "Computer vision & edge AI", "Full-stack & mobile"]
+  },
+
+  stack: ["Python", "TypeScript", "Node.js", "React", "FastAPI", "Kubernetes", "Docker", "PostgreSQL", "MySQL", "YOLOv8", "TensorFlow.js", "Capacitor"],
+
+  principles: [
+    { t: "Build the company and the code", d: "Strategy and architecture are the same conversation. I lead both." },
+    { t: "Earn trust in production", d: "Pilots with real partners matter more than slides. Every claim gets tested." },
+    { t: "Build for India, design for scale", d: "Products that work in a district hospital or a campus office can work anywhere." }
   ],
 
   contact: [
     { label: "Email", value: "ashutosh@reasonateai.com", href: "mailto:ashutosh@reasonateai.com" },
-    { label: "LinkedIn", value: "in/ashutosh-mishra", href: "https://www.linkedin.com/in/ashutosh-mishra-841408324/" },
-    { label: "GitHub", value: "@Ashutosh26-uu", href: "https://github.com/Ashutosh26-uu" },
-    { label: "ReasonateAI", value: "reasonateai.com", href: "https://www.reasonateai.com" }
+    { label: "LinkedIn", value: "Ashutosh Mishra", href: "https://www.linkedin.com/in/ashutosh-mishra-841408324/" },
+    { label: "GitHub", value: "Ashutosh26-uu", href: "https://github.com/Ashutosh26-uu" },
+    { label: "Company", value: "reasonateai.com", href: "https://www.reasonateai.com" }
   ]
 };
