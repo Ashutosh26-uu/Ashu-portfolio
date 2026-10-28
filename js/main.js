@@ -35,7 +35,7 @@
     $$(".vtab", tabs).forEach((t, j) => { t.setAttribute("aria-selected", j === i); t.tabIndex = j === i ? 0 : -1; });
     panel.setAttribute("aria-labelledby", `tab-${v.id}`);
     panel.innerHTML = `
-      <article class="card vpanel" style="--c:${v.color}">
+      <article class="card vpanel spot" style="--c:${v.color}">
         <div class="vpanel__top">
           <div>
             <p class="vpanel__sector">${esc(v.sector)}</p>
@@ -49,8 +49,8 @@
         </div>
         <p class="vpanel__summary">${esc(v.summary)}</p>
         <div class="vpanel__grid">
-          <ul class="vpanel__list">${v.highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
-          <div class="vpanel__metrics">${v.metrics.map(([n, l]) => `<div><b>${esc(n)}</b><small>${esc(l)}</small></div>`).join("")}</div>
+          <ul class="vpanel__list">${v.highlights.map((h, j) => `<li style="--i:${j}">${esc(h)}</li>`).join("")}</ul>
+          <div class="vpanel__metrics">${v.metrics.map(([n, l], j) => `<div style="--i:${j}"><b>${esc(n)}</b><small>${esc(l)}</small></div>`).join("")}</div>
         </div>
         <a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>
       </article>`;
@@ -78,7 +78,7 @@
 
   const capIcons = [ICONS.brain, ICONS.heal, ICONS.nodes];
   $("#capabilities").innerHTML = D.capabilities.map((c, i) => `
-    <article class="card cap reveal">
+    <article class="card cap spot reveal">
       <span class="cap__icon" aria-hidden="true">${capIcons[i % capIcons.length]}</span>
       <div><h3>${esc(c.t)}</h3><p>${esc(c.d)}</p></div>
     </article>`).join("");
@@ -86,7 +86,7 @@
   // Work
   $("#filters").innerHTML = D.filters.map((f, i) => `<button class="${i === 0 ? "active" : ""}" data-filter="${f.id}" aria-pressed="${i === 0}">${esc(f.label)}</button>`).join("");
   $("#projects").innerHTML = D.projects.map((p) => `
-    <article class="card project reveal" data-cat="${p.cat.join(" ")}">
+    <article class="card project spot reveal" data-cat="${p.cat.join(" ")}">
       <span class="project__org">${esc(p.org)}</span>
       <h3>${esc(p.title)}</h3>
       <p>${esc(p.desc)}</p>
@@ -123,8 +123,8 @@
   // About
   $("#principles").innerHTML = D.principles.map((p, i) => `
     <div class="principle"><span>0${i + 1}</span><div><b>${esc(p.t)}</b><p>${esc(p.d)}</p></div></div>`).join("");
-  $("#timeline").innerHTML = D.experience.map((x) => `
-    <li class="${/present/i.test(x.period) ? "now" : ""}">
+  $("#timeline").innerHTML = D.experience.map((x, i) => `
+    <li class="${/present/i.test(x.period) ? "now" : ""}" style="--i:${i}">
       <b>${esc(x.role)}</b>
       <span class="org">${esc(x.org)}</span>${x.period ? `<span class="period">${esc(x.period)}</span>` : ""}
       <p>${esc(x.desc)}</p>
@@ -251,6 +251,89 @@
     setTimeout(finish, 7000); // never block the page on a slow network
   };
 
+  /* ---------- Motion ---------- */
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  // Split headings into words so they can rise one by one
+  const splitWords = (el) => {
+    el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+    let n = 0;
+    const walk = (node) => [...node.childNodes].forEach((c) => {
+      if (c.nodeType === 1) return walk(c);
+      if (c.nodeType !== 3) return;
+      const frag = document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) return frag.append(" ");
+        const w = document.createElement("span"), wi = document.createElement("span");
+        w.className = "w"; w.setAttribute("aria-hidden", "true");
+        wi.className = "wi"; wi.style.setProperty("--w", n++); wi.textContent = part;
+        w.append(wi); frag.append(w);
+      });
+      c.replaceWith(frag);
+    });
+    walk(el);
+    el.classList.add("wsplit");
+  };
+  $$(".hero__title, .section__head h2, .contact__title").forEach(splitWords);
+
+  // Spotlight on static cards too
+  $$(".backers, .about__side .panel, .expertise__col").forEach((el) => el.classList.add("spot"));
+  document.addEventListener("pointermove", (e) => {
+    const el = e.target.closest(".spot, .profile");
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", e.clientX - r.left + "px");
+    el.style.setProperty("--my", e.clientY - r.top + "px");
+  }, { passive: true });
+
+  if (fine && !reduced) {
+    // Profile card tilt
+    const profile = $(".profile");
+    profile.addEventListener("mousemove", (e) => {
+      if (root.classList.contains("is-loading") || root.classList.contains("is-leaving")) return;
+      const r = profile.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      profile.classList.add("tilting");
+      profile.style.transform = `perspective(1000px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 7).toFixed(2)}deg)`;
+    });
+    profile.addEventListener("mouseleave", () => {
+      profile.classList.remove("tilting");
+      profile.style.transform = "";
+    });
+
+    // Hero glow follows the cursor
+    const hero = $(".hero");
+    hero.addEventListener("mousemove", (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty("--gx", ((e.clientX - r.left) / r.width - 0.5) * 140 + "px");
+      hero.style.setProperty("--gy", ((e.clientY - r.top) / r.height - 0.5) * 100 + "px");
+    });
+
+    // Primary buttons lean towards the cursor
+    $$(".btn--primary").forEach((b) => {
+      b.addEventListener("mousemove", (e) => {
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.16}px, ${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
+      });
+      b.addEventListener("mouseleave", () => { b.style.transform = ""; });
+    });
+  }
+
+  // Nav pill that glides to the active link
+  const pill = document.createElement("span");
+  pill.className = "nav__pill";
+  pill.setAttribute("aria-hidden", "true");
+  $("#navLinks").prepend(pill);
+  const movePill = () => {
+    const a = $(".nav__links a.active");
+    if (!a) { pill.style.opacity = "0"; return; }
+    pill.style.opacity = "1";
+    pill.style.width = a.offsetWidth + "px";
+    pill.style.transform = `translateX(${a.offsetLeft}px)`;
+  };
+  addEventListener("resize", movePill);
+
   /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -306,9 +389,11 @@
     nav.classList.toggle("scrolled", y > 8);
     const max = document.documentElement.scrollHeight - innerHeight;
     $("#progress").style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+    if (y < innerHeight * 1.2) $(".hero").style.setProperty("--py", y * 0.25 + "px");
     let current = "";
     sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) current = s.id; });
     $$(".nav__links a").forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
+    movePill();
   };
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();

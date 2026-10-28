@@ -357,6 +357,97 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 .term__input input { flex: 1; background: none; border: 0; outline: 0; color: #E6E8EB; font: inherit; font-size: 0.82rem; }
 
 /* ==========================================================================
+   Motion — restrained, purposeful animation layered on the base design
+   ========================================================================== */
+
+/* Headings rise word by word (JS wraps words in .w > .wi) */
+.section__head.reveal, .hero__title.reveal, .contact__title { opacity: 1; transform: none; }
+/* clip-path (not overflow) keeps each word on the text baseline; the bottom allowance leaves room for descenders */
+.w { display: inline-block; clip-path: inset(-60% -12% -0.18em -12%); }
+.wi { display: inline-block; transform: translateY(130%); transition: transform 1s var(--ease); transition-delay: calc(80ms + var(--w) * 45ms); }
+.in .wi, .in.wsplit .wi { transform: none; }
+.section__head .kicker, .section__head .section__lead { opacity: 0; transform: translateY(12px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.section__head .section__lead { transition-delay: 0.35s; }
+.section__head.in .kicker, .section__head.in .section__lead { opacity: 1; transform: none; }
+
+/* Kicker gets a short drawn rule */
+.kicker { display: inline-flex; align-items: center; gap: 12px; }
+.kicker::before { content: ""; width: 0; height: 1px; background: currentColor; transition: width 0.9s var(--ease) 0.15s; }
+.in .kicker::before, .in > .kicker::before { width: 28px; }
+.contact .reveal.in .kicker::before { width: 28px; }
+
+/* Hero ambient depth: glow follows the cursor, grid drifts on scroll */
+.hero::after { transform: translate3d(var(--gx, 0px), var(--gy, 0px), 0); transition: transform 1.2s var(--ease); }
+.hero__grid-bg { transform: translate3d(0, var(--py, 0px), 0); will-change: transform; }
+
+/* Profile card: gentle 3D tilt with a soft glare */
+.profile { transform-style: preserve-3d; will-change: transform; }
+.profile.tilting { transition: transform 0.15s linear !important; }
+.profile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.09), transparent 45%); }
+.profile.tilting::after { opacity: 1; }
+
+/* Cursor spotlight on cards */
+.spot { position: relative; }
+.spot::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.35s;
+  padding: 1px; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 70%, transparent), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.spot:hover::after { opacity: 1; }
+
+/* Navigation: a pill glides to the active link */
+.nav__links { position: relative; }
+.nav__pill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 999px; background: var(--surface-2); z-index: -1; opacity: 0;
+  transition: transform 0.5s var(--ease), width 0.5s var(--ease), opacity 0.3s; }
+.nav__links a.active { background: none; }
+.nav__links a { position: relative; }
+
+/* Ventures panel: contents stagger in on every switch */
+.vpanel > :not(.vpanel__top) , .vpanel__top { animation: itemIn 0.7s var(--ease) both; }
+.vpanel__top { animation-delay: 0.02s; }
+.vpanel__summary { animation-delay: 0.1s; }
+.vpanel__grid { animation-delay: 0.18s; }
+.vpanel__link { animation-delay: 0.26s; }
+.vpanel__list li { animation: itemIn 0.6s var(--ease) both; animation-delay: calc(0.22s + var(--i, 0) * 0.06s); }
+.vpanel__metrics div { animation: itemIn 0.6s var(--ease) both; animation-delay: calc(0.26s + var(--i, 0) * 0.07s); }
+@keyframes itemIn { from { opacity: 0; transform: translateY(12px); } }
+.vtab__mark { transition: transform 0.4s var(--ease); }
+.vtab[aria-selected="true"] .vtab__mark { transform: scale(1.06) rotate(-4deg); }
+
+/* Key figures: accent rule grows under each number */
+.figure__n { position: relative; padding-bottom: 14px; }
+.figure__n::after { content: ""; position: absolute; left: 0; bottom: 0; width: 28px; height: 2px; border-radius: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease) 0.3s; }
+.figure.in .figure__n::after { transform: scaleX(1); }
+
+/* Timeline draws itself; entries follow */
+.timeline::before { transform: scaleY(0); transform-origin: top; transition: transform 1.6s var(--ease) 0.2s; }
+.panel.in .timeline::before { transform: scaleY(1); }
+.timeline li { opacity: 0; transform: translateX(-10px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); transition-delay: calc(0.25s + var(--i, 0) * 0.12s); }
+.panel.in .timeline li { opacity: 1; transform: none; }
+.timeline li.now::before { animation: nowPulse 2.4s ease-out infinite; }
+@keyframes nowPulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 100% { box-shadow: 0 0 0 9px transparent; } }
+
+/* Small hover refinements */
+.chips span, .backers li, .tags span { transition: transform 0.25s var(--ease), border-color 0.25s, color 0.25s; }
+.chips span:hover, .backers li:hover { transform: translateY(-2px); border-color: var(--line-2); }
+.award { transition: padding 0.35s var(--ease); }
+.award:hover { padding-left: 10px; }
+.award__no { transition: transform 0.35s var(--ease); }
+.award:hover .award__no { transform: translateX(-4px); }
+.cap__icon { transition: transform 0.4s var(--ease), background 0.3s; }
+.cap:hover .cap__icon { transform: rotate(-8deg) scale(1.08); }
+.brand__mark { transition: transform 0.4s var(--ease); }
+.brand:hover .brand__mark { transform: rotate(-6deg); }
+.btn--primary { will-change: transform; }
+
+@media (hover: none) {
+  .spot::after, .profile::after { display: none; }
+}
+@media (max-width: 860px) {
+  .nav__pill { display: none; }
+}
+
+/* ==========================================================================
    Intro — a watch-dial progress ring around the portrait, split-curtain exit
    ========================================================================== */
 .intro { display: none; position: fixed; inset: 0; z-index: 1000; color: var(--text); overflow: hidden; pointer-events: none; }
