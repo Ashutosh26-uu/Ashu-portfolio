@@ -88,7 +88,7 @@
   $("#projects").innerHTML = D.projects.map((p) => `
     <article class="card project spot reveal" data-cat="${p.cat.join(" ")}">
       <span class="project__org">${esc(p.org)}</span>
-      <h3>${esc(p.title)}</h3>
+      <h3>${p.live ? `<a class="project__stretch" href="${p.live}"${ext(p.live)}>${esc(p.title)}</a>` : esc(p.title)}</h3>
       <p>${esc(p.desc)}</p>
       <div class="project__foot">
         <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>

@@ -265,6 +265,14 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 .project.hide { display: none; }
 .project__org { font-family: var(--mono); font-size: 0.74rem; color: var(--accent); }
 .project h3 { font-size: 1.35rem; letter-spacing: -0.02em; margin: 8px 0 10px; }
+/* Cards with a live site are clickable end to end */
+.project__stretch::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.project__stretch:focus-visible { outline: none; }
+.project:has(.project__stretch:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.project:has(.project__stretch) { cursor: pointer; }
+.project:has(.project__stretch):hover h3 { color: var(--accent); }
+.project h3 { transition: color 0.25s; }
+.project__links { position: relative; z-index: 2; }
 .project p { color: var(--muted); font-size: 0.95rem; flex: 1; }
 .project__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
