@@ -135,13 +135,13 @@ window.PORTFOLIO = {
 
   projects: [
     { title: "Dual-Twin Runtime", org: "ReasonateAI", desc: "Ephemeral simulation mirror that verifies every infrastructure change before it reaches production.", tags: ["LLM agents", "Kubernetes", "Docker"], cat: ["ai", "cloud"], live: "https://www.reasonateai.com" },
-    { title: "AI Drone Defense System", org: "Code for Bharat 2.0 · Winner", desc: "Real-time threat detection, tracking and interception with edge inference and swarm coordination.", tags: ["Python", "YOLOv8", "TensorFlow.js"], cat: ["ai", "defence"], repo: "project-D" },
+    { title: "AI Drone Defense System", org: "Code for Bharat 2.0 · Winner", desc: "Real-time threat detection, tracking and interception with edge inference and swarm coordination.", tags: ["Python", "YOLOv8", "TensorFlow.js"], cat: ["ai", "defence"] },
     { title: "Sehatra Platform", org: "Sehatra", desc: "Eight portals, dispatch and an AI patient assistant on one backend, with web and Android clients.", tags: ["Node.js", "React", "PostgreSQL"], cat: ["health"] },
     { title: "Enterprise Pilots", org: "Samsung R&D · Tata Elxsi", desc: "Automated cloud deployment for industrial workloads and autonomous DevOps pipeline validation.", tags: ["DevOps", "Multi-cluster"], cat: ["cloud"] },
-    { title: "AETHER", org: "Intelligent mobility", desc: "AI, IoT, drones and NavIC satellite communication for real-time fleet monitoring and safety.", tags: ["Python", "React", "IoT"], cat: ["ai", "defence"], repo: "AETHER", live: "https://aether-tau-flax.vercel.app" },
+    { title: "AETHER", org: "Intelligent mobility", desc: "AI, IoT, drones and NavIC satellite communication for real-time fleet monitoring and safety.", tags: ["Python", "React", "IoT"], cat: ["ai", "defence"], live: "https://aether-tau-flax.vercel.app" },
     { title: "Curelex", org: "Health-tech · CTO", desc: "Patient platform and administrative portal for doctors, patients, revenue and analytics.", tags: ["TypeScript", "Node.js", "MySQL"], cat: ["health"], live: "https://curelex.in", liveLabel: "curelex.in" },
-    { title: "ChayBot", org: "Applied AI", desc: "Multi-model assistant with web search, multimodal input, memory and a plugin architecture.", tags: ["Python", "FastAPI"], cat: ["ai"], repo: "chatbot" },
-    { title: "UU-10 Bus Attendance", org: "EduTech", desc: "Campus transport attendance with daily PINs and phone check-in.", tags: ["React", "Express"], cat: ["edu"], repo: "UU-bus-erp", live: "https://client-ghwf.vercel.app" }
+    { title: "ChayBot", org: "Applied AI", desc: "Multi-model assistant with web search, multimodal input, memory and a plugin architecture.", tags: ["Python", "FastAPI"], cat: ["ai"] },
+    { title: "UU-10 Bus Attendance", org: "EduTech", desc: "Campus transport attendance with daily PINs and phone check-in.", tags: ["React", "Express"], cat: ["edu"], live: "https://client-ghwf.vercel.app" }
   ],
 
   filters: [
