@@ -22,20 +22,48 @@
       <p class="figure__l">${esc(f.label)}</p>
     </div>`).join("");
 
-  // Ventures — tabs + detail panel
-  const tabs = $("#ventureTabs"), panel = $("#venturePanel");
+  // Ventures — tabs + detail panel, auto-advancing like a deck
+  const tabs = $("#ventureTabs"), panel = $("#venturePanel"), venturesEl = $(".ventures");
+  const VENTURE_MS = 7000;
   tabs.innerHTML = D.ventures.map((v, i) => `
     <button class="vtab" role="tab" id="tab-${v.id}" aria-controls="venturePanel" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}" style="--c:${v.color}">
       <span class="vtab__mark">${esc(v.mark)}</span>
       <span><b>${esc(v.name)}</b><small>${esc(v.role)}</small></span>
       <span class="vtab__arrow" aria-hidden="true">→</span>
+      <span class="vtab__progress" aria-hidden="true"><i></i></span>
     </button>`).join("");
+  $("#ventureTotal").textContent = String(D.ventures.length).padStart(2, "0");
+
+  // Animate the leading number of a metric ("8,800+" → 0…8,800+)
+  const countMetric = (el) => {
+    const raw = el.textContent, m = raw.match(/^([\d,]+)(.*)$/);
+    if (!m || reduced) return;
+    const target = +m[1].replace(/,/g, ""), t0 = performance.now(), dur = 900;
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))).toLocaleString("en-IN") + m[2];
+      if (t < 1) requestAnimationFrame(step); else el.textContent = raw;
+    };
+    requestAnimationFrame(step);
+  };
+
+  let current = 0;
   const showVenture = (i) => {
+    current = i;
     const v = D.ventures[i];
-    $$(".vtab", tabs).forEach((t, j) => { t.setAttribute("aria-selected", j === i); t.tabIndex = j === i ? 0 : -1; });
+    $$(".vtab", tabs).forEach((t, j) => {
+      t.setAttribute("aria-selected", j === i); t.tabIndex = j === i ? 0 : -1;
+      // Restart the progress bar on the active tab
+      const bar = $(".vtab__progress i", t);
+      bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+    });
+    const active = $$(".vtab", tabs)[i];
+    if (tabs.scrollWidth > tabs.clientWidth) tabs.scrollTo({ left: active.offsetLeft - 16, behavior: reduced ? "auto" : "smooth" });
+    $("#ventureNo").textContent = String(i + 1).padStart(2, "0");
     panel.setAttribute("aria-labelledby", `tab-${v.id}`);
     panel.innerHTML = `
       <article class="card vpanel spot" style="--c:${v.color}">
+        <span class="vpanel__watermark" aria-hidden="true">${esc(v.mark)}</span>
         <div class="vpanel__top">
           <div>
             <p class="vpanel__sector">${esc(v.sector)}</p>
@@ -54,17 +82,41 @@
         </div>
         ${v.link ? `<a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>` : ""}
       </article>`;
+    $$(".vpanel__metrics b", panel).forEach(countMetric);
   };
+  const step = (dir) => showVenture((current + dir + D.ventures.length) % D.ventures.length);
   showVenture(0);
+
+  // Autoplay: the active tab's progress bar is the timer; it pauses on hover,
+  // keyboard focus, when off-screen, or when the visitor turns it off.
+  const autoBtn = $("#ventureAuto");
+  let userPaused = reduced, hovering = false, focused = false;
+  const onScreen = () => { const r = venturesEl.getBoundingClientRect(); return r.bottom > innerHeight * 0.3 && r.top < innerHeight * 0.7; };
+  const syncAuto = () => {
+    const running = !userPaused && !hovering && !focused && onScreen();
+    venturesEl.classList.toggle("is-auto", !userPaused);
+    venturesEl.classList.toggle("is-paused", !running);
+    autoBtn.setAttribute("aria-pressed", String(userPaused));
+    autoBtn.setAttribute("aria-label", userPaused ? "Play autoplay" : "Pause autoplay");
+  };
+  tabs.addEventListener("animationend", (e) => {
+    if (e.animationName === "ventureTimer" && !userPaused) step(1);
+  });
+  venturesEl.addEventListener("mouseenter", () => { hovering = true; syncAuto(); });
+  venturesEl.addEventListener("mouseleave", () => { hovering = false; syncAuto(); });
+  venturesEl.addEventListener("focusin", () => { focused = true; syncAuto(); });
+  venturesEl.addEventListener("focusout", (e) => { if (!venturesEl.contains(e.relatedTarget)) { focused = false; syncAuto(); } });
+  autoBtn.addEventListener("click", () => { userPaused = !userPaused; if (!userPaused) showVenture(current); syncAuto(); });
+  $("#venturePrev").addEventListener("click", () => step(-1));
+  $("#ventureNext").addEventListener("click", () => step(1));
+  syncAuto();
+
   tabs.addEventListener("click", (e) => { const t = e.target.closest(".vtab"); if (t) showVenture(+t.dataset.i); });
   tabs.addEventListener("keydown", (e) => {
     if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
     e.preventDefault();
-    const cur = $$(".vtab", tabs).findIndex((t) => t.getAttribute("aria-selected") === "true");
-    const dir = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
-    const next = (cur + dir + D.ventures.length) % D.ventures.length;
-    showVenture(next);
-    $$(".vtab", tabs)[next].focus();
+    step(e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1);
+    $$(".vtab", tabs)[current].focus();
   });
 
   // Technology
@@ -470,6 +522,7 @@
     if (y < innerHeight * 1.2) $(".hero").style.setProperty("--py", y * 0.25 + "px");
     paintStatement();
     paintGhosts();
+    syncAuto();
     let current = "";
     sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) current = s.id; });
     $$(".nav__links a").forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));

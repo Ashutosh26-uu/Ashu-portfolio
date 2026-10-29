@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=19" />
+  <link rel="stylesheet" href="css/style.css?v=22" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -145,7 +145,20 @@
           <h2>Three companies, one mission: <em>technology that works in the real world.</em></h2>
         </header>
         <div class="ventures reveal">
-          <div class="ventures__tabs" role="tablist" aria-label="Ventures" id="ventureTabs"></div>
+          <div class="ventures__side">
+            <div class="ventures__tabs" role="tablist" aria-label="Ventures" id="ventureTabs"></div>
+            <div class="ventures__ctrl">
+              <span class="ventures__count"><b id="ventureNo">01</b> / <span id="ventureTotal">03</span></span>
+              <div class="ventures__btns">
+                <button class="icon-btn" id="venturePrev" aria-label="Previous venture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <button class="icon-btn" id="ventureAuto" aria-label="Pause autoplay" aria-pressed="false">
+                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                </button>
+                <button class="icon-btn" id="ventureNext" aria-label="Next venture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+              </div>
+            </div>
+          </div>
           <div class="ventures__panel" id="venturePanel" role="tabpanel"></div>
         </div>
       </div>
@@ -292,7 +305,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=19"></script>
-  <script src="js/main.js?v=19"></script>
+  <script src="js/data.js?v=22"></script>
+  <script src="js/main.js?v=22"></script>
 </body>
 </html>
