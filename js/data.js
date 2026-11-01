@@ -36,6 +36,12 @@ window.PORTFOLIO = {
         "Member of NVIDIA Inception and Google for Startups"
       ],
       metrics: [["8,800+", "Waitlist"], ["13", "Incubators"], ["2", "Enterprise pilots"]],
+      milestones: [
+        ["Mar 2026", "Company founded", "done"],
+        ["Aug 2026", "v0.0.1 — AI website builder", "done"],
+        ["Now", "v0.0.2 — Dual-Twin live", "now"],
+        ["Q1 2027", "Virtual CTO", "next"]
+      ],
       link: "https://www.reasonateai.com",
       linkLabel: "Visit reasonateai.com"
     },

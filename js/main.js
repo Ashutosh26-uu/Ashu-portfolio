@@ -48,7 +48,9 @@
   };
 
   let current = 0;
-  const showVenture = (i) => {
+  const showVenture = (i, dir) => {
+    // Slide in from the side we are moving towards
+    dir = dir || Math.sign(i - current) || 1;
     current = i;
     const v = D.ventures[i];
     $$(".vtab", tabs).forEach((t, j) => {
@@ -61,9 +63,11 @@
     if (tabs.scrollWidth > tabs.clientWidth) tabs.scrollTo({ left: active.offsetLeft - 16, behavior: reduced ? "auto" : "smooth" });
     $("#ventureNo").textContent = String(i + 1).padStart(2, "0");
     panel.setAttribute("aria-labelledby", `tab-${v.id}`);
+    panel.style.setProperty("--dx", `${dir * 28}px`);
     panel.innerHTML = `
       <article class="card vpanel spot" style="--c:${v.color}">
         <span class="vpanel__watermark" aria-hidden="true">${esc(v.mark)}</span>
+        <span class="vpanel__timer" aria-hidden="true"></span>
         <div class="vpanel__top">
           <div>
             <p class="vpanel__sector">${esc(v.sector)}</p>
@@ -80,11 +84,13 @@
           <ul class="vpanel__list">${v.highlights.map((h, j) => `<li style="--i:${j}">${esc(h)}</li>`).join("")}</ul>
           <div class="vpanel__metrics">${v.metrics.map(([n, l], j) => `<div style="--i:${j}"><b>${esc(n)}</b><small>${esc(l)}</small></div>`).join("")}</div>
         </div>
+        ${v.milestones ? `<ol class="milestones" aria-label="Milestones" style="--done:${(Math.max(0, v.milestones.findIndex((m) => m[2] === "now")) / v.milestones.length) * 100}%">${v.milestones.map(([when, what, state], j) => `
+          <li class="milestone is-${state}" style="--i:${j}"><span class="milestone__dot"></span><b>${esc(when)}</b><small>${esc(what)}</small></li>`).join("")}</ol>` : ""}
         ${v.link ? `<a class="vpanel__link" href="${v.link}"${ext(v.link)}>${esc(v.linkLabel)} <span aria-hidden="true">↗</span></a>` : ""}
       </article>`;
     $$(".vpanel__metrics b", panel).forEach(countMetric);
   };
-  const step = (dir) => showVenture((current + dir + D.ventures.length) % D.ventures.length);
+  const step = (dir) => showVenture((current + dir + D.ventures.length) % D.ventures.length, dir);
   showVenture(0);
 
   // Autoplay: the active tab's progress bar is the timer; it pauses on hover,
@@ -109,6 +115,16 @@
   autoBtn.addEventListener("click", () => { userPaused = !userPaused; if (!userPaused) showVenture(current); syncAuto(); });
   $("#venturePrev").addEventListener("click", () => step(-1));
   $("#ventureNext").addEventListener("click", () => step(1));
+
+  // Swipe between ventures on touch screens
+  let touchX = null, touchY = null;
+  panel.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }, { passive: true });
+  panel.addEventListener("touchend", (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    touchX = touchY = null;
+  }, { passive: true });
   syncAuto();
 
   tabs.addEventListener("click", (e) => { const t = e.target.closest(".vtab"); if (t) showVenture(+t.dataset.i); });
