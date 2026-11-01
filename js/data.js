@@ -70,19 +70,17 @@ window.PORTFOLIO = {
       legal: "EduTech",
       mark: "E",
       color: "#8B5CF6",
-      sector: "Ed-tech · Campus systems",
+      sector: "Ed-tech · Test preparation",
       role: "Founder & CEO",
       since: "",
       stage: "Early stage",
-      summary: "Digital infrastructure for educational institutions, starting with operations campuses still run on paper — beginning with transport attendance at United University.",
+      summary: "An ed-tech company focused on test preparation — helping students prepare for their exams with structured, technology-led learning.",
       highlights: [
-        "First deployment: UU-10 bus attendance portal",
-        "Daily PIN-based attendance from students' phones",
-        "Built around the tools administrators already use"
+        "Ed-tech company built around test preparation",
+        "Technology-first approach to how students prepare and practise",
+        "Led alongside ReasonateAI and Sehatra"
       ],
-      metrics: [["1", "Campus"], ["Daily", "PIN attendance"], ["0 → 1", "Stage"]],
-      link: "https://client-ghwf.vercel.app",
-      linkLabel: "See the first product"
+      metrics: [["Test prep", "Focus"], ["Ed-tech", "Sector"], ["Early", "Stage"]]
     }
   ],
 
@@ -120,7 +118,7 @@ window.PORTFOLIO = {
   experience: [
     { role: "Founder, CEO & CTO", org: "ReasonateAI Private Limited", period: "Mar 2026 — Present", desc: "Lead company strategy, enterprise partnerships and the core engineering of the Autonomous AI CTO and Dual-Twin Architecture." },
     { role: "Founder & CEO", org: "Sehatra · Nexus Healthcare", period: "Present", desc: "Building a connected public-health platform for India, from product design to a district-level pilot." },
-    { role: "Founder & CEO", org: "EduTech", period: "Present", desc: "Building digital operations for educational institutions, starting with campus transport." },
+    { role: "Founder & CEO", org: "EduTech", period: "Present", desc: "Building an ed-tech company focused on test preparation." },
     { role: "Founding Member & CTO", org: "Curelex Healthtech Pvt. Ltd.", period: "", desc: "Owned end-to-end backend architecture for the patient platform and the administrative suite." },
     { role: "Full-Stack Engineer", org: "Cashcry", period: "", desc: "Engineered scalable full-stack applications under senior engineering mentorship." },
     { role: "Backend Developer", org: "Prodesk IT", period: "", desc: "Built backend services and database logic for production systems." }
@@ -147,7 +145,7 @@ window.PORTFOLIO = {
     { title: "AETHER", org: "Intelligent mobility", desc: "AI, IoT, drones and NavIC satellite communication for real-time fleet monitoring and safety.", tags: ["Python", "React", "IoT"], cat: ["ai", "defence"] },
     { title: "Curelex", org: "Health-tech · CTO", desc: "Patient platform and administrative portal for doctors, patients, revenue and analytics.", tags: ["TypeScript", "Node.js", "MySQL"], cat: ["health"], live: "https://curelex.in", liveLabel: "curelex.in" },
     { title: "ChayBot", org: "Applied AI", desc: "Multi-model assistant with web search, multimodal input, memory and a plugin architecture.", tags: ["Python", "FastAPI"], cat: ["ai"] },
-    { title: "UU-10 Bus Attendance", org: "EduTech", desc: "Campus transport attendance with daily PINs and phone check-in.", tags: ["React", "Express"], cat: ["edu"], live: "https://client-ghwf.vercel.app" }
+    { title: "UU-10 Bus Attendance", org: "United University · Campus", desc: "Campus transport attendance with daily PINs and phone check-in.", tags: ["React", "Express"], cat: ["edu"], live: "https://client-ghwf.vercel.app" }
   ],
 
   filters: [
