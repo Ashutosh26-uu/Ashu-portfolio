@@ -5,6 +5,23 @@ window.PORTFOLIO = {
   email: "ashutosh@reasonateai.com",
   linkedin: "https://www.linkedin.com/in/ashutosh-mishra-841408324/",
 
+  // "Now" — what I'm focused on; update `nowUpdated` whenever this changes
+  nowUpdated: "November 2026",
+  now: [
+    { tag: "Building", title: "ReasonateAI v0.0.2", desc: "Dual-Twin is live — every build is tested and repaired in its own sandbox before release.", color: "#3E7BFA" },
+    { tag: "Piloting", title: "Samsung R&D · Tata Elxsi", desc: "Running enterprise pilots on automated cloud deployment and autonomous DevOps validation.", color: "#D2B37A" },
+    { tag: "Scaling", title: "Sehatra in Barabanki", desc: "Taking the connected health network through its first district pilot in Uttar Pradesh.", color: "#14A37F" },
+    { tag: "Next", title: "The virtual CTO", desc: "Security checks, cloud-cost control and server setup handled by AI — planned for Q1 2027.", color: "#8B5CF6" }
+  ],
+
+  // Featured press item
+  press: {
+    source: "ReasonateAI Press",
+    headline: "Nine of India's top institutes select ReasonateAI for incubation in a single round",
+    detail: "IISc Bangalore, IIT Kanpur, IIT Mandi, IIT Jodhpur, IIT Patna, IIIT Bangalore, BITS Pilani, DTU and VIT Vellore — bringing the total to 13 incubators.",
+    link: "https://www.reasonateai.com/press"
+  },
+
   // Hero credential strip
   credentials: ["TBIF · IIT Ropar", "NVIDIA Inception", "Google for Startups", "Samsung R&D · Pilot", "Tata Elxsi · Pilot"],
 

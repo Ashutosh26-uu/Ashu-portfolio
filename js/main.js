@@ -188,6 +188,28 @@
     </li>`).join("");
   $("#backers").innerHTML = D.backers.map((b) => `<li>${esc(b)}</li>`).join("");
 
+  // Trust band — the list is doubled so the marquee loops seamlessly
+  const trustItems = D.backers.map((b) => `<li>${esc(b)}</li>`).join("");
+  $("#trustRow").innerHTML = trustItems + trustItems.replace(/<li>/g, '<li aria-hidden="true">');
+
+  // Featured press
+  $("#press").href = D.press.link;
+  $("#press").innerHTML = `
+    <span class="press__source"><span class="press__badge">Press</span>${esc(D.press.source)}</span>
+    <strong class="press__headline">${esc(D.press.headline)}</strong>
+    <span class="press__detail">${esc(D.press.detail)}</span>
+    <span class="press__cta">Read the announcement <span aria-hidden="true">↗</span></span>`;
+
+  // Now
+  $("#nowUpdated").textContent = D.nowUpdated;
+  $("#nowGrid").innerHTML = D.now.map((n, i) => `
+    <article class="card now__card spot reveal" style="--c:${n.color}">
+      <span class="now__tag">${esc(n.tag)}</span>
+      <h3>${esc(n.title)}</h3>
+      <p>${esc(n.desc)}</p>
+      <span class="now__index" aria-hidden="true">0${i + 1}</span>
+    </article>`).join("");
+
   // About
   $("#principles").innerHTML = D.principles.map((p, i) => `
     <div class="principle"><span>0${i + 1}</span><div><b>${esc(p.t)}</b><p>${esc(p.d)}</p></div></div>`).join("");
@@ -426,11 +448,12 @@
     });
   })(statement);
   const paintStatement = () => {
-    if (reduced) { stWords.forEach((w) => w.classList.add("lit")); return; }
+    if (reduced) { stWords.forEach((w) => w.classList.add("lit")); statement.closest(".statement").classList.add("signed"); return; }
     const r = statement.getBoundingClientRect();
     const p = Math.min(1, Math.max(0, (innerHeight * 0.82 - r.top) / (innerHeight * 0.55)));
     const lit = Math.round(p * stWords.length);
     stWords.forEach((w, i) => w.classList.toggle("lit", i < lit));
+    if (lit >= stWords.length) statement.closest(".statement").classList.add("signed");
   };
 
   // Ghost numerals behind section headings

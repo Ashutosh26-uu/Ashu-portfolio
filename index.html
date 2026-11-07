@@ -14,8 +14,8 @@
   <link rel="preload" as="image" href="assets/ashutosh.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=24" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Mrs+Saint+Delafield&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=25" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -137,6 +137,14 @@
       <div class="container figures__grid" id="figures"></div>
     </section>
 
+    <!-- Backed by -->
+    <section class="trust" aria-label="Backed by">
+      <p class="trust__label">Backed by India's leading institutes &amp; programmes</p>
+      <div class="trust__track">
+        <ul class="trust__row" id="trustRow"></ul>
+      </div>
+    </section>
+
     <!-- Ventures -->
     <section class="section" id="ventures">
       <div class="container">
@@ -168,7 +176,21 @@
     <section class="statement" aria-label="Philosophy">
       <div class="container">
         <p class="statement__text" id="statement">Strategy and architecture are the same conversation. I lead both — from the <em>boardroom</em> to the <em>codebase</em> — and every promise we make gets tested in production.</p>
-        <p class="statement__by"><span></span>Ashutosh Mishra, Founder &amp; CEO</p>
+        <div class="statement__sign">
+          <span class="signature" aria-hidden="true">Ashutosh Mishra</span>
+          <p class="statement__by"><span></span>Ashutosh Mishra, Founder &amp; CEO</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Now -->
+    <section class="now" aria-label="What I'm doing now">
+      <div class="container">
+        <header class="now__head reveal">
+          <p class="kicker"><span class="status-dot"></span>Now</p>
+          <p class="now__updated">Updated <span id="nowUpdated"></span></p>
+        </header>
+        <div class="now__grid" id="nowGrid"></div>
       </div>
     </section>
 
@@ -213,6 +235,7 @@
           <p class="kicker">04 — Track record</p>
           <h2>Recognition and <em>backing.</em></h2>
         </header>
+        <a class="press reveal" id="press" target="_blank" rel="noopener"></a>
         <div class="record">
           <ol class="awards" id="awards"></ol>
           <div class="backers reveal">
@@ -305,7 +328,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=24"></script>
-  <script src="js/main.js?v=24"></script>
+  <script src="js/data.js?v=25"></script>
+  <script src="js/main.js?v=25"></script>
 </body>
 </html>
