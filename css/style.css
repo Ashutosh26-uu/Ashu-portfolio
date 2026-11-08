@@ -191,6 +191,7 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 .ventures { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
 .ventures__side { position: sticky; top: calc(var(--nav-h) + 24px); min-width: 0; }
 .ventures > * { min-width: 0; }
+.ventures__panel { overflow-x: clip; overflow-y: visible; }
 .ventures__tabs { display: flex; flex-direction: column; gap: 10px; }
 .vtab { position: relative; overflow: hidden; }
 .vtab__progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: transparent; }
@@ -585,6 +586,19 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 .now__card p { color: var(--muted); font-size: 0.9rem; }
 .now__index { position: absolute; right: 18px; bottom: 6px; font-family: var(--serif); font-style: italic; font-size: 3.4rem; line-height: 1; color: var(--line-2); }
 
+.now__dots { display: none; }
+.now__dots button { width: 8px; height: 8px; padding: 0; border-radius: 999px; background: var(--line-2); transition: width 0.35s var(--ease), background 0.3s; }
+.now__dots button[aria-selected="true"] { width: 24px; background: var(--accent); }
+
+/* Touch screens: the card nearest the middle of the screen gets the hover look */
+@media (hover: none) {
+  .spot.is-centered::after { display: block; opacity: 1; }
+  .project.is-centered, .cap.is-centered, .now__card.is-centered, .expertise__col.is-centered, .about__side .panel.is-centered { border-color: var(--line-2); transform: translateY(-2px); }
+  .project.is-centered .project__icon, .cap.is-centered .cap__icon { transform: rotate(-6deg) scale(1.06); }
+  .award.is-centered { padding-left: 10px; }
+  .project, .cap, .now__card, .expertise__col, .about__side .panel { transition: border-color 0.4s, transform 0.5s var(--ease); }
+}
+
 /* Featured press card */
 .press { position: relative; display: grid; gap: 10px; padding: clamp(24px, 3.4vw, 36px); margin-bottom: 28px; border-radius: var(--radius);
   background: linear-gradient(120deg, color-mix(in srgb, var(--gold) 9%, var(--surface)), var(--surface) 55%); border: 1px solid var(--line);
@@ -600,8 +614,14 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 
 @media (max-width: 1080px) { .now__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) {
-  .now__grid { grid-template-columns: 1fr; }
-  .now__card { min-height: 0; }
+  /* Phone: swipeable, self-advancing row */
+  .now__grid { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none;
+    margin-inline: -16px; padding: 4px 16px 8px; }
+  .now__grid::-webkit-scrollbar { display: none; }
+  .now__card { flex: 0 0 84%; scroll-snap-align: start; min-height: 0; }
+  .now__grid .reveal { opacity: 1; transform: none; }
+  .now__grid .now__card::before { transform: scaleX(1); }
+  .now__dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
   .trust__row li { font-size: 0.98rem; margin-right: 32px; }
   .trust__row li::after { margin-left: 32px; }
 }

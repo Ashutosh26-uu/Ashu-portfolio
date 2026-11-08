@@ -45,7 +45,7 @@
     if (!m || reduced) return;
     const target = +m[1].replace(/,/g, ""), t0 = performance.now(), dur = 900;
     const step = (now) => {
-      const t = Math.min(1, (now - t0) / dur);
+      const t = Math.min(1, Math.max(0, (now - t0) / dur));
       el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))).toLocaleString("en-IN") + m[2];
       if (t < 1) requestAnimationFrame(step); else el.textContent = raw;
     };
@@ -113,9 +113,15 @@
   tabs.addEventListener("animationend", (e) => {
     if (e.animationName === "ventureTimer" && !userPaused) step(1);
   });
-  venturesEl.addEventListener("mouseenter", () => { hovering = true; syncAuto(); });
-  venturesEl.addEventListener("mouseleave", () => { hovering = false; syncAuto(); });
-  venturesEl.addEventListener("focusin", () => { focused = true; syncAuto(); });
+  // Phones fire a synthetic mouseenter on tap but never the matching mouseleave, and a tapped
+  // button keeps focus — so only a real mouse pauses on hover, only keyboard focus pauses on
+  // focus, and a finger pauses just while it is on the screen.
+  venturesEl.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovering = true; syncAuto(); } });
+  venturesEl.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") { hovering = false; syncAuto(); } });
+  venturesEl.addEventListener("touchstart", () => { hovering = true; syncAuto(); }, { passive: true });
+  venturesEl.addEventListener("touchend", () => { hovering = false; syncAuto(); }, { passive: true });
+  venturesEl.addEventListener("touchcancel", () => { hovering = false; syncAuto(); }, { passive: true });
+  venturesEl.addEventListener("focusin", (e) => { if (e.target.matches(":focus-visible")) { focused = true; syncAuto(); } });
   venturesEl.addEventListener("focusout", (e) => { if (!venturesEl.contains(e.relatedTarget)) { focused = false; syncAuto(); } });
   autoBtn.addEventListener("click", () => { userPaused = !userPaused; if (!userPaused) showVenture(current); syncAuto(); });
   $("#venturePrev").addEventListener("click", () => step(-1));
@@ -489,7 +495,7 @@
     el.dataset.decoded = "1";
     const final = el.textContent, t0 = performance.now(), dur = 700;
     const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
+      const p = Math.min(1, Math.max(0, (now - t0) / dur));
       const upto = Math.floor(p * final.length);
       el.textContent = [...final].map((ch, i) => (i < upto || /[\s—·&]/.test(ch) ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join("");
       if (p < 1) requestAnimationFrame(step); else el.textContent = final;
@@ -532,7 +538,7 @@
     if (reduced) { el.textContent = target.toLocaleString("en-IN"); return; }
     const t0 = performance.now(), dur = 1400;
     const step = (now) => {
-      const t = Math.min(1, (now - t0) / dur);
+      const t = Math.min(1, Math.max(0, (now - t0) / dur));
       el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))).toLocaleString("en-IN");
       if (t < 1) requestAnimationFrame(step);
     };
@@ -603,6 +609,44 @@
   };
   addEventListener("scroll", paintToTop, { passive: true });
   paintToTop();
+
+  /* ---------- Phone: "Now" becomes a self-advancing carousel ---------- */
+  const phone = matchMedia("(max-width: 560px)");
+  const nowGrid = $("#nowGrid"), nowDots = $("#nowDots"), nowCards = $$(".now__card", nowGrid);
+  nowDots.innerHTML = nowCards.map((_, i) => `<button role="tab" aria-label="Item ${i + 1}" data-i="${i}"></button>`).join("");
+  let nowIdx = 0, nowHold = 0, nowTouch = false;
+  const nowLeft = (c) => c.offsetLeft - nowGrid.offsetLeft - 16;
+  const nowGo = (i) => {
+    nowIdx = (i + nowCards.length) % nowCards.length;
+    nowGrid.scrollTo({ left: nowLeft(nowCards[nowIdx]), behavior: reduced ? "auto" : "smooth" });
+  };
+  const nowSync = () => {
+    // The dot follows whichever card is nearest the left edge, however it got there
+    const x = nowGrid.scrollLeft;
+    let best = 0;
+    nowCards.forEach((c, i) => { if (Math.abs(nowLeft(c) - x) < Math.abs(nowLeft(nowCards[best]) - x)) best = i; });
+    nowIdx = best;
+    $$("button", nowDots).forEach((b, i) => b.setAttribute("aria-selected", i === best));
+  };
+  nowGrid.addEventListener("scroll", () => requestAnimationFrame(nowSync), { passive: true });
+  nowGrid.addEventListener("touchstart", () => { nowTouch = true; }, { passive: true });
+  nowGrid.addEventListener("touchend", () => { nowTouch = false; nowHold = Date.now() + 6000; }, { passive: true });
+  nowDots.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { nowHold = Date.now() + 6000; nowGo(+b.dataset.i); } });
+  nowSync();
+  setInterval(() => {
+    if (!phone.matches || reduced || nowTouch || Date.now() < nowHold || document.hidden) return;
+    const r = nowGrid.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    nowGo(nowIdx + 1);
+  }, 4500);
+
+  /* ---------- Touch: the card in the middle of the screen lights up ---------- */
+  if (!fine) {
+    const centerIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => e.target.classList.toggle("is-centered", e.isIntersecting));
+    }, { rootMargin: "-42% 0px -42% 0px" });
+    $$(".project, .cap, .now__card, .award, .expertise__col, .about__side .panel").forEach((c) => centerIO.observe(c));
+  }
 
   /* ---------- Contact actions ---------- */
   const toast = (msg) => {
