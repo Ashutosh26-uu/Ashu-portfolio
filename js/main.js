@@ -10,8 +10,13 @@
   const ICONS = {
     brain: '<svg viewBox="0 0 24 24"><path d="M9 3a3 3 0 0 0-3 3v.5A3 3 0 0 0 4 9.3a3 3 0 0 0 .6 5A3 3 0 0 0 9 18.6V21M15 3a3 3 0 0 1 3 3v.5a3 3 0 0 1 2 2.8 3 3 0 0 1-.6 5A3 3 0 0 1 15 18.6V21M9 3h6M12 3v18"/></svg>',
     heal: '<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><path d="M12 8v8M8 12h8"/></svg>',
-    nodes: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="3" width="6" height="6" rx="1.5"/><rect x="9" y="15" width="6" height="6" rx="1.5"/><path d="M6 9v3h12V9M12 12v3"/></svg>'
+    nodes: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="3" width="6" height="6" rx="1.5"/><rect x="9" y="15" width="6" height="6" rx="1.5"/><path d="M6 9v3h12V9M12 12v3"/></svg>',
+    cloud: '<svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.6-7.96A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/></svg>',
+    health: '<svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>',
+    shield: '<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/></svg>',
+    cap: '<svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>'
   };
+  const CAT_ICON = { ai: "brain", cloud: "cloud", health: "health", defence: "shield", edu: "cap" };
 
   /* ---------- Render ---------- */
   $("#creds").innerHTML = D.credentials.map((c) => `<li>${esc(c)}</li>`).join("");
@@ -155,7 +160,10 @@
   $("#filters").innerHTML = D.filters.map((f, i) => `<button class="${i === 0 ? "active" : ""}" data-filter="${f.id}" aria-pressed="${i === 0}">${esc(f.label)}</button>`).join("");
   $("#projects").innerHTML = D.projects.map((p) => `
     <article class="card project spot reveal" data-cat="${p.cat.join(" ")}">
-      <span class="project__org">${esc(p.org)}</span>
+      <div class="project__head">
+        <span class="project__icon" aria-hidden="true">${ICONS[CAT_ICON[p.cat[0]]] || ICONS.nodes}</span>
+        <span class="project__org">${esc(p.org)}</span>
+      </div>
       <h3>${p.live ? `<a class="project__stretch" href="${p.live}"${ext(p.live)}>${esc(p.title)}</a>` : esc(p.title)}</h3>
       <p>${esc(p.desc)}</p>
       <div class="project__foot">
@@ -584,6 +592,17 @@
   /* ---------- Clock ---------- */
   const clock = () => { $("#clock").textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata" }); };
   clock(); setInterval(clock, 15000);
+
+  /* ---------- Back to top ---------- */
+  const toTop = $("#toTop"), toTopRing = $("#toTopProgress"), RING_LEN = 2 * Math.PI * 20;
+  toTopRing.style.strokeDasharray = RING_LEN;
+  const paintToTop = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    toTop.classList.toggle("show", scrollY > innerHeight * 1.2);
+    toTopRing.style.strokeDashoffset = RING_LEN * (1 - (max > 0 ? scrollY / max : 0));
+  };
+  addEventListener("scroll", paintToTop, { passive: true });
+  paintToTop();
 
   /* ---------- Contact actions ---------- */
   const toast = (msg) => {
