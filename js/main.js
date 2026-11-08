@@ -585,6 +585,39 @@
   const clock = () => { $("#clock").textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata" }); };
   clock(); setInterval(clock, 15000);
 
+  /* ---------- Contact actions ---------- */
+  const toast = (msg) => {
+    let t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.append(t); }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._h);
+    t._h = setTimeout(() => t.classList.remove("show"), 2200);
+  };
+  $("#copyEmail").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(D.email); toast("Email copied to clipboard"); }
+    catch (e) { location.href = `mailto:${D.email}`; }
+  });
+  // A vCard so visitors can save the contact straight to their phone
+  $("#saveContact").addEventListener("click", () => {
+    const card = [
+      "BEGIN:VCARD", "VERSION:3.0",
+      "N:Mishra;Ashutosh;;;", "FN:Ashutosh Mishra",
+      "ORG:ReasonateAI Private Limited", "TITLE:Founder & CEO",
+      `EMAIL;TYPE=WORK:${D.email}`,
+      "URL:https://ashutosh26-uu.github.io/Ashu-portfolio/",
+      `X-SOCIALPROFILE;TYPE=linkedin:${D.linkedin}`,
+      "ADR;TYPE=WORK:;;;Prayagraj;Uttar Pradesh;;India",
+      "NOTE:Founder & CEO — ReasonateAI · Sehatra · EduTech",
+      "END:VCARD"
+    ].join("\r\n");
+    const url = URL.createObjectURL(new Blob([card], { type: "text/vcard" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: "Ashutosh-Mishra.vcf" });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast("Contact card downloaded");
+  });
+
   /* ---------- Console (press /) ---------- */
   const term = $("#term"), body = $("#termBody"), input = $("#termInput");
   const print = (html) => { body.insertAdjacentHTML("beforeend", html + "\n"); body.scrollTop = body.scrollHeight; };

@@ -5,17 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ashutosh Mishra — Founder & CEO · ReasonateAI, Sehatra, EduTech</title>
   <meta name="description" content="Ashutosh Mishra is an entrepreneur and systems engineer. Founder & CEO of ReasonateAI, Sehatra and EduTech. Incubated at TBIF – IIT Ropar, with enterprise pilots at Samsung R&D and Tata Elxsi." />
+  <meta name="author" content="Ashutosh Mishra" />
   <meta name="theme-color" content="#0B0D11" />
-  <meta property="og:title" content="Ashutosh Mishra — Founder & CEO" />
-  <meta property="og:description" content="Entrepreneur and systems engineer building ReasonateAI, Sehatra and EduTech." />
+  <link rel="canonical" href="https://ashutosh26-uu.github.io/Ashu-portfolio/" />
+
+  <!-- Social sharing (LinkedIn, WhatsApp, X, Slack) -->
   <meta property="og:type" content="profile" />
-  <meta property="og:image" content="assets/ashutosh.jpg" />
+  <meta property="og:site_name" content="Ashutosh Mishra" />
+  <meta property="og:url" content="https://ashutosh26-uu.github.io/Ashu-portfolio/" />
+  <meta property="og:title" content="Ashutosh Mishra — Founder & CEO · ReasonateAI, Sehatra, EduTech" />
+  <meta property="og:description" content="Entrepreneur and systems engineer building companies where AI meets real-world infrastructure. Incubated at TBIF – IIT Ropar." />
+  <meta property="og:image" content="https://ashutosh26-uu.github.io/Ashu-portfolio/assets/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Ashutosh Mishra — Founder & CEO of ReasonateAI, Sehatra and EduTech" />
+  <meta property="profile:first_name" content="Ashutosh" />
+  <meta property="profile:last_name" content="Mishra" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ashutosh Mishra — Founder & CEO" />
+  <meta name="twitter:description" content="Building companies where AI meets real-world infrastructure." />
+  <meta name="twitter:image" content="https://ashutosh26-uu.github.io/Ashu-portfolio/assets/og.jpg" />
+
+  <!-- Structured data so search engines understand who this page is about -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ashutosh Mishra",
+    "url": "https://ashutosh26-uu.github.io/Ashu-portfolio/",
+    "image": "https://ashutosh26-uu.github.io/Ashu-portfolio/assets/ashutosh.jpg",
+    "jobTitle": "Founder & CEO",
+    "description": "Entrepreneur and systems engineer. Founder & CEO of ReasonateAI, Sehatra and EduTech.",
+    "email": "mailto:ashutosh@reasonateai.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Prayagraj", "addressRegion": "Uttar Pradesh", "addressCountry": "IN" },
+    "worksFor": [
+      { "@type": "Organization", "name": "ReasonateAI Private Limited", "url": "https://www.reasonateai.com" },
+      { "@type": "Organization", "name": "Sehatra" },
+      { "@type": "Organization", "name": "EduTech" }
+    ],
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "United University, Prayagraj" },
+    "award": ["Microsoft Code for Bharat 2.0 — National Winner"],
+    "knowsAbout": ["Autonomous AI infrastructure", "Cloud orchestration", "Kubernetes", "LLM agents", "Distributed systems"],
+    "sameAs": ["https://www.linkedin.com/in/ashutosh-mishra-841408324/", "https://github.com/Ashutosh26-uu", "https://www.reasonateai.com/team/ashutosh-mishra"]
+  }
+  </script>
+
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/ashutosh.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Mrs+Saint+Delafield&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=25" />
+  <link rel="stylesheet" href="css/style.css?v=26" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -302,6 +343,16 @@
           <p class="section__lead">I'm open to enterprise pilots, strategic partnerships, investment conversations and
             collaborations with institutions. I read every message personally.</p>
           <a class="btn btn--primary btn--lg" href="mailto:ashutosh@reasonateai.com">ashutosh@reasonateai.com <span aria-hidden="true">→</span></a>
+          <div class="contact__actions">
+            <button class="btn btn--ghost btn--sm" id="copyEmail" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              <span>Copy email</span>
+            </button>
+            <button class="btn btn--ghost btn--sm" id="saveContact" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+              <span>Save contact</span>
+            </button>
+          </div>
         </div>
         <ul class="contact__list reveal" id="contactLinks"></ul>
       </div>
@@ -328,7 +379,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=25"></script>
-  <script src="js/main.js?v=25"></script>
+  <script src="js/data.js?v=26"></script>
+  <script src="js/main.js?v=26"></script>
 </body>
 </html>
