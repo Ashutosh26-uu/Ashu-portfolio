@@ -365,9 +365,16 @@
 
   // Split headings into words so they can rise one by one
   const splitWords = (el) => {
-    el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+    el.setAttribute("aria-label", el.dataset.label || el.textContent.replace(/\s+/g, " ").trim());
     let n = 0;
     const walk = (node) => [...node.childNodes].forEach((c) => {
+      if (c.nodeType === 1 && c.classList.contains("rotator")) {
+        const w = document.createElement("span"), wi = document.createElement("span");
+        w.className = "w"; w.setAttribute("aria-hidden", "true");
+        wi.className = "wi"; wi.style.setProperty("--w", n++);
+        c.replaceWith(w); wi.append(c); w.append(wi);
+        return;
+      }
       if (c.nodeType === 1) return walk(c);
       if (c.nodeType !== 3) return;
       const frag = document.createDocumentFragment();
@@ -514,6 +521,33 @@
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(fitWordmark);
   addEventListener("resize", fitWordmark);
   new IntersectionObserver(([e]) => { if (e.isIntersecting) wordmark.classList.add("in"); }, { threshold: 0.3 }).observe(wordmark);
+
+  /* ---------- Hero: the gold word cycles through what the three ventures serve ---------- */
+  const rotator = $("#rotator");
+  if (rotator) {
+    const words = $$(".rot", rotator);
+    // All words share one grid cell, so the box is always as wide as the longest word
+    // and the headline never reflows while they change.
+    let ri = 0;
+    if (!reduced) setInterval(() => {
+      if (document.hidden || root.classList.contains("is-loading")) return;
+      words[ri].classList.remove("is-on"); words[ri].classList.add("is-off");
+      const prev = words[ri];
+      setTimeout(() => prev.classList.remove("is-off"), 700);
+      ri = (ri + 1) % words.length;
+      words[ri].classList.add("is-on");
+    }, 2800);
+  }
+
+  // Profile card: jump straight to a venture
+  $("#profileVentures").innerHTML = '<span class="profile__ventures-label">Ventures</span>' + D.ventures.map((v, i) =>
+    `<button type="button" class="pv" data-i="${i}" style="--c:${v.color}" aria-label="Open ${esc(v.name)}"><i>${esc(v.mark)}</i><span>${esc(v.name)}</span></button>`).join("");
+  $("#profileVentures").addEventListener("click", (e) => {
+    const b = e.target.closest(".pv");
+    if (!b) return;
+    showVenture(+b.dataset.i);
+    $("#ventures").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  });
 
   /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((entries) => {

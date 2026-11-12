@@ -56,7 +56,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Mrs+Saint+Delafield&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=31" />
+  <link rel="stylesheet" href="css/style.css?v=33" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -133,12 +133,13 @@
   <main id="main">
     <!-- Hero -->
     <section class="hero" id="top">
+      <div class="hero__aurora" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="hero__grid-bg" aria-hidden="true"></div>
       <div class="container hero__inner">
         <div class="hero__copy">
           <p class="eyebrow reveal"><span class="status-dot"></span>Founder &amp; CEO — ReasonateAI · Sehatra · EduTech</p>
-          <h1 class="hero__title reveal">
-            Building companies where <em>AI</em> meets real&#8209;world <em>infrastructure</em>.
+          <h1 class="hero__title reveal" data-label="Building companies where AI meets real-world infrastructure, healthcare and education.">
+            Building companies where <em>AI</em> meets real&#8209;world <span class="rotator" id="rotator"><em class="rot is-on">infrastructure<span class="rot__dot">.</span></em><em class="rot">healthcare<span class="rot__dot">.</span></em><em class="rot">education<span class="rot__dot">.</span></em></span>
           </h1>
           <p class="hero__lead reveal">
             I'm Ashutosh Mishra — an entrepreneur and systems engineer. I lead three ventures across autonomous AI,
@@ -168,6 +169,7 @@
               <div><dt>Focus</dt><dd>Autonomous AI infrastructure</dd></div>
               <div><dt>Local time</dt><dd><span id="clock">--:--</span> IST</dd></div>
             </dl>
+            <div class="profile__ventures" id="profileVentures"></div>
           </figcaption>
         </figure>
       </div>
@@ -410,7 +412,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=31"></script>
-  <script src="js/main.js?v=31"></script>
+  <script src="js/data.js?v=33"></script>
+  <script src="js/main.js?v=33"></script>
 </body>
 </html>
