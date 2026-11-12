@@ -177,7 +177,8 @@
         <div class="project__links">
           ${p.live ? `<a href="${p.live}"${ext(p.live)}>${esc(p.liveLabel || "Live")} ↗</a>` : ""}
           ${p.repo ? `<a href="${ghUrl(p.repo)}"${ext(ghUrl(p.repo))}>Source ↗</a>` : ""}
-          ${!p.live && !p.repo ? `<span class="nda">Proprietary</span>` : ""}
+          ${p.case ? `<button type="button" class="case-btn" data-case="${D.projects.indexOf(p)}">Case study <span aria-hidden="true">→</span></button>` : ""}
+          ${!p.live && !p.repo && !p.case ? `<span class="nda">Proprietary</span>` : ""}
         </div>
       </div>
     </article>`).join("");
@@ -681,6 +682,50 @@
     }, { rootMargin: "-42% 0px -42% 0px" });
     $$(".project, .cap, .now__card, .award, .expertise__col, .about__side .panel").forEach((c) => centerIO.observe(c));
   }
+
+  /* ---------- Case study drawer ---------- */
+  const drawer = $("#drawer"), drawerPanel = $(".drawer__panel", drawer), drawerBody = $("#drawerBody");
+  let drawerReturn = null;
+  const openCase = (i) => {
+    const p = D.projects[i], c = p.case;
+    drawerBody.innerHTML = `
+      <p class="drawer__org">${esc(p.org)}</p>
+      <h2 id="drawerTitle">${esc(p.title)}</h2>
+      <p class="drawer__lead">${esc(p.desc)}</p>
+      <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+      <section><h3><span>01</span>The problem</h3><p>${esc(c.problem)}</p></section>
+      <section><h3><span>02</span>What I built</h3><ul class="drawer__list">${c.built.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></section>
+      <section><h3><span>03</span>Outcome</h3><ul class="drawer__outcome">${c.outcome.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></section>
+      ${p.live ? `<a class="btn btn--primary" href="${p.live}"${ext(p.live)}>${esc(p.liveLabel || "Visit live site")} <span aria-hidden="true">↗</span></a>` : `<p class="drawer__note">Proprietary — source code is not public.</p>`}`;
+    drawerReturn = document.activeElement;
+    drawer.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("drawer-open");
+    drawerPanel.scrollTop = 0;
+    setTimeout(() => drawerPanel.focus(), 60);
+  };
+  const closeCase = () => {
+    if (!drawer.classList.contains("open")) return;
+    drawer.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("drawer-open");
+    if (drawerReturn) drawerReturn.focus();
+  };
+  $("#projects").addEventListener("click", (e) => {
+    const b = e.target.closest(".case-btn");
+    if (b) { e.preventDefault(); openCase(+b.dataset.case); }
+  });
+  drawer.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeCase(); });
+  addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeCase();
+    // Keep keyboard focus inside the open drawer
+    if (e.key === "Tab" && drawer.classList.contains("open")) {
+      const f = $$("button, a[href]", drawerPanel);
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
 
   /* ---------- Contact actions ---------- */
   const toast = (msg) => {

@@ -155,9 +155,39 @@ window.PORTFOLIO = {
     "NVIDIA Inception", "Google for Startups", "PW School of Startups"],
 
   projects: [
-    { title: "Dual-Twin Runtime", org: "ReasonateAI", desc: "Ephemeral simulation mirror that verifies every infrastructure change before it reaches production.", tags: ["LLM agents", "Kubernetes", "Docker"], cat: ["ai", "cloud"], live: "https://www.reasonateai.com" },
-    { title: "AI Drone Defense System", org: "Code for Bharat 2.0 · Winner", desc: "Real-time threat detection, tracking and interception with edge inference and swarm coordination.", tags: ["Python", "YOLOv8", "TensorFlow.js"], cat: ["ai", "defence"] },
-    { title: "Sehatra Platform", org: "Sehatra", desc: "Eight portals, dispatch and an AI patient assistant on one backend, with web and Android clients.", tags: ["Node.js", "React", "PostgreSQL"], cat: ["health"] },
+    { title: "Dual-Twin Runtime", org: "ReasonateAI", desc: "Ephemeral simulation mirror that verifies every infrastructure change before it reaches production.", tags: ["LLM agents", "Kubernetes", "Docker"], cat: ["ai", "cloud"], live: "https://www.reasonateai.com",
+      case: {
+        problem: "Most production outages come from changes that were never rehearsed against the real application.",
+        built: [
+          "An ephemeral test twin of the application, provisioned for every change",
+          "Three AI agents that plan, build and test each change inside the twin",
+          "Verification gates — tests, security and configuration checks — before anything is promoted",
+          "Zero-downtime promotion to the live twin, with telemetry agents watching for drift and repairing it"
+        ],
+        outcome: ["v0.0.2 live with Dual-Twin", "8,800+ developers on the waitlist", "Enterprise pilots with Samsung R&D and Tata Elxsi"]
+      } },
+    { title: "AI Drone Defense System", org: "Code for Bharat 2.0 · Winner", desc: "Real-time threat detection, tracking and interception with edge inference and swarm coordination.", tags: ["Python", "YOLOv8", "TensorFlow.js"], cat: ["ai", "defence"],
+      case: {
+        problem: "Detecting and tracking aerial threats in real time, at the edge, without a person watching every feed.",
+        built: [
+          "YOLOv8 object detection trained on military asset classes",
+          "Multi-object tracking with behavioural analysis and threat prediction",
+          "Swarm coordination across multiple drones",
+          "Voice and gesture control for operators"
+        ],
+        outcome: ["1st Prize — Microsoft Code for Bharat 2.0 (national)"]
+      } },
+    { title: "Sehatra Platform", org: "Sehatra", desc: "Eight portals, dispatch and an AI patient assistant on one backend, with web and Android clients.", tags: ["Node.js", "React", "PostgreSQL"], cat: ["health"],
+      case: {
+        problem: "In a district, patients, doctors, hospitals and ambulances work on disconnected systems — or on paper.",
+        built: [
+          "Eight role-based portals and a dispatch app on one shared backend",
+          "Real authentication, access control and live updates across portals",
+          "Saathi — an AI assistant that guides patients through care",
+          "SQLite for pilots and PostgreSQL in production, with an installable web app and an Android app"
+        ],
+        outcome: ["District pilot in Barabanki, Uttar Pradesh"]
+      } },
     { title: "Enterprise Pilots", org: "Samsung R&D · Tata Elxsi", desc: "Automated cloud deployment for industrial workloads and autonomous DevOps pipeline validation.", tags: ["DevOps", "Multi-cluster"], cat: ["cloud"] },
     { title: "AETHER", org: "Intelligent mobility", desc: "AI, IoT, drones and NavIC satellite communication for real-time fleet monitoring and safety.", tags: ["Python", "React", "IoT"], cat: ["ai", "defence"] },
     { title: "Curelex", org: "Health-tech · CTO", desc: "Patient platform and administrative portal for doctors, patients, revenue and analytics.", tags: ["TypeScript", "Node.js", "MySQL"], cat: ["health"], live: "https://curelex.in", liveLabel: "curelex.in" },

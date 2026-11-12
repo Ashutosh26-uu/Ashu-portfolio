@@ -578,6 +578,53 @@ kbd { font-family: var(--mono); font-size: 0.75rem; padding: 2px 7px; border-rad
 .pv i { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-style: normal; font-size: 0.66rem; font-weight: 800; color: #fff; background: var(--c); }
 .pv:hover { border-color: var(--c); color: var(--text); transform: translateY(-1px); }
 
+/* Case-study button on project cards */
+.case-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.86rem; font-weight: 600; color: var(--text);
+  padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line-2); transition: border-color 0.25s, color 0.25s, background 0.25s; }
+.case-btn span { transition: transform 0.25s var(--ease); }
+.case-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.case-btn:hover span { transform: translateX(3px); }
+.project__links { align-items: center; }
+
+/* Case-study drawer */
+html.drawer-open, html.drawer-open body { overflow: hidden; }
+.drawer { position: fixed; inset: 0; z-index: 350; pointer-events: none; }
+.drawer.open { pointer-events: auto; }
+.drawer__backdrop { position: absolute; inset: 0; background: rgba(5, 6, 8, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.35s; }
+.drawer.open .drawer__backdrop { opacity: 1; }
+.drawer__panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(560px, 100%); overflow-y: auto; overscroll-behavior: contain;
+  background: var(--surface); border-left: 1px solid var(--line-2); box-shadow: -30px 0 80px -20px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%); transition: transform 0.55s var(--ease); outline: none; }
+.drawer.open .drawer__panel { transform: none; }
+.drawer__close { position: sticky; top: 16px; float: right; margin: 16px 16px 0 0; background: var(--surface); z-index: 1; }
+.drawer__close svg { stroke-width: 2; }
+.drawer__body { padding: 40px clamp(24px, 4vw, 44px) 48px; }
+.drawer__org { font-family: var(--mono); font-size: 0.74rem; color: var(--accent); }
+.drawer__body h2 { font-size: clamp(1.9rem, 3.4vw, 2.5rem); letter-spacing: -0.035em; line-height: 1.08; margin: 10px 0 14px; }
+.drawer__lead { color: var(--muted); font-size: 1.02rem; margin-bottom: 18px; }
+.drawer__body section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.drawer__body h3 { display: flex; align-items: center; gap: 12px; font-size: 1.05rem; margin-bottom: 12px; }
+.drawer__body h3 span { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.3rem; color: var(--gold); }
+.drawer__body section > p { color: var(--text); font-family: var(--serif); font-size: 1.25rem; line-height: 1.45; }
+.drawer__list li { position: relative; padding: 0 0 12px 22px; color: var(--muted); }
+.drawer__list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 2px; background: var(--accent); }
+.drawer__outcome { display: grid; gap: 8px; }
+.drawer__outcome li { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); font-weight: 600; }
+.drawer__outcome li::before { content: ""; width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--ok); }
+.drawer__body > .btn { margin-top: 32px; }
+.drawer__note { margin-top: 32px; font-family: var(--mono); font-size: 0.75rem; color: var(--faint); }
+.drawer.open .drawer__body > * { animation: itemIn 0.6s var(--ease) both; }
+.drawer.open .drawer__body > :nth-child(2) { animation-delay: 0.05s; }
+.drawer.open .drawer__body > :nth-child(3) { animation-delay: 0.1s; }
+.drawer.open .drawer__body > :nth-child(n+4) { animation-delay: 0.16s; }
+@media (max-width: 560px) {
+  /* Phone: a bottom sheet instead of a side panel */
+  .drawer__panel { top: auto; left: 0; width: 100%; max-height: 88svh; border-left: 0; border-top: 1px solid var(--line-2);
+    border-radius: 22px 22px 0 0; transform: translateY(100%); }
+  .drawer__panel::before { content: ""; position: sticky; top: 0; display: block; width: 40px; height: 4px; margin: 10px auto 0; border-radius: 4px; background: var(--line-2); }
+  .drawer__body { padding-top: 16px; }
+}
+
 /* Trust band — institutes and programmes in a slow, endless row */
 .trust { padding: 34px 0 38px; border-bottom: 1px solid var(--line); overflow: hidden; }
 .trust__label { text-align: center; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 22px; }
