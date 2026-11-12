@@ -19,7 +19,6 @@
   const CAT_ICON = { ai: "brain", cloud: "cloud", health: "health", defence: "shield", edu: "cap" };
 
   /* ---------- Render ---------- */
-  $("#creds").innerHTML = D.credentials.map((c) => `<li>${esc(c)}</li>`).join("");
 
   $("#figures").innerHTML = D.figures.map((f) => `
     <div class="figure reveal">
@@ -579,7 +578,12 @@
     };
     requestAnimationFrame(step);
   };
-  const cio = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } }), { threshold: 0.6 });
+  const afterIntro = (fn) => (root.classList.contains("is-loading") ? setTimeout(() => afterIntro(fn), 150) : setTimeout(fn, 500));
+  const cio = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    cio.unobserve(e.target);
+    afterIntro(() => countUp(e.target));
+  }), { threshold: 0.6 });
   $$(".count").forEach((el) => cio.observe(el));
 
   /* ---------- Engine log ---------- */
