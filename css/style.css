@@ -10,7 +10,7 @@
   --line-2: rgba(255, 255, 255, 0.15);
   --text: #ECEDEF;
   --muted: #9AA0AB;
-  --faint: #6B717D;
+  --faint: #7F8592;
   --accent: #4A86FF;
   --accent-soft: rgba(74, 134, 255, 0.12);
   --on-accent: #FFFFFF;
@@ -37,7 +37,7 @@
   :root:not([data-theme="dark"]) {
     --bg: #F7F6F2; --bg-alt: #EFEDE7; --surface: #FFFFFF; --surface-2: #F4F3EF;
     --line: rgba(17, 19, 24, 0.08); --line-2: rgba(17, 19, 24, 0.16);
-    --text: #111318; --muted: #565C67; --faint: #8A909A;
+    --text: #111318; --muted: #565C67; --faint: #666C77;
     --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C; --gold-hi: #C9A35A; --gold-lo: #5E4519;
     --ok: #0F9D6E; --warn: #B45309; --err: #DC2626;
     --shadow: 0 1px 2px rgba(17, 19, 24, 0.04), 0 24px 48px -28px rgba(17, 19, 24, 0.22);
@@ -48,7 +48,7 @@
 :root[data-theme="light"] {
   --bg: #F7F6F2; --bg-alt: #EFEDE7; --surface: #FFFFFF; --surface-2: #F4F3EF;
   --line: rgba(17, 19, 24, 0.08); --line-2: rgba(17, 19, 24, 0.16);
-  --text: #111318; --muted: #565C67; --faint: #8A909A;
+  --text: #111318; --muted: #565C67; --faint: #666C77;
   --accent: #2457D6; --accent-soft: rgba(36, 87, 214, 0.09); --gold: #8C6A2C; --gold-hi: #C9A35A; --gold-lo: #5E4519;
   --ok: #0F9D6E; --warn: #B45309; --err: #DC2626;
   --shadow: 0 1px 2px rgba(17, 19, 24, 0.04), 0 24px 48px -28px rgba(17, 19, 24, 0.22);
@@ -636,6 +636,9 @@ html.drawer-open, html.drawer-open body { overflow: hidden; }
   .drawer__body { padding-top: 16px; }
 }
 
+/* Responsive portrait wrappers */
+.profile__photo picture, .intro__photo picture { display: block; width: 100%; height: 100%; }
+
 /* Trust band — institutes and programmes in a slow, endless row */
 .trust { padding: 34px 0 38px; border-bottom: 1px solid var(--line); overflow: hidden; }
 .trust__label { text-align: center; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 22px; }
@@ -923,4 +926,31 @@ html.is-loading .hero .profile.reveal, .hero .profile.reveal { transform: none; 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   html { scroll-behavior: auto; }
+}
+
+/* ==========================================================================
+   Print — a clean document when the page is printed or saved as PDF
+   ========================================================================== */
+@media print {
+  :root, :root[data-theme] { --bg: #fff; --bg-alt: #fff; --surface: #fff; --surface-2: #f6f6f6; --text: #111; --muted: #444; --faint: #666;
+    --line: #ddd; --line-2: #ccc; --accent: #1f4fd1; --gold: #7a5a1e; --shadow: none; color-scheme: light; }
+  @page { margin: 16mm 14mm; }
+  body { font-size: 11pt; }
+  .intro, .nav, .progress, .skip, .to-top, .toast, .term, .drawer, .hero__aurora, .hero__grid-bg, .trust, .ventures__ctrl,
+  .filters, .console, .flow__bar, .ghost-num, .contact__actions, .now__dots, .footer__top, .footer__hint, .wordmark, .case-btn,
+  .hero::after, .contact::before { display: none !important; }
+  .reveal, .wi, .w, .sw { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .sw { color: inherit !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+  .hero { min-height: 0; padding: 0 0 8mm; }
+  .hero__inner { grid-template-columns: 1fr 52mm; gap: 8mm; }
+  .hero__figures { margin-top: 6mm; background: none; }
+  .section, .statement, .now, .contact { padding: 8mm 0; }
+  .section--alt { background: none; }
+  .card, .panel, .press, .vpanel, .expertise__col { break-inside: avoid; border: 1px solid #ddd; }
+  .section__head { margin-bottom: 6mm; }
+  .projects, .awards, .record, .tech-grid { break-inside: auto; }
+  a { color: inherit; text-decoration: none; }
+  .contact__list a::after { content: " — " attr(href); font-size: 9pt; color: #666; }
+  .statement__text { font-size: 18pt; }
 }

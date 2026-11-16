@@ -1,6 +1,5 @@
 // All portfolio content lives here — edit this file to update the site.
 window.PORTFOLIO = {
-  name: "Ashutosh Mishra",
   github: "Ashutosh26-uu",
   email: "ashutosh@reasonateai.com",
   linkedin: "https://www.linkedin.com/in/ashutosh-mishra-841408324/",
@@ -21,9 +20,6 @@ window.PORTFOLIO = {
     detail: "IISc Bangalore, IIT Kanpur, IIT Mandi, IIT Jodhpur, IIT Patna, IIIT Bangalore, BITS Pilani, DTU and VIT Vellore — bringing the total to 13 incubators.",
     link: "https://www.reasonateai.com/press"
   },
-
-  // Hero credential strip
-  credentials: ["TBIF · IIT Ropar", "NVIDIA Inception", "Google for Startups", "Samsung R&D · Pilot", "Tata Elxsi · Pilot"],
 
   figures: [
     { n: 3, suffix: "", label: "Companies founded" },

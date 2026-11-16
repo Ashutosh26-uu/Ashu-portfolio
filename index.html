@@ -52,11 +52,12 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="preload" as="image" href="assets/ashutosh.jpg" />
+  <link rel="preload" as="image" type="image/webp" href="assets/ashutosh-900.webp"
+        imagesrcset="assets/ashutosh-480.webp 480w, assets/ashutosh-900.webp 900w" imagesizes="(max-width: 860px) 92vw, 440px" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Mrs+Saint+Delafield&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=36" />
+  <link rel="stylesheet" href="css/style.css?v=37" />
   <script>
     try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
     // Intro only runs with JS and full motion; the short variant is used on repeat visits in a session
@@ -91,7 +92,7 @@
           <circle class="intro__ring-fill" id="introRing" cx="100" cy="100" r="86" />
           <circle class="intro__comet" id="introComet" cx="186" cy="100" r="3.2" />
         </svg>
-        <div class="intro__photo" id="introPhoto"><img src="assets/ashutosh.jpg" alt="" width="900" height="1116" /></div>
+        <div class="intro__photo" id="introPhoto"><picture><source type="image/webp" srcset="assets/ashutosh-480.webp" /><img src="assets/ashutosh.jpg" alt="" width="900" height="1116" decoding="async" /></picture></div>
       </div>
       <div class="intro__name" id="introName">Ashutosh Mishra</div>
       <div class="intro__rule"><i></i></div>
@@ -153,7 +154,10 @@
 
         <figure class="profile reveal">
           <div class="profile__photo">
-            <img src="assets/ashutosh.jpg" alt="Portrait of Ashutosh Mishra" width="900" height="1116" />
+            <picture>
+              <source type="image/webp" srcset="assets/ashutosh-480.webp 480w, assets/ashutosh-900.webp 900w" sizes="(max-width: 860px) 92vw, 440px" />
+              <img src="assets/ashutosh.jpg" alt="Portrait of Ashutosh Mishra" width="900" height="1116" fetchpriority="high" decoding="async" />
+            </picture>
           </div>
           <figcaption class="profile__card">
             <div class="profile__row">
@@ -422,7 +426,7 @@
     </div>
   </div>
 
-  <script src="js/data.js?v=36"></script>
-  <script src="js/main.js?v=36"></script>
+  <script src="js/data.js?v=37"></script>
+  <script src="js/main.js?v=37"></script>
 </body>
 </html>
